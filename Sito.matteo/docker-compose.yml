@@ -1,0 +1,16 @@
+version: '3'
+services:
+  web:
+    build: .
+    ports:
+      - "8080:80"
+    volumes:
+      - .:/usr/share/nginx/html
+    restart: always
+
+  tunnel:
+    image: cloudflare/cloudflared:latest
+    command: tunnel --url http://web:80
+    depends_on:
+      - web
+    restart: always
