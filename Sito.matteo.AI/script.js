@@ -74,10 +74,10 @@ window.addEventListener('scroll', () => {
 
     // Navbar background update
     if (window.scrollY > 50) {
-        navbar.style.background = 'rgba(10, 10, 18, 0.95)';
+        navbar.style.background = 'rgba(0, 0, 0, 0.95)';
         navbar.style.padding = '15px 0';
     } else {
-        navbar.style.background = 'rgba(10, 10, 18, 0.8)';
+        navbar.style.background = 'rgba(0, 0, 0, 0.9)';
         navbar.style.padding = '20px 0';
     }
 
@@ -96,14 +96,79 @@ backToTopBtn.addEventListener('click', () => {
     });
 });
 
-// Mouse following effect for background globes
-document.addEventListener('mousemove', (e) => {
-    const globes = document.querySelectorAll('.globe');
-    const x = (e.clientX / window.innerWidth) * 30; // Max 30px movement
-    const y = (e.clientY / window.innerHeight) * 30;
+// Star Background Logic
+const canvas = document.getElementById('star-canvas');
+const ctx = canvas.getContext('2d');
+let stars = [];
+const starCount = 150;
+let mouseX = -100;
+let mouseY = -100;
 
-    globes.forEach((globe, index) => {
-        const factor = (index + 1) * 0.5;
-        globe.style.transform = `translate(${x * factor}px, ${y * factor}px)`;
+function resizeCanvas() {
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+    initStars();
+}
+
+function initStars() {
+    stars = [];
+    for (let i = 0; i < starCount; i++) {
+        stars.push({
+            x: Math.random() * canvas.width,
+            y: Math.random() * canvas.width,
+            size: Math.random() * 2,
+            baseX: 0,
+            baseY: 0,
+            speed: Math.random() * 0.5 + 0.2
+        });
+        stars[i].baseX = stars[i].x;
+        stars[i].baseY = stars[i].y;
+    }
+}
+
+function animate() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    ctx.fillStyle = '#ffcc00';
+
+    stars.forEach(star => {
+        // Subtle drift
+        star.y -= star.speed;
+        star.baseY -= star.speed;
+        
+        if (star.y < 0) {
+            star.y = canvas.height;
+            star.baseY = canvas.height;
+        }
+
+        // Mouse interaction
+        const dx = mouseX - star.x;
+        const dy = mouseY - star.y;
+        const distance = Math.sqrt(dx * dx + dy * dy);
+        const maxDistance = 100;
+
+        if (distance < maxDistance) {
+            const force = (maxDistance - distance) / maxDistance;
+            star.x -= dx * force * 0.1;
+            star.y -= dy * force * 0.1;
+        } else {
+            // Return to base position
+            star.x += (star.baseX - star.x) * 0.05;
+            star.y += (star.baseY - star.y) * 0.05;
+        }
+
+        ctx.beginPath();
+        ctx.arc(star.x, star.y, star.size, 0, Math.PI * 2);
+        ctx.fill();
     });
+
+    requestAnimationFrame(animate);
+}
+
+window.addEventListener('resize', resizeCanvas);
+document.addEventListener('mousemove', (e) => {
+    mouseX = e.clientX;
+    mouseY = e.clientY;
 });
+
+resizeCanvas();
+animate();
