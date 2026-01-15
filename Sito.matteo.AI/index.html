@@ -13,6 +13,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;700&display=swap" rel="stylesheet">
     <link rel="icon" href="images/favicon.png" type="image/png">
     <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="cookie-banner.css">
 </head>
 
 <body>
@@ -22,11 +23,16 @@
         <div class="container">
             <a href="#" class="logo">MB.</a>
             <ul class="nav-links">
-                <li><a href="#about">Chi Sono</a></li>
-                <li><a href="#skills">Skills</a></li>
-                <li><a href="#projects">Progetti</a></li>
-                <li><a href="#contact">Contatti</a></li>
+                <li><a href="#about" data-i18n="nav-about">Chi Sono</a></li>
+                <li><a href="#skills" data-i18n="nav-skills">Skills</a></li>
+                <li><a href="#projects" data-i18n="nav-projects">Progetti</a></li>
+                <li><a href="#contact" data-i18n="nav-contact">Contatti</a></li>
             </ul>
+            <div class="lang-switcher">
+                <button id="lang-it" class="lang-btn active">IT</button>
+                <span class="lang-divider">|</span>
+                <button id="lang-en" class="lang-btn">EN</button>
+            </div>
             <div class="hamburger">
                 <span></span>
                 <span></span>
@@ -37,26 +43,28 @@
 
     <header class="hero">
         <div class="container hero-content">
+            <div class="hero-image fade-in delay-2">
+                <img src="images/profile.jpeg?v=2" alt="Matteo Augustinho Bertotti">
+            </div>
             <div class="hero-text">
                 <h1 class="fade-in">Matteo Augustinho Bertotti</h1>
                 <h2 class="fade-in delay-1" id="typing-text"></h2>
-                <p class="fade-in delay-2">ITS Mario Volpato | Studente di Intelligenza Artificiale e Data Analysis</p>
+                <p class="fade-in delay-2" data-i18n="hero-subtitle">ITS Mario Volpato | Studente di Intelligenza
+                    Artificiale e Data Analysis</p>
                 <div class="cta-buttons fade-in delay-3">
-                    <a href="images/CV_MatteoBertotti.pdf" class="btn btn-primary" download>Scarica il CV</a>
-                    <a href="#projects" class="btn btn-secondary">Vedi Progetti</a>
+                    <a href="images/CV_MatteoBertotti.pdf" class="btn btn-primary" download data-i18n="hero-cv">Scarica
+                        il CV</a>
+                    <a href="#projects" class="btn btn-secondary" data-i18n="hero-projects">Vedi Progetti</a>
                 </div>
-            </div>
-            <div class="hero-image fade-in delay-2">
-                <img src="images/profile.jpeg?v=2" alt="Matteo Augustinho Bertotti">
             </div>
         </div>
     </header>
 
     <section id="about" class="section">
         <div class="container">
-            <h2 class="section-title">Chi Sono</h2>
+            <h2 class="section-title" data-i18n="about-title">Chi Sono</h2>
             <div class="about-content">
-                <p>
+                <p data-i18n="about-text">
                     Sono uno studente appassionato con un forte interesse per la <strong>gestione, analisi e
                         valorizzazione dei dati</strong>.
                     Mi occupo di automazione dei processi, sviluppo di soluzioni <em>data-driven</em> e applicazione di
@@ -70,7 +78,7 @@
 
     <section id="education" class="section">
         <div class="container">
-            <h2 class="section-title">Formazione</h2>
+            <h2 class="section-title" data-i18n="education-title">Formazione</h2>
             <div class="education-card">
                 <div class="edu-header">
                     <a href="https://itsdigitalacademy.com/corsi/artificial-intelligence-developer-and-data-analyst/"
@@ -79,23 +87,25 @@
                     </a>
                     <div class="edu-info">
                         <h3><a href="https://itsdigitalacademy.com/corsi/artificial-intelligence-developer-and-data-analyst/"
-                                target="_blank" rel="noopener noreferrer" class="edu-link">Artificial Intelligence
+                                target="_blank" rel="noopener noreferrer" class="edu-link"
+                                data-i18n="edu-course-name">Artificial Intelligence
                                 Developer and Data Analyst</a>
                         </h3>
-                        <p class="edu-course">Corso Biennale ITS per Tecnico Superiore Data Manager</p>
-                        <p class="edu-year">2025 - Presente</p>
+                        <p class="edu-course" data-i18n="edu-course-desc">Corso Biennale ITS per Tecnico Superiore Data
+                            Manager</p>
+                        <p class="edu-year" data-i18n="edu-year">2025 - Presente</p>
                     </div>
                 </div>
                 <div class="edu-skills">
-                    <h4>Competenze Acquisite:</h4>
+                    <h4 data-i18n="edu-skills-title">Competenze Acquisite:</h4>
                     <ul class="skill-tags">
-                        <li>Programmazione Python & Basi Dati</li>
-                        <li>Statistical Learning & Data Science</li>
-                        <li>Deep Learning & AI Generativa</li>
-                        <li>Analisi Esplorativa (EDA) & Visualization</li>
-                        <li>Big Data Computing</li>
-                        <li>Data Driven Marketing</li>
-                        <li>Modelli Supervised & Unsupervised</li>
+                        <li data-i18n="edu-s1">Programmazione Python & Basi Dati</li>
+                        <li data-i18n="edu-s2">Statistical Learning & Data Science</li>
+                        <li data-i18n="edu-s3">Deep Learning & AI Generativa</li>
+                        <li data-i18n="edu-s4">Analisi Esplorativa (EDA) & Visualization</li>
+                        <li data-i18n="edu-s5">Big Data Computing</li>
+                        <li data-i18n="edu-s6">Data Driven Marketing</li>
+                        <li data-i18n="edu-s7">Modelli Supervised & Unsupervised</li>
                     </ul>
                 </div>
             </div>
@@ -104,31 +114,31 @@
 
     <section id="skills" class="section">
         <div class="container">
-            <h2 class="section-title">Competenze Tecniche</h2>
+            <h2 class="section-title" data-i18n="skills-title">Competenze Tecniche</h2>
             <div class="skills-grid">
                 <div class="skill-card">
-                    <h3>Analisi Dati & Tools</h3>
+                    <h3 data-i18n="skill-title-1">Analisi Dati & Tools</h3>
                     <p>Excel, Pandas, NumPy</p>
                 </div>
                 <div class="skill-card">
-                    <h3>Database Management</h3>
+                    <h3 data-i18n="skill-title-2">Database Management</h3>
                     <p>MySQL, PostgreSQL, SQL</p>
                 </div>
                 <div class="skill-card">
-                    <h3>Machine Learning Libs</h3>
+                    <h3 data-i18n="skill-title-3">Machine Learning Libs</h3>
                     <p>Scikit-learn, TensorFlow, Keras</p>
                 </div>
                 <div class="skill-card">
-                    <h3>Data Visualization</h3>
+                    <h3 data-i18n="skill-title-4">Data Visualization</h3>
                     <p>Power BI, Tableau, Matplotlib, Seaborn</p>
                 </div>
                 <div class="skill-card">
-                    <h3>AI Technologies</h3>
-                    <p>LLM Integration, Prompt Engineering, Computer Vision</p>
+                    <h3 data-i18n="skill-title-5">AI Technologies</h3>
+                    <p data-i18n="skill-desc-5">LLM Integration, Prompt Engineering, Computer Vision</p>
                 </div>
                 <div class="skill-card">
-                    <h3>Soft Skills</h3>
-                    <p>Problem Solving, Gestione Processi, Strategic Thinking</p>
+                    <h3 data-i18n="skill-title-6">Soft Skills</h3>
+                    <p data-i18n="skill-desc-6">Problem Solving, Gestione Processi, Strategic Thinking</p>
                 </div>
             </div>
         </div>
@@ -136,18 +146,20 @@
 
     <section id="projects" class="section">
         <div class="container">
-            <h2 class="section-title">I Miei Progetti</h2>
+            <h2 class="section-title" data-i18n="projects-title">I Miei Progetti</h2>
             <div class="projects-featured">
                 <article class="project-card featured-repo">
                     <div class="project-image">
                         <img src="images/code.png" alt="GitHub Repository">
                     </div>
                     <div class="project-info">
-                        <h3>Repository Progetti (GitHub)</h3>
-                        <p>Esplora la raccolta completa dei miei progetti e collaborazioni direttamente sul mio profilo
+                        <h3 data-i18n="project-featured-title">Repository Progetti (GitHub)</h3>
+                        <p data-i18n="project-featured-desc">Esplora la raccolta completa dei miei progetti e
+                            collaborazioni direttamente sul mio profilo
                             GitHub.</p>
                         <a href="https://github.com/Matteo019/Progetti.Matteo_Bertotti" target="_blank"
-                            rel="noopener noreferrer" class="btn btn-primary">Vai al Repository <span>&rarr;</span></a>
+                            rel="noopener noreferrer" class="btn btn-primary" data-i18n="project-featured-btn">Vai al
+                            Repository <span>&rarr;</span></a>
                     </div>
                 </article>
             </div>
@@ -156,25 +168,25 @@
 
     <section id="certifications" class="section">
         <div class="container">
-            <h2 class="section-title">Certificazioni</h2>
+            <h2 class="section-title" data-i18n="certs-title">Certificazioni</h2>
             <div class="cert-grid">
                 <a href="https://drive.google.com/file/d/13baesGKJVsgItFjrQHkbN5cpqRbEWIVy/view?usp=drive_link"
                     target="_blank" rel="noopener noreferrer" class="cert-card">
                     <div class="cert-icon">📜</div>
                     <h3>SQL & PostgreSQL</h3>
-                    <p>Visualizza Certificato</p>
+                    <p data-i18n="cert-view">Visualizza Certificato</p>
                 </a>
                 <a href="https://drive.google.com/file/d/1kgP1Fb7qW5Zv3BCnLUWp_9Kb15VlgZm-/view?usp=drive_link"
                     target="_blank" rel="noopener noreferrer" class="cert-card">
                     <div class="cert-icon">🗄️</div>
-                    <h3>Database Foundations</h3>
-                    <p>Visualizza Certificato</p>
+                    <h3 data-i18n="cert-db">Database Foundations</h3>
+                    <p data-i18n="cert-view">Visualizza Certificato</p>
                 </a>
                 <a href="https://drive.google.com/file/d/1375i4mOVR4xKB-bPOvNDxXHlDB0153bw/view?usp=sharing"
                     target="_blank" rel="noopener noreferrer" class="cert-card">
                     <div class="cert-icon">📊</div>
-                    <h3>Excel Avanzato</h3>
-                    <p>Visualizza Certificato</p>
+                    <h3 data-i18n="cert-excel">Excel Avanzato</h3>
+                    <p data-i18n="cert-view">Visualizza Certificato</p>
                 </a>
             </div>
         </div>
@@ -182,7 +194,7 @@
 
     <section id="contact" class="section">
         <div class="container">
-            <h2 class="section-title">Contatti</h2>
+            <h2 class="section-title" data-i18n="contact-title">Contatti</h2>
             <div class="contact-cards">
                 <a href="mailto:matteobertotti888@gmail.com" class="contact-card">
                     <span class="icon">&#9993;</span>
@@ -213,13 +225,30 @@
 
     <button id="back-to-top" title="Torna su">↑</button>
 
+    <div id="cookie-banner" class="cookie-banner">
+        <div class="cookie-container">
+            <div class="cookie-text">
+                <p data-i18n="cookie-text">Utilizziamo i cookie per personalizzare i contenuti e migliorare la vostra
+                    esperienza. Continuando a
+                    navigare, accettate il nostro uso dei cookie. Per saperne di più, consultate la nostra <a
+                        href="privacy.html">Informativa sulla Privacy</a>.</p>
+            </div>
+            <div class="cookie-actions">
+                <button id="cookie-reject" class="cookie-btn btn-reject" data-i18n="cookie-reject">Rifiuta</button>
+                <button id="cookie-accept" class="cookie-btn btn-accept" data-i18n="cookie-accept">Accetta
+                    Tutti</button>
+            </div>
+        </div>
+    </div>
+
     <footer>
         <div class="container">
-            <p>&copy; 2025 Matteo Augustinho Bertotti. Tutti i diritti riservati.</p>
+            <p data-i18n="footer-rights">&copy; 2025 Matteo Augustinho Bertotti. Tutti i diritti riservati.</p>
         </div>
     </footer>
 
     <script src="script.js"></script>
+    <script src="cookie-banner.js"></script>
 </body>
 
 </html>
