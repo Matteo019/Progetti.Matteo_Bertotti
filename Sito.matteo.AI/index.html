@@ -4,19 +4,34 @@
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="Content-Security-Policy"
-        content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data:;">
+        content="default-src 'self' mailto: tel:; script-src 'self'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data:; connect-src 'self'; form-action 'self' mailto: tel:;">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Matteo Augustinho Bertotti | AI Dev & Data Analyst</title>
     <meta name="description" content="Portfolio di Matteo Augustinho Bertotti, studente di AI e Data Analysis.">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=Outfit:wght@300;400;500;700&family=Space+Mono:wght@400;700&display=swap"
+        rel="stylesheet">
     <link rel="icon" href="images/favicon.png" type="image/png">
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="cookie-banner.css">
 </head>
 
 <body>
+    <canvas id="grid-canvas"></canvas>
+    <!-- Preloader -->
+    <div class="preloader">
+        <div class="preloader-content">
+            <div class="preloader-text">MATTEO AUGUSTINHO BERTOTTI</div>
+            <div class="preloader-counter">0%</div>
+        </div>
+    </div>
+
+    <!-- Custom Cursor -->
+    <div class="cursor-dot"></div>
+    <div class="cursor-outline"></div>
+
     <canvas id="star-canvas"></canvas>
 
     <nav class="navbar">
@@ -43,26 +58,50 @@
 
     <header class="hero">
         <div class="container hero-content">
-            <div class="hero-image fade-in delay-2">
-                <img src="images/profile.jpeg?v=2" alt="Matteo Augustinho Bertotti">
+            <div class="hero-visual">
+                <span class="hero-big-text hero-big-top" aria-hidden="true">AI DEV &amp;</span>
+                <div class="hero-image fade-in delay-2">
+                    <img src="images/profile.png" alt="Matteo Augustinho Bertotti">
+                </div>
+                <span class="hero-big-text hero-big-bottom" aria-hidden="true">DATA ANALYST</span>
+                <span class="hero-code-icon" aria-hidden="true">&lt;/&gt;</span>
             </div>
             <div class="hero-text">
-                <h1 class="fade-in">Matteo Augustinho Bertotti</h1>
+                <h1 class="fade-in" id="hero-name"></h1>
                 <h2 class="fade-in delay-1" id="typing-text"></h2>
                 <p class="fade-in delay-2" data-i18n="hero-subtitle">ITS Mario Volpato | Studente di Intelligenza
                     Artificiale e Data Analysis</p>
                 <div class="cta-buttons fade-in delay-3">
-                    <a href="images/CV_MatteoBertotti_ProgrammatoreBackEnd-DataAnalyst_Verona.pdf" class="btn btn-primary" download data-i18n="hero-cv">Scarica
+                    <a href="images/CV_MatteoBertotti_ProgrammatoreBackEnd-DataAnalyst_Verona.pdf"
+                        class="btn btn-primary magnetic-btn" download data-i18n="hero-cv">Scarica
                         il CV</a>
-                    <a href="#projects" class="btn btn-secondary" data-i18n="hero-projects">Vedi Progetti</a>
+                    <a href="#projects" class="btn btn-secondary magnetic-btn" data-i18n="hero-projects">Vedi
+                        Progetti</a>
                 </div>
             </div>
         </div>
     </header>
 
+    <!-- Marquee Ticker -->
+    <div class="marquee-container">
+        <div class="marquee-content">
+            <span>AI DEVELOPER</span>
+            <span class="separator">•</span>
+            <span>DATA ANALYST</span>
+            <span class="separator">•</span>
+            <span>PYTHON EXPERT</span>
+            <span class="separator">•</span>
+            <span>MACHINE LEARNING</span>
+            <span class="separator">•</span>
+            <span>PROBLEM SOLVER</span>
+            <span class="separator">•</span>
+        </div>
+    </div>
+
+
     <section id="about" class="section">
         <div class="container">
-            <h2 class="section-title" data-i18n="about-title">Chi Sono</h2>
+            <h2 class="section-title" data-i18n="about-title" data-split-text>Chi Sono</h2>
             <div class="about-content">
                 <p data-i18n="about-text">
                     Sono uno studente appassionato con un forte interesse per la <strong>gestione, analisi e
@@ -78,7 +117,7 @@
 
     <section id="education" class="section">
         <div class="container">
-            <h2 class="section-title" data-i18n="education-title">Formazione</h2>
+            <h2 class="section-title" data-i18n="education-title" data-split-text>Formazione</h2>
             <div class="education-card">
                 <div class="edu-header">
                     <a href="https://itsdigitalacademy.com/corsi/artificial-intelligence-developer-and-data-analyst/"
@@ -114,7 +153,7 @@
 
     <section id="skills" class="section">
         <div class="container">
-            <h2 class="section-title" data-i18n="skills-title">Competenze Tecniche</h2>
+            <h2 class="section-title" data-i18n="skills-title" data-split-text>Competenze Tecniche</h2>
             <div class="skills-grid">
                 <div class="skill-card">
                     <h3 data-i18n="skill-title-1">Analisi Dati & Tools</h3>
@@ -146,7 +185,7 @@
 
     <section id="projects" class="section">
         <div class="container">
-            <h2 class="section-title" data-i18n="projects-title">I Miei Progetti</h2>
+            <h2 class="section-title" data-i18n="projects-title" data-split-text>I Miei Progetti</h2>
             <div class="projects-featured">
                 <article class="project-card featured-repo">
                     <div class="project-image">
@@ -194,11 +233,11 @@
 
     <section id="contact" class="section">
         <div class="container">
-            <h2 class="section-title" data-i18n="contact-title">Contatti</h2>
+            <h2 class="section-title" data-i18n="contact-title" data-split-text>Contatti</h2>
             <div class="contact-cards">
-                <a href="mailto:matteobertotti888@gmail.com" class="contact-card">
+                <a href="mailto:matteobertotti@icloud.com?subject=Ciao%20Matteo!" class="contact-card">
                     <span class="icon">&#9993;</span>
-                    <span>matteobertotti888@gmail.com</span>
+                    <span>matteobertotti@icloud.com</span>
                 </a>
                 <a href="tel:+393921831641" class="contact-card">
                     <span class="icon">&#9742;</span>
