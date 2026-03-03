@@ -740,6 +740,10 @@ select.form-input {
         border-top: 1px solid var(--border-color);
     }
 
+    .page {
+        padding-top: calc(var(--nav-height) + var(--space-2xl));
+    }
+
     .page__title {
         font-size: var(--font-size-2xl);
     }

@@ -2,6 +2,7 @@ import { resolve } from 'path';
 import { defineConfig } from 'vite';
 
 export default defineConfig({
+    envPrefix: ['VITE_', 'SUPABASE_'],
     build: {
         rollupOptions: {
             input: {
