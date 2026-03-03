@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="it">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Dispensa Bar — Inventario</title>
+    <meta name="description" content="Inserimento rapido dati inventario Dispensa Bar" />
+    <link rel="stylesheet" href="/css/data-entry.css" />
+</head>
+
+<body>
+    <!-- Navbar injected by JS -->
+
+    <main class="page container">
+        <header class="page__header">
+            <h1 class="page__title">Inventario</h1>
+            <p class="page__subtitle">Cerca e aggiorna le quantità rapidamente</p>
+        </header>
+
+        <!-- Search -->
+        <div class="search-bar" id="product-search-bar">
+            <span class="search-bar__icon">🔍</span>
+            <input type="text" id="product-search" class="search-bar__input" placeholder="Cerca bottiglie per nome..."
+                autocomplete="off" />
+        </div>
+
+        <!-- Results -->
+        <section id="search-results" class="de-results" aria-label="Risultati ricerca">
+            <div class="empty-state" id="empty-state">
+                <div class="empty-state__icon">📦</div>
+                <p class="empty-state__text">Inizia a cercare un prodotto</p>
+            </div>
+        </section>
+
+        <!-- History -->
+        <section class="de-history" aria-label="Cronologia recente">
+            <h2 class="de-history__title">📋 Aggiornamenti Recenti</h2>
+            <div id="history-list" class="de-history__list">
+                <div class="empty-state">
+                    <p class="empty-state__text">Nessuna attività recente</p>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <script type="module" src="/js/data-entry.js"></script>
+</body>
+
+</html>

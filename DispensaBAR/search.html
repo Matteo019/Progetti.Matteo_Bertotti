@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="it" data-theme="dark">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Dispensa Bar — Dashboard</title>
+    <meta name="description" content="Dashboard inventario e ricerca prodotti" />
+    <link rel="stylesheet" href="/css/search.css" />
+</head>
+
+<body>
+    <!-- Navbar injected by JS -->
+
+    <main class="page container">
+        <header class="page__header-dash">
+            <div class="page__header-left">
+                <h1 class="page__title-dash">Inventory Overview</h1>
+                <div class="view-switch">
+                    <button class="view-btn active" data-view="overview" title="Vista Panoramica">📊 Overview</button>
+                    <button class="view-btn" data-view="stock" title="Vista Magazzino">📋 Stock</button>
+                    <button class="view-btn" data-view="discards" title="Vista Scarti">🗑️ Discards</button>
+                </div>
+            </div>
+
+            <div class="page__header-right">
+                <div class="search-box">
+                    <input type="text" id="search-input" placeholder="Search..." autocomplete="off">
+                    <span class="search-icon">🔍</span>
+                </div>
+            </div>
+        </header>
+
+        <!-- Filters Bar -->
+        <div class="toolbar">
+            <div class="toolbar__group">
+                <button class="tool-btn" id="filter-toggle">
+                    <span class="icon">⏳</span> Filters <span class="chevron">▼</span>
+                </button>
+                <div id="filter-dropdown" class="dropdown-content hidden">
+                    <div class="filter-section">
+                        <h4>📁 Categoria</h4>
+                        <div id="category-chips" class="chip-container"></div>
+                    </div>
+                    <div class="filter-section">
+                        <h4>📍 Posizione</h4>
+                        <div id="location-chips" class="chip-container"></div>
+                    </div>
+                </div>
+            </div>
+            <!-- Removed non-functional buttons as requested -->
+            <div class="toolbar__pagination">
+                <span id="pagination-info">1-9 / 9</span>
+                <button class="page-nav" disabled>❮</button>
+                <button class="page-nav" disabled>❯</button>
+            </div>
+        </div>
+
+        <!-- Dynamic Content Area -->
+        <section id="main-content" class="content-view">
+            <!-- Populated by JS -->
+            <div class="loading-state">
+                <div class="spinner"></div>
+            </div>
+        </section>
+
+        <!-- Product Detail Modal -->
+        <div id="product-modal" class="modal-overlay" role="dialog" aria-modal="true" aria-hidden="true">
+            <div class="modal">
+                <div class="modal__header">
+                    <h2 class="modal__title" id="modal-title">Dettaglio Prodotto</h2>
+                    <button class="modal__close" id="modal-close" aria-label="Chiudi">✕</button>
+                </div>
+                <div class="modal__body" id="modal-body">
+                    <!-- Populated by JS -->
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script type="module" src="/js/search.js"></script>
+</body>
+
+</html>
