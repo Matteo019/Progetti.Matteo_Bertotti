@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="it">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Dispensa Bar — Recupera Password</title>
+    <meta name="description" content="Recupera la tua password per Dispensa Bar" />
+  <script type="module" crossorigin src="/assets/supabase-config-Cx9GDPIQ.js"></script>
+  <script type="module" crossorigin src="/assets/auth-BoJBCNKn.js"></script>
+  <link rel="stylesheet" crossorigin href="/assets/auth-C1Dag3UN.css">
+</head>
+
+<body>
+    <main class="auth-page">
+        <div class="auth-card glass-card glass-card--glow">
+            <div class="auth-card__logo">
+                <span class="auth-card__logo-icon">🔑</span>
+                <h1 class="auth-card__logo-title">Recupera Password</h1>
+                <p class="auth-card__logo-sub">Ti invieremo un link di ripristino</p>
+            </div>
+
+            <div id="auth-message" class="auth-message"></div>
+
+            <form id="recovery-form" class="auth-form" autocomplete="on">
+                <div class="form-group">
+                    <label for="email" class="form-label">Email</label>
+                    <input type="email" id="email" class="form-input" placeholder="nome@esempio.com" required
+                        autocomplete="email" />
+                </div>
+                <button type="submit" id="recovery-btn" class="btn btn--primary btn--full btn--lg">
+                    Invia Link
+                </button>
+            </form>
+
+            <div class="auth-links">
+                <a href="/">Torna al <strong>Login</strong></a>
+            </div>
+        </div>
+    </main>
+
+</body>
+
+</html>

@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="it">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Dispensa Bar — Inserimento Massivo</title>
+    <meta name="description" content="Inserimento rapido di più prodotti contemporaneamente" />
+  <script type="module" crossorigin src="/assets/bulkEntry--2bt9mey.js"></script>
+  <link rel="modulepreload" crossorigin href="/assets/supabase-config-Cx9GDPIQ.js">
+  <link rel="modulepreload" crossorigin href="/assets/auth-guard-BJFNIgSW.js">
+  <link rel="stylesheet" crossorigin href="/assets/bulkEntry-D08XU6bQ.css">
+</head>
+
+<body>
+    <!-- Navbar injected by JS -->
+
+    <main class="page container">
+        <header class="page__header">
+            <h1 class="page__title">Inserimento Massivo</h1>
+            <p class="page__subtitle">Aggiorna più bottiglie in una sola operazione</p>
+        </header>
+
+        <!-- Config -->
+        <section class="bulk-config glass-card">
+            <div class="form-group">
+                <label for="bulk-location" class="form-label">📍 Zona / Posizione</label>
+                <select id="bulk-location" class="form-input">
+                    <option value="">— Seleziona posizione —</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="bulk-category" class="form-label">📁 Categoria (opzionale)</label>
+                <select id="bulk-category" class="form-input">
+                    <option value="">— Tutte le categorie —</option>
+                </select>
+            </div>
+        </section>
+
+        <!-- Text Input -->
+        <section class="bulk-input">
+            <div class="form-group">
+                <label for="bulk-text" class="form-label">Inserisci i dati (un prodotto per riga)</label>
+                <textarea id="bulk-text" class="form-input bulk-textarea" rows="10"
+                    placeholder="Grappa Poli Cleopatra | 3,5 bott&#10;Whisky Jack Daniel's | 2,2 bott&#10;Punt e Mes | 1,1 bott"></textarea>
+            </div>
+            <div class="bulk-input__help">
+                <p>📝 <strong>Formato:</strong> <code>Nome Prodotto | quantità bott</code></p>
+                <p>Usa la virgola per i decimali (es: <code>1,5</code>). La parola "bott" è opzionale.</p>
+            </div>
+            <button id="parse-btn" class="btn btn--primary btn--lg">
+                Analizza Dati
+            </button>
+        </section>
+
+        <!-- Preview Table -->
+        <section id="preview-section" class="bulk-preview" hidden>
+            <h2 class="section-title">Anteprima</h2>
+            <div class="table-wrap">
+                <table class="table" id="preview-table">
+                    <thead>
+                        <tr>
+                            <th>Stato</th>
+                            <th>Nome Prodotto</th>
+                            <th>Quantità</th>
+                            <th>Azione</th>
+                        </tr>
+                    </thead>
+                    <tbody id="preview-body"></tbody>
+                </table>
+            </div>
+            <div class="bulk-preview__actions">
+                <button id="confirm-btn" class="btn btn--success btn--lg">
+                    ✓ Conferma Inserimento
+                </button>
+                <button id="cancel-preview-btn" class="btn btn--secondary">
+                    Annulla
+                </button>
+            </div>
+        </section>
+
+        <!-- Results -->
+        <section id="results-section" class="bulk-results" hidden>
+            <h2 class="section-title">Risultato</h2>
+            <div id="results-list" class="admin-list"></div>
+        </section>
+    </main>
+
+</body>
+
+</html>

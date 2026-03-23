@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="it">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Dispensa Bar — Cerca</title>
+    <meta name="description" content="Sfoglia l'inventario per categoria o posizione" />
+  <script type="module" crossorigin src="/assets/search-BkZIhzD3.js"></script>
+  <link rel="modulepreload" crossorigin href="/assets/supabase-config-Cx9GDPIQ.js">
+  <link rel="modulepreload" crossorigin href="/assets/auth-guard-BJFNIgSW.js">
+  <link rel="stylesheet" crossorigin href="/assets/search-DslisHLt.css">
+</head>
+
+<body>
+    <!-- Navbar injected by JS -->
+
+    <main class="page container">
+        <header class="page__header">
+            <h1 class="page__title">Cerca & Scopri</h1>
+            <p class="page__subtitle">Filtra per categoria o posizione</p>
+        </header>
+
+        <!-- Filters -->
+        <section class="search-filters" aria-label="Filtri">
+            <div class="filter-group">
+                <h3 class="filter-group__title">📁 Categoria</h3>
+                <div id="category-chips" class="filter-group__chips">
+                    <!-- Populated by JS -->
+                </div>
+            </div>
+            <div class="filter-group">
+                <h3 class="filter-group__title">📍 Posizione</h3>
+                <div id="location-chips" class="filter-group__chips">
+                    <!-- Populated by JS -->
+                </div>
+            </div>
+        </section>
+
+        <!-- Results -->
+        <section id="product-grid" class="product-grid" aria-label="Prodotti">
+            <div class="empty-state" id="empty-state">
+                <div class="empty-state__icon">🍾</div>
+                <p class="empty-state__text">Seleziona un filtro per visualizzare i prodotti</p>
+            </div>
+        </section>
+
+        <!-- Product Detail Modal -->
+        <div id="product-modal" class="modal-overlay" role="dialog" aria-modal="true" aria-hidden="true">
+            <div class="modal">
+                <div class="modal__header">
+                    <h2 class="modal__title" id="modal-title">Dettaglio Prodotto</h2>
+                    <button class="modal__close" id="modal-close" aria-label="Chiudi">✕</button>
+                </div>
+                <div class="modal__body" id="modal-body">
+                    <!-- Populated by JS -->
+                </div>
+            </div>
+        </div>
+    </main>
+
+</body>
+
+</html>

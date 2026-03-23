@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="it">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Dispensa Bar — Admin</title>
+    <meta name="description" content="Pannello amministratore Dispensa Bar" />
+  <script type="module" crossorigin src="/assets/admin-BQQ6LA_r.js"></script>
+  <link rel="modulepreload" crossorigin href="/assets/supabase-config-Cx9GDPIQ.js">
+  <link rel="modulepreload" crossorigin href="/assets/auth-guard-BJFNIgSW.js">
+  <link rel="stylesheet" crossorigin href="/assets/admin-BCdIeuGy.css">
+</head>
+
+<body>
+    <!-- Navbar injected by JS -->
+
+    <main class="page container">
+        <header class="page__header">
+            <h1 class="page__title">Pannello Admin</h1>
+            <p class="page__subtitle">Gestione utenti, attività e prodotti</p>
+        </header>
+
+        <!-- Tabs -->
+        <div class="tabs" role="tablist">
+            <button class="tab tab--active" data-tab="users" role="tab" aria-selected="true">👥 Utenti</button>
+            <button class="tab" data-tab="activity" role="tab">📋 Attività</button>
+            <button class="tab" data-tab="products" role="tab">🍾 Prodotti</button>
+            <button class="tab" data-tab="categories" role="tab">📁 Categorie</button>
+            <button class="tab" data-tab="locations" role="tab">📍 Posizioni</button>
+        </div>
+
+        <!-- Users Tab -->
+        <section id="tab-users" class="tab-panel" role="tabpanel">
+            <h2 class="section-title">Richieste in Attesa</h2>
+            <div id="pending-users" class="admin-list"></div>
+
+            <h2 class="section-title" style="margin-top:var(--space-2xl)">Utenti Approvati</h2>
+            <div id="approved-users" class="admin-list"></div>
+        </section>
+
+        <!-- Activity Tab -->
+        <section id="tab-activity" class="tab-panel" role="tabpanel" hidden>
+            <div id="activity-filters" class="activity-filters">
+                <input type="date" id="activity-date-filter" class="form-input" />
+                <input type="text" id="activity-user-filter" class="form-input" placeholder="Filtra per utente..." />
+            </div>
+            <div id="activity-list" class="admin-list"></div>
+        </section>
+
+        <!-- Products Tab -->
+        <section id="tab-products" class="tab-panel" role="tabpanel" hidden>
+            <div class="section-actions">
+                <button id="add-product-btn" class="btn btn--primary btn--sm">+ Nuovo Prodotto</button>
+            </div>
+            <div id="products-list" class="admin-list"></div>
+        </section>
+
+        <!-- Categories Tab -->
+        <section id="tab-categories" class="tab-panel" role="tabpanel" hidden>
+            <div class="section-actions">
+                <div class="inline-add">
+                    <input type="text" id="new-category-input" class="form-input" placeholder="Nuova categoria..." />
+                    <button id="add-category-btn" class="btn btn--primary btn--sm">Aggiungi</button>
+                </div>
+            </div>
+            <div id="categories-list" class="admin-list"></div>
+        </section>
+
+        <!-- Locations Tab -->
+        <section id="tab-locations" class="tab-panel" role="tabpanel" hidden>
+            <div class="section-actions">
+                <div class="inline-add">
+                    <input type="text" id="new-location-input" class="form-input" placeholder="Nuova posizione..." />
+                    <button id="add-location-btn" class="btn btn--primary btn--sm">Aggiungi</button>
+                </div>
+            </div>
+            <div id="locations-list" class="admin-list"></div>
+        </section>
+
+        <!-- Product Edit Modal -->
+        <div id="product-modal" class="modal-overlay" role="dialog" aria-modal="true" aria-hidden="true">
+            <div class="modal">
+                <div class="modal__header">
+                    <h2 class="modal__title" id="modal-title">Modifica Prodotto</h2>
+                    <button class="modal__close" id="modal-close" aria-label="Chiudi">✕</button>
+                </div>
+                <div class="modal__body">
+                    <form id="product-form">
+                        <input type="hidden" id="product-id" />
+                        <div class="form-group">
+                            <label for="product-name" class="form-label">Nome</label>
+                            <input type="text" id="product-name" class="form-input" required />
+                        </div>
+                        <div class="form-group">
+                            <label for="product-category" class="form-label">Categoria</label>
+                            <select id="product-category" class="form-input"></select>
+                        </div>
+                        <div class="form-group">
+                            <label for="product-location" class="form-label">Posizione</label>
+                            <select id="product-location" class="form-input"></select>
+                        </div>
+                        <div class="form-group">
+                            <label for="product-quantity" class="form-label">Quantità (bott)</label>
+                            <input type="text" id="product-quantity" class="form-input" placeholder="0,0" />
+                        </div>
+                        <div class="form-group">
+                            <label for="product-origin" class="form-label">Origine</label>
+                            <input type="text" id="product-origin" class="form-input"
+                                placeholder="Es: Scozia, Italia..." />
+                        </div>
+                        <div class="form-group">
+                            <label for="product-aroma" class="form-label">Aroma</label>
+                            <input type="text" id="product-aroma" class="form-input"
+                                placeholder="Es: Affumicato, Fruttato..." />
+                        </div>
+                        <div class="form-group">
+                            <label for="product-description" class="form-label">Descrizione</label>
+                            <textarea id="product-description" class="form-input" rows="3"
+                                placeholder="Due frasi descrittive..."></textarea>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal__footer">
+                    <button id="delete-product-btn" class="btn btn--danger btn--sm"
+                        style="margin-right:auto;">Elimina</button>
+                    <button id="cancel-product-btn" class="btn btn--secondary btn--sm">Annulla</button>
+                    <button id="save-product-btn" class="btn btn--primary btn--sm">Salva</button>
+                </div>
+            </div>
+        </div>
+    </main>
+
+</body>
+
+</html>
