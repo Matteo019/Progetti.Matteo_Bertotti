@@ -6,11 +6,11 @@ services:
       - "8080:80"
     volumes:
       - .:/usr/share/nginx/html
-    restart: always
+    restart: False
 
   tunnel:
     image: cloudflare/cloudflared:latest
     command: tunnel --url http://web:80
     depends_on:
       - web
-    restart: always
+    restart: False
