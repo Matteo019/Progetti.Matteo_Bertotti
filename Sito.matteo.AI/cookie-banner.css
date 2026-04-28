@@ -1,0 +1,113 @@
+/* ============================================================
+   COOKIE BANNER — Cream / Green Theme
+   ============================================================ */
+.cookie-banner {
+    position: fixed;
+    bottom: 2rem;
+    left: 2rem;
+    right: 2rem;
+    width: auto;
+    z-index: 9999;
+    background: rgba(15, 61, 36, .97);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    padding: 1rem 0;
+    border-radius: 16px;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.4);
+    transform: translateY(150%);
+    transition: transform .4s cubic-bezier(.25, .46, .45, .94);
+}
+
+.cookie-banner.show {
+    transform: translateY(0);
+}
+
+.cookie-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 clamp(1.25rem, 5vw, 6rem);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 2rem;
+}
+
+.cookie-text p {
+    font-family: 'Outfit', sans-serif;
+    font-size: .85rem;
+    line-height: 1.6;
+    color: rgba(255, 255, 255, .85);
+}
+
+.cookie-text a {
+    color: #1bbc5e;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+    transition: color .2s;
+}
+
+.cookie-text a:hover {
+    color: #ffffff;
+}
+
+.cookie-actions {
+    display: flex;
+    gap: .75rem;
+    flex-shrink: 0;
+}
+
+.cookie-btn {
+    padding: .6rem 1.4rem;
+    font-family: 'Space Mono', monospace;
+    font-size: .7rem;
+    font-weight: 700;
+    letter-spacing: .1em;
+    text-transform: uppercase;
+    border: none;
+    cursor: pointer;
+    transition: all .25s;
+}
+
+.btn-reject {
+    background: transparent;
+    color: rgba(255, 255, 255, .7);
+    border: 1.5px solid rgba(255, 255, 255, .3);
+}
+
+.btn-reject:hover {
+    background: rgba(255, 255, 255, .1);
+    color: #ffffff;
+    border-color: rgba(255, 255, 255, .6);
+}
+
+.btn-accept {
+    background: #1bbc5e;
+    color: #ffffff;
+}
+
+.btn-accept:hover {
+    background: #2d8c4e;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 16px rgba(27, 188, 94, .3);
+}
+
+/* Mobile */
+@media (max-width: 768px) {
+    .cookie-banner {
+        bottom: 1rem;
+        left: 1rem;
+        right: 1rem;
+        padding: 1.5rem 0;
+    }
+
+    .cookie-container {
+        flex-direction: column;
+        text-align: center;
+        gap: 1rem;
+    }
+
+    .cookie-actions {
+        width: 100%;
+        justify-content: center;
+    }
+}

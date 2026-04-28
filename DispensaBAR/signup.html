@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="it">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Dispensa Bar — Registrazione</title>
+    <meta name="description" content="Crea un account per accedere a Dispensa Bar" />
+    <link rel="stylesheet" href="/css/login.css" />
+</head>
+
+<body>
+    <main class="auth-page">
+        <div class="auth-card glass-card glass-card--glow">
+            <div class="auth-card__logo">
+                <span class="auth-card__logo-icon">🥃</span>
+                <h1 class="auth-card__logo-title">Registrazione</h1>
+                <p class="auth-card__logo-sub">Crea il tuo account</p>
+            </div>
+
+            <div id="auth-message" class="auth-message"></div>
+
+            <form id="signup-form" class="auth-form" autocomplete="on">
+                <div class="form-group">
+                    <label for="display-name" class="form-label">Nome Completo</label>
+                    <input type="text" id="display-name" class="form-input" placeholder="Mario Rossi" required
+                        autocomplete="name" />
+                </div>
+                <div class="form-group">
+                    <label for="email" class="form-label">Email</label>
+                    <input type="email" id="email" class="form-input" placeholder="nome@esempio.com" required
+                        autocomplete="email" />
+                </div>
+                <div class="form-group">
+                    <label for="password" class="form-label">Password</label>
+                    <input type="password" id="password" class="form-input" placeholder="Minimo 6 caratteri" required
+                        minlength="6" autocomplete="new-password" />
+                </div>
+                <button type="submit" id="signup-btn" class="btn btn--primary btn--full btn--lg">
+                    Registrati
+                </button>
+            </form>
+
+            <div class="auth-links">
+                <a href="/">Hai già un account? <strong>Accedi</strong></a>
+            </div>
+        </div>
+    </main>
+
+    <script type="module" src="/js/auth.js"></script>
+</body>
+
+</html>

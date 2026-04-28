@@ -1,0 +1,238 @@
+/* ============================================
+   DISPENSA BAR — Admin Dashboard
+   ============================================ */
+@import './global.css';
+
+body:not(.authenticated) .page {
+    opacity: 0;
+}
+
+body.authenticated .page {
+    opacity: 1;
+    animation: fadeUp 0.4s ease;
+}
+
+@keyframes fadeUp {
+    from {
+        opacity: 0;
+        transform: translateY(12px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Section */
+.section-title {
+    font-size: var(--font-size-xl);
+    font-weight: var(--font-weight-semibold);
+    color: var(--text-primary);
+    margin-bottom: var(--space-md);
+}
+
+.section-actions {
+    margin-bottom: var(--space-lg);
+}
+
+.inline-add {
+    display: flex;
+    gap: var(--space-sm);
+    max-width: 400px;
+}
+
+.inline-add .form-input {
+    flex: 1;
+}
+
+/* Admin List */
+.admin-list {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-sm);
+}
+
+/* User Card */
+.user-card {
+    display: flex;
+    align-items: center;
+    gap: var(--space-md);
+    padding: var(--space-md) var(--space-lg);
+}
+
+.user-card__info {
+    flex: 1;
+    min-width: 0;
+}
+
+.user-card__name {
+    font-weight: var(--font-weight-semibold);
+    color: var(--text-primary);
+    margin-bottom: 2px;
+}
+
+.user-card__email {
+    font-size: var(--font-size-sm);
+    color: var(--text-secondary);
+}
+
+.user-card__date {
+    font-size: var(--font-size-xs);
+    color: var(--text-muted);
+}
+
+.user-card__actions {
+    display: flex;
+    gap: var(--space-sm);
+}
+
+/* Activity Card */
+.activity-card {
+    display: flex;
+    align-items: flex-start;
+    gap: var(--space-md);
+    padding: var(--space-md);
+    border-radius: var(--radius-md);
+    background: var(--bg-glass);
+    transition: background var(--transition-fast);
+}
+
+.activity-card:hover {
+    background: var(--bg-glass-hover);
+}
+
+.activity-card__icon {
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: var(--radius-md);
+    font-size: var(--font-size-lg);
+    flex-shrink: 0;
+}
+
+.activity-card__icon--in {
+    background: var(--success-bg);
+}
+
+.activity-card__icon--out {
+    background: var(--danger-bg);
+}
+
+.activity-card__icon--admin {
+    background: rgba(212, 168, 67, 0.12);
+}
+
+.activity-card__content {
+    flex: 1;
+}
+
+.activity-card__text {
+    font-size: var(--font-size-sm);
+    color: var(--text-primary);
+    margin-bottom: 2px;
+}
+
+.activity-card__text strong {
+    color: var(--accent-gold);
+}
+
+.activity-card__meta {
+    font-size: var(--font-size-xs);
+    color: var(--text-muted);
+}
+
+.activity-card__date-header {
+    font-size: var(--font-size-sm);
+    font-weight: var(--font-weight-semibold);
+    color: var(--text-secondary);
+    padding: var(--space-sm) 0;
+    border-bottom: 1px solid var(--border-color);
+    margin-bottom: var(--space-sm);
+}
+
+/* Activity Filters */
+.activity-filters {
+    display: flex;
+    gap: var(--space-sm);
+    margin-bottom: var(--space-lg);
+    flex-wrap: wrap;
+}
+
+.activity-filters .form-input {
+    max-width: 220px;
+}
+
+/* Product list item */
+.product-list-item {
+    display: flex;
+    align-items: center;
+    gap: var(--space-md);
+    padding: var(--space-md) var(--space-lg);
+    cursor: pointer;
+    transition: border-color var(--transition-fast);
+}
+
+.product-list-item:hover {
+    border-color: var(--border-accent);
+}
+
+.product-list-item__name {
+    flex: 1;
+    font-weight: var(--font-weight-medium);
+    color: var(--text-primary);
+}
+
+.product-list-item__category {
+    font-size: var(--font-size-sm);
+    color: var(--text-secondary);
+}
+
+.product-list-item__qty {
+    font-weight: var(--font-weight-bold);
+    color: var(--accent-gold);
+    min-width: 60px;
+    text-align: right;
+}
+
+/* Simple item (categories/locations) */
+.simple-item {
+    display: flex;
+    align-items: center;
+    gap: var(--space-md);
+    padding: 12px var(--space-lg);
+    border-radius: var(--radius-md);
+    background: var(--bg-glass);
+}
+
+.simple-item__name {
+    flex: 1;
+    font-weight: var(--font-weight-medium);
+    color: var(--text-primary);
+}
+
+.simple-item__actions {
+    display: flex;
+    gap: var(--space-xs);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+
+    .user-card,
+    .product-list-item {
+        flex-wrap: wrap;
+    }
+
+    .user-card__actions {
+        width: 100%;
+        justify-content: flex-end;
+    }
+
+    .activity-filters .form-input {
+        max-width: 100%;
+        flex: 1;
+    }
+}

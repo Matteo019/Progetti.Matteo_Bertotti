@@ -1,0 +1,138 @@
+/* ============================================
+   DISPENSA BAR — Bulk Entry Page
+   ============================================ */
+@import './global.css';
+
+body:not(.authenticated) .page {
+    opacity: 0;
+}
+
+body.authenticated .page {
+    opacity: 1;
+    animation: fadeUp 0.4s ease;
+}
+
+@keyframes fadeUp {
+    from {
+        opacity: 0;
+        transform: translateY(12px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Config section */
+.bulk-config {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--space-lg);
+    padding: var(--space-lg);
+    margin-bottom: var(--space-xl);
+}
+
+/* Input section */
+.bulk-input {
+    margin-bottom: var(--space-2xl);
+}
+
+.bulk-textarea {
+    min-height: 200px;
+    font-family: 'Cascadia Code', 'Fira Code', monospace;
+    font-size: var(--font-size-sm);
+    line-height: 1.8;
+    resize: vertical;
+}
+
+.bulk-input__help {
+    margin: var(--space-md) 0;
+    padding: var(--space-md);
+    background: var(--bg-glass);
+    border-radius: var(--radius-md);
+    font-size: var(--font-size-sm);
+    color: var(--text-secondary);
+}
+
+.bulk-input__help code {
+    background: rgba(212, 168, 67, 0.15);
+    color: var(--accent-gold);
+    padding: 2px 6px;
+    border-radius: var(--radius-sm);
+    font-size: var(--font-size-xs);
+}
+
+.bulk-input__help p {
+    margin-bottom: var(--space-xs);
+}
+
+.bulk-input__help p:last-child {
+    margin-bottom: 0;
+}
+
+/* Preview */
+.bulk-preview {
+    margin-bottom: var(--space-2xl);
+    animation: fadeUp 0.3s ease;
+}
+
+.bulk-preview .section-title {
+    margin-bottom: var(--space-md);
+}
+
+.bulk-preview__actions {
+    display: flex;
+    gap: var(--space-md);
+    margin-top: var(--space-lg);
+}
+
+/* Table status indicators */
+.status-new {
+    color: var(--success);
+    font-weight: var(--font-weight-semibold);
+}
+
+.status-update {
+    color: var(--accent-gold);
+    font-weight: var(--font-weight-semibold);
+}
+
+.status-error {
+    color: var(--danger);
+    font-weight: var(--font-weight-semibold);
+}
+
+/* Results */
+.bulk-results {
+    animation: fadeUp 0.3s ease;
+}
+
+.result-item {
+    display: flex;
+    align-items: center;
+    gap: var(--space-md);
+    padding: 12px var(--space-md);
+    border-radius: var(--radius-md);
+    background: var(--bg-glass);
+    font-size: var(--font-size-sm);
+}
+
+.result-item--success {
+    border-left: 3px solid var(--success);
+}
+
+.result-item--error {
+    border-left: 3px solid var(--danger);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .bulk-config {
+        grid-template-columns: 1fr;
+    }
+
+    .bulk-preview__actions {
+        flex-direction: column;
+    }
+}
