@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="Content-Security-Policy"
-        content="default-src 'self' mailto: tel:; script-src 'self'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data:; connect-src 'self'; form-action 'self' mailto: tel:;">
+        content="default-src 'self' mailto: tel:; script-src 'self'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data:; connect-src 'self'; frame-src 'self' https://progettochatboxmatteo.netlify.app https://progettodispensamatteo.netlify.app; form-action 'self' mailto: tel:;">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Matteo Augustinho Bertotti | AI Dev & Data Analyst</title>
     <meta name="description" content="Portfolio di Matteo Augustinho Bertotti, studente di AI e Data Analysis.">
@@ -219,19 +219,63 @@
     <section id="projects" class="section">
         <div class="container">
             <h2 class="section-title" data-i18n="projects-title" data-split-text>I Miei Progetti</h2>
-            <div class="projects-featured">
-                <article class="project-card featured-repo">
-                    <div class="project-image">
-                        <img src="images/code.png" alt="GitHub Repository">
+            <div class="projects-grid">
+                <!-- Card 1: Metline Chatbox -->
+                <article class="project-card" data-modal-type="iframe"
+                    data-modal-url="https://progettochatboxmatteo.netlify.app/"
+                    data-modal-title="Metline Chatbox" tabindex="0" role="button"
+                    aria-label="Apri progetto Metline Chatbox">
+                    <div class="project-card-image">
+                        <img src="images/chatbox.png" alt="Metline Chatbox Preview">
+                        <div class="project-card-overlay">
+                            <span data-i18n="project-open">Apri Progetto</span>
+                        </div>
                     </div>
-                    <div class="project-info">
-                        <h3 data-i18n="project-featured-title">Repository Progetti (GitHub)</h3>
-                        <p data-i18n="project-featured-desc">Esplora la raccolta completa dei miei progetti e
-                            collaborazioni direttamente sul mio profilo
-                            GitHub.</p>
-                        <a href="https://github.com/Matteo019/Progetti.Matteo_Bertotti" target="_blank"
-                            rel="noopener noreferrer" class="btn btn-primary" data-i18n="project-featured-btn">Vai al
-                            Repository <span>&rarr;</span></a>
+                    <div class="project-card-body">
+                        <h3 data-i18n="project-1-title">Metline Chatbox</h3>
+                        <p data-i18n="project-1-desc">Chatbot AI per assistenza clienti, con integrazione MCP e modello Groq.</p>
+                        <div class="project-tags">
+                            <span>FastAPI</span><span>Groq</span><span>MCP</span><span>Python</span>
+                        </div>
+                    </div>
+                </article>
+
+                <!-- Card 2: Gestione Magazzino Bar -->
+                <article class="project-card" data-modal-type="iframe"
+                    data-modal-url="https://progettodispensamatteo.netlify.app/"
+                    data-modal-title="Gestione Magazzino Bar" tabindex="0" role="button"
+                    aria-label="Apri progetto Gestione Magazzino Bar">
+                    <div class="project-card-image">
+                        <img src="images/dispensa.png" alt="Gestione Magazzino Bar Preview">
+                        <div class="project-card-overlay">
+                            <span data-i18n="project-open">Apri Progetto</span>
+                        </div>
+                    </div>
+                    <div class="project-card-body">
+                        <h3 data-i18n="project-2-title">Gestione Magazzino Bar</h3>
+                        <p data-i18n="project-2-desc">Applicazione web per la gestione completa del magazzino alcolico di un bar.</p>
+                        <div class="project-tags">
+                            <span>HTML</span><span>CSS</span><span>JavaScript</span>
+                        </div>
+                    </div>
+                </article>
+
+                <!-- Card 3: Notebook Analisi Dati -->
+                <article class="project-card" data-modal-type="notebook"
+                    data-modal-title="Notebook Analisi Dati" tabindex="0" role="button"
+                    aria-label="Apri notebook analisi dati">
+                    <div class="project-card-image">
+                        <img src="images/AnalisiDati.png" alt="Notebook Analisi Dati Preview">
+                        <div class="project-card-overlay">
+                            <span data-i18n="project-explore">Esplora il Notebook</span>
+                        </div>
+                    </div>
+                    <div class="project-card-body">
+                        <h3 data-i18n="project-3-title">Notebook Analisi Dati</h3>
+                        <p data-i18n="project-3-desc">Pulizia e analisi guidata di un dataset CSV con Python, step by step.</p>
+                        <div class="project-tags">
+                            <span>Python</span><span>Pandas</span><span>Seaborn</span><span>Matplotlib</span>
+                        </div>
                     </div>
                 </article>
             </div>
@@ -318,6 +362,34 @@
             <p data-i18n="footer-rights">&copy; 2025 Matteo Augustinho Bertotti. Tutti i diritti riservati.</p>
         </div>
     </footer>
+
+    <!-- Project Modal -->
+    <div class="modal-overlay" id="project-modal" role="dialog" aria-modal="true" aria-labelledby="modal-title" hidden>
+        <div class="modal-container">
+            <div class="modal-header">
+                <div class="modal-browser-dots">
+                    <span class="dot dot-red"></span>
+                    <span class="dot dot-yellow"></span>
+                    <span class="dot dot-green"></span>
+                </div>
+                <div class="modal-address-bar" id="modal-address-bar"></div>
+                <h3 class="modal-title" id="modal-title"></h3>
+                <button class="modal-close" id="modal-close" aria-label="Chiudi" data-i18n-aria="modal-close">&times;</button>
+            </div>
+            <div class="modal-body" id="modal-body">
+                <!-- Dynamic content: iframe or notebook -->
+                <div class="modal-loading" id="modal-loading">
+                    <div class="modal-spinner"></div>
+                    <p data-i18n="modal-loading">Caricamento in corso...</p>
+                </div>
+                <div class="modal-error" id="modal-error" hidden>
+                    <div class="modal-error-icon">🚀</div>
+                    <h4 data-i18n="modal-error-title">Progetto in fase di deploy</h4>
+                    <p data-i18n="modal-error-desc">Questo progetto sarà disponibile a breve.</p>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <script src="script.js"></script>
     <script src="cookie-banner.js"></script>

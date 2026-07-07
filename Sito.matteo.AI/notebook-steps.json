@@ -1,0 +1,87 @@
+{
+  "title_it": "Pulizia e Analisi Dataset CSV",
+  "title_en": "CSV Dataset Cleaning & Analysis",
+  "steps": [
+    {
+      "id": 1,
+      "title_it": "Import Librerie",
+      "title_en": "Import Libraries",
+      "description_it": "Importiamo le librerie necessarie per l'analisi dei dati: Pandas per la manipolazione, Matplotlib e Seaborn per la visualizzazione.",
+      "description_en": "We import the necessary libraries for data analysis: Pandas for manipulation, Matplotlib and Seaborn for visualization.",
+      "code": "import pandas as pd\nimport numpy as np\nimport matplotlib.pyplot as plt\nimport seaborn as sns\n\nsns.set_theme(style='whitegrid')\nplt.rcParams['figure.figsize'] = (10, 6)\nprint('Librerie importate con successo ✓')",
+      "outputType": "text",
+      "outputContent": "Librerie importate con successo ✓"
+    },
+    {
+      "id": 2,
+      "title_it": "Caricamento Dataset",
+      "title_en": "Load Dataset",
+      "description_it": "Carichiamo il CSV e visualizziamo le prime 5 righe per capire la struttura dei dati.",
+      "description_en": "We load the CSV file and display the first 5 rows to understand the data structure.",
+      "code": "df = pd.read_csv('sales_data.csv')\nprint(f'Shape: {df.shape}')\nprint(f'Colonne: {list(df.columns)}')\ndf.head()",
+      "outputType": "table",
+      "outputContent": "<table><thead><tr><th></th><th>date</th><th>product</th><th>category</th><th>quantity</th><th>price</th><th>region</th></tr></thead><tbody><tr><td>0</td><td>2024-01-05</td><td>Widget A</td><td>Electronics</td><td>12</td><td>29.99</td><td>Nord</td></tr><tr><td>1</td><td>2024-01-07</td><td>Widget B</td><td>Electronics</td><td>NaN</td><td>49.99</td><td>Sud</td></tr><tr><td>2</td><td>2024-01-10</td><td>Gadget X</td><td>Home</td><td>5</td><td>NaN</td><td>Centro</td></tr><tr><td>3</td><td>2024-01-12</td><td>Tool Y</td><td>Tools</td><td>8</td><td>15.50</td><td>Nord</td></tr><tr><td>4</td><td>2024-01-15</td><td>Widget A</td><td>Electronics</td><td>20</td><td>29.99</td><td>NaN</td></tr></tbody></table><p class='nb-shape'>Shape: (1200, 6) &bull; Colonne: ['date', 'product', 'category', 'quantity', 'price', 'region']</p>"
+    },
+    {
+      "id": 3,
+      "title_it": "Analisi Valori Mancanti",
+      "title_en": "Missing Values Analysis",
+      "description_it": "Verifichiamo quanti valori mancanti (NaN) ci sono per ogni colonna e visualizziamo la distribuzione.",
+      "description_en": "We check how many missing values (NaN) exist per column and visualize the distribution.",
+      "code": "missing = df.isnull().sum()\nmissing_pct = (missing / len(df) * 100).round(2)\n\nmissing_df = pd.DataFrame({\n    'Mancanti': missing,\n    'Percentuale': missing_pct\n}).sort_values('Mancanti', ascending=False)\n\nprint(missing_df)\nprint(f'\\nTotale NaN: {missing.sum()}')",
+      "outputType": "table",
+      "outputContent": "<table><thead><tr><th>Colonna</th><th>Mancanti</th><th>Percentuale %</th></tr></thead><tbody><tr><td>quantity</td><td>45</td><td>3.75</td></tr><tr><td>price</td><td>32</td><td>2.67</td></tr><tr><td>region</td><td>28</td><td>2.33</td></tr><tr><td>date</td><td>0</td><td>0.00</td></tr><tr><td>product</td><td>0</td><td>0.00</td></tr><tr><td>category</td><td>0</td><td>0.00</td></tr></tbody></table><p class='nb-shape'>Totale NaN: 105 su 7200 celle (1.46%)</p>"
+    },
+    {
+      "id": 4,
+      "title_it": "Pulizia Dati",
+      "title_en": "Data Cleaning",
+      "description_it": "Riempiamo i valori mancanti: mediana per le colonne numeriche, moda per le categoriche. Convertiamo anche la colonna 'date' in formato datetime.",
+      "description_en": "We fill missing values: median for numerical columns, mode for categorical ones. We also convert the 'date' column to datetime format.",
+      "code": "# Conversione data\ndf['date'] = pd.to_datetime(df['date'])\n\n# Impute numerici con mediana\ndf['quantity'].fillna(df['quantity'].median(), inplace=True)\ndf['price'].fillna(df['price'].median(), inplace=True)\n\n# Impute categorici con moda\ndf['region'].fillna(df['region'].mode()[0], inplace=True)\n\n# Verifica\nassert df.isnull().sum().sum() == 0\nprint('Pulizia completata ✓')\nprint(f'NaN rimanenti: {df.isnull().sum().sum()}')\ndf.dtypes",
+      "outputType": "text",
+      "outputContent": "Pulizia completata ✓\nNaN rimanenti: 0\n\ndate        datetime64[ns]\nproduct             object\ncategory            object\nquantity           float64\nprice              float64\nregion              object\ndtype: object"
+    },
+    {
+      "id": 5,
+      "title_it": "Vendite per Categoria",
+      "title_en": "Sales by Category",
+      "description_it": "Calcoliamo il fatturato per categoria e visualizziamo il risultato con un grafico a barre.",
+      "description_en": "We calculate revenue by category and visualize the result with a bar chart.",
+      "code": "df['revenue'] = df['quantity'] * df['price']\n\nrev_by_cat = df.groupby('category')['revenue'] \\\n    .sum().sort_values(ascending=False)\n\nfig, ax = plt.subplots()\nsns.barplot(x=rev_by_cat.values, y=rev_by_cat.index,\n            palette='Greens_r', ax=ax)\nax.set_xlabel('Fatturato (€)')\nax.set_title('Fatturato per Categoria')\nplt.tight_layout()\nplt.show()",
+      "outputType": "chart",
+      "chartConfig": {
+        "type": "bar",
+        "labels": ["Electronics", "Home", "Tools", "Garden", "Sports"],
+        "datasets": [{
+          "label": "Fatturato (€)",
+          "data": [48500, 32100, 21800, 18400, 12700],
+          "backgroundColor": ["#0f3d24", "#1a5c38", "#2d8c4e", "#1bbc5e", "#5cd88a"]
+        }]
+      }
+    },
+    {
+      "id": 6,
+      "title_it": "Trend Temporale",
+      "title_en": "Time Trend",
+      "description_it": "Analizziamo l'andamento del fatturato mensile per individuare trend e stagionalità.",
+      "description_en": "We analyze the monthly revenue trend to identify patterns and seasonality.",
+      "code": "monthly = df.set_index('date') \\\n    .resample('M')['revenue'].sum()\n\nfig, ax = plt.subplots()\nax.plot(monthly.index, monthly.values,\n        color='#1a5c38', linewidth=2, marker='o',\n        markerfacecolor='#1bbc5e', markersize=6)\nax.fill_between(monthly.index, monthly.values,\n                alpha=0.15, color='#1bbc5e')\nax.set_title('Fatturato Mensile')\nax.set_ylabel('Fatturato (€)')\nplt.xticks(rotation=45)\nplt.tight_layout()\nplt.show()",
+      "outputType": "chart",
+      "chartConfig": {
+        "type": "line",
+        "labels": ["Gen", "Feb", "Mar", "Apr", "Mag", "Giu", "Lug", "Ago", "Set", "Ott", "Nov", "Dic"],
+        "datasets": [{
+          "label": "Fatturato (€)",
+          "data": [8200, 9500, 11200, 10800, 12400, 14100, 13500, 11800, 12900, 15200, 16800, 18400],
+          "borderColor": "#1a5c38",
+          "backgroundColor": "rgba(27, 188, 94, 0.15)",
+          "fill": true,
+          "tension": 0.3,
+          "pointBackgroundColor": "#1bbc5e",
+          "pointRadius": 5
+        }]
+      }
+    }
+  ]
+}

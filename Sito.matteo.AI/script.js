@@ -43,9 +43,22 @@ const translations = {
         "skill-title-6": "Backend & Frameworks",
         "skill-desc-6": "FastAPI, Flask, Python",
         "projects-title": "I Miei Progetti",
-        "project-featured-title": "Repository Progetti (GitHub)",
-        "project-featured-desc": "Esplora la raccolta completa dei miei progetti e collaborazioni direttamente sul mio profilo GitHub.",
-        "project-featured-btn": "Vai al Repository",
+        "project-1-title": "Metline Chatbox",
+        "project-1-desc": "Chatbot AI per assistenza clienti, con integrazione MCP e modello Groq.",
+        "project-2-title": "Gestione Magazzino Bar",
+        "project-2-desc": "Applicazione web per la gestione completa del magazzino alcolico di un bar.",
+        "project-3-title": "Notebook Analisi Dati",
+        "project-3-desc": "Pulizia e analisi guidata di un dataset CSV con Python, step by step.",
+        "project-open": "Apri Progetto",
+        "project-explore": "Esplora il Notebook",
+        "modal-close": "Chiudi",
+        "modal-loading": "Caricamento in corso...",
+        "modal-error-title": "Progetto in fase di deploy",
+        "modal-error-desc": "Questo progetto sarà disponibile a breve.",
+        "notebook-run": "Esegui questo step",
+        "notebook-prev": "Precedente",
+        "notebook-next": "Successivo",
+        "notebook-step-of": "Step {n} di {total}",
         "certs-title": "Certificazioni",
         "cert-view": "Visualizza Certificato",
         "cert-db": "freeCodeCamp Python",
@@ -100,9 +113,22 @@ const translations = {
         "skill-title-6": "Backend & Frameworks",
         "skill-desc-6": "FastAPI, Flask, Python",
         "projects-title": "My Projects",
-        "project-featured-title": "Project Repository (GitHub)",
-        "project-featured-desc": "Explore the complete collection of my projects and collaborations directly on my GitHub profile.",
-        "project-featured-btn": "Go to Repository",
+        "project-1-title": "Metline Chatbox",
+        "project-1-desc": "AI Chatbot for customer support with MCP integration and Groq model.",
+        "project-2-title": "Bar Inventory Management",
+        "project-2-desc": "Web application for complete bar inventory management.",
+        "project-3-title": "Data Analysis Notebook",
+        "project-3-desc": "Guided CSV dataset cleaning and analysis with Python, step by step.",
+        "project-open": "Open Project",
+        "project-explore": "Explore Notebook",
+        "modal-close": "Close",
+        "modal-loading": "Loading...",
+        "modal-error-title": "Project being deployed",
+        "modal-error-desc": "This project will be available soon.",
+        "notebook-run": "Run this step",
+        "notebook-prev": "Previous",
+        "notebook-next": "Next",
+        "notebook-step-of": "Step {n} of {total}",
         "certs-title": "Certifications",
         "cert-view": "View Certificate",
         "cert-db": "freeCodeCamp Python",
@@ -170,6 +196,7 @@ document.addEventListener('DOMContentLoaded', () => {
     initMagneticButtons();
     initTiltCards();
     initParallaxHero();
+    initProjectModals();
 });
 
 // --- Typing Effect Logic ---
@@ -810,6 +837,365 @@ function initParallaxHero() {
             if (heroImg) heroImg.style.transform = 'translate(0, 0)';
             if (codeIcon) codeIcon.style.transform = 'translate(0, 0)';
         });
+    }
+}
+
+// ============================================================
+//  PROJECT MODALS & NOTEBOOK LOGIC
+// ============================================================
+function initProjectModals() {
+    const cards = document.querySelectorAll('.project-card');
+    const modal = document.getElementById('project-modal');
+    if (!modal || cards.length === 0) return;
+
+    const closeBtn = document.getElementById('modal-close');
+    const titleEl = document.getElementById('modal-title');
+    const addressBar = document.getElementById('modal-address-bar');
+    const bodyEl = document.getElementById('modal-body');
+    const loadingEl = document.getElementById('modal-loading');
+    const errorEl = document.getElementById('modal-error');
+
+    let iframeTimeout;
+
+    // Focus trap variables
+    let focusableElements;
+    let firstFocusableElement;
+    let lastFocusableElement;
+
+    function openModal(card) {
+        const type = card.getAttribute('data-modal-type');
+        const url = card.getAttribute('data-modal-url');
+        const title = card.getAttribute('data-modal-title');
+
+        titleEl.textContent = title;
+        addressBar.textContent = url || 'local://notebook';
+        
+        // Reset state
+        bodyEl.innerHTML = '';
+        bodyEl.appendChild(loadingEl);
+        bodyEl.appendChild(errorEl);
+        loadingEl.classList.remove('hidden');
+        errorEl.setAttribute('hidden', '');
+
+        if (type === 'iframe') {
+            const iframe = document.createElement('iframe');
+            iframe.src = url;
+            iframe.title = title;
+            
+            iframeTimeout = setTimeout(() => {
+                loadingEl.classList.add('hidden');
+                errorEl.removeAttribute('hidden');
+                iframe.style.display = 'none';
+            }, 8000); // 8s timeout
+
+            iframe.onload = () => {
+                clearTimeout(iframeTimeout);
+                loadingEl.classList.add('hidden');
+                errorEl.setAttribute('hidden', '');
+                iframe.style.display = 'block';
+            };
+            
+            bodyEl.appendChild(iframe);
+        } else if (type === 'notebook') {
+            loadNotebook();
+        }
+
+        modal.removeAttribute('hidden');
+        // Force reflow
+        void modal.offsetWidth;
+        modal.classList.add('active');
+        document.body.style.overflow = 'hidden';
+
+        // Set up focus trap
+        focusableElements = modal.querySelectorAll('button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])');
+        if (focusableElements.length > 0) {
+            firstFocusableElement = focusableElements[0];
+            lastFocusableElement = focusableElements[focusableElements.length - 1];
+            firstFocusableElement.focus();
+        }
+    }
+
+    function closeModal() {
+        modal.classList.remove('active');
+        setTimeout(() => {
+            modal.setAttribute('hidden', '');
+            bodyEl.innerHTML = '';
+            document.body.style.overflow = '';
+            clearTimeout(iframeTimeout);
+        }, 350);
+    }
+
+    cards.forEach(card => {
+        card.addEventListener('click', () => openModal(card));
+        card.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter' || e.key === ' ') {
+                e.preventDefault();
+                openModal(card);
+            }
+        });
+    });
+
+    closeBtn.addEventListener('click', closeModal);
+    modal.addEventListener('click', (e) => {
+        if (e.target === modal) closeModal();
+    });
+
+    document.addEventListener('keydown', (e) => {
+        if (!modal.classList.contains('active')) return;
+        
+        if (e.key === 'Escape') {
+            closeModal();
+        }
+        
+        // Focus trap logic
+        let isTabPressed = e.key === 'Tab' || e.keyCode === 9;
+        if (!isTabPressed) return;
+
+        if (e.shiftKey) { // shift + tab
+            if (document.activeElement === firstFocusableElement) {
+                lastFocusableElement.focus();
+                e.preventDefault();
+            }
+        } else { // tab
+            if (document.activeElement === lastFocusableElement) {
+                firstFocusableElement.focus();
+                e.preventDefault();
+            }
+        }
+    });
+
+    // Notebook Logic
+    async function loadNotebook() {
+        try {
+            const response = await fetch('notebook-steps.json');
+            const data = await response.json();
+            renderNotebook(data);
+        } catch (err) {
+            console.error('Failed to load notebook:', err);
+            loadingEl.classList.add('hidden');
+            errorEl.removeAttribute('hidden');
+        }
+    }
+
+    function renderNotebook(data) {
+        let currentStep = 0;
+        const steps = data.steps;
+
+        const layout = document.createElement('div');
+        layout.className = 'notebook-layout';
+
+        // Header
+        const header = document.createElement('div');
+        header.className = 'notebook-header';
+        
+        const stepInfo = document.createElement('div');
+        stepInfo.className = 'notebook-step-info';
+        
+        const stepCounter = document.createElement('span');
+        stepCounter.className = 'notebook-step-counter';
+        
+        const stepTitle = document.createElement('span');
+        stepTitle.className = 'notebook-step-title';
+        
+        stepInfo.appendChild(stepCounter);
+        stepInfo.appendChild(stepTitle);
+        header.appendChild(stepInfo);
+
+        // Progress
+        const progress = document.createElement('div');
+        progress.className = 'notebook-progress';
+        const progressBar = document.createElement('div');
+        progressBar.className = 'notebook-progress-bar';
+        progress.appendChild(progressBar);
+
+        // Description
+        const desc = document.createElement('div');
+        desc.className = 'notebook-step-desc';
+
+        // Content (Code & Output)
+        const content = document.createElement('div');
+        content.className = 'notebook-content';
+        
+        const codePanel = document.createElement('div');
+        codePanel.className = 'notebook-code-panel';
+        const codePre = document.createElement('pre');
+        codePre.className = 'language-python';
+        codePanel.appendChild(codePre);
+
+        const outputPanel = document.createElement('div');
+        outputPanel.className = 'notebook-output-panel';
+
+        content.appendChild(codePanel);
+        content.appendChild(outputPanel);
+
+        // Controls
+        const controls = document.createElement('div');
+        controls.className = 'notebook-controls';
+        
+        const dots = document.createElement('div');
+        dots.className = 'notebook-dots';
+        steps.forEach((_, i) => {
+            const dot = document.createElement('span');
+            dot.className = 'step-dot';
+            dots.appendChild(dot);
+        });
+
+        const navBtns = document.createElement('div');
+        navBtns.className = 'notebook-nav-btns';
+        
+        const prevBtn = document.createElement('button');
+        prevBtn.className = 'nb-btn nb-btn-secondary';
+        prevBtn.innerHTML = translations[currentLang]['notebook-prev'];
+        
+        const runBtn = document.createElement('button');
+        runBtn.className = 'nb-btn nb-btn-primary';
+        
+        navBtns.appendChild(prevBtn);
+        navBtns.appendChild(runBtn);
+        controls.appendChild(dots);
+        controls.appendChild(navBtns);
+
+        layout.appendChild(header);
+        layout.appendChild(progress);
+        layout.appendChild(desc);
+        layout.appendChild(content);
+        layout.appendChild(controls);
+
+        loadingEl.classList.add('hidden');
+        bodyEl.appendChild(layout);
+
+        // Syntax Highlighting simple implementation
+        function highlightPython(code) {
+            const keywords = ['import', 'from', 'as', 'def', 'class', 'return', 'if', 'else', 'elif', 'for', 'while', 'in', 'and', 'or', 'not', 'True', 'False', 'None'];
+            const builtins = ['print', 'len', 'range', 'list', 'dict', 'set', 'str', 'int', 'float'];
+            
+            let highlighted = code
+                .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;') // escape HTML
+                .replace(/(#.*)/g, '<span class="nb-comment">$1</span>') // comments
+                .replace(/('(?:\\'|[^'])*'|"(?:\\"|[^"])*")/g, '<span class="nb-string">$1</span>') // strings
+                .replace(/\b(\d+\.?\d*)\b/g, '<span class="nb-number">$1</span>'); // numbers
+            
+            keywords.forEach(kw => {
+                const regex = new RegExp(`\\b${kw}\\b`, 'g');
+                highlighted = highlighted.replace(regex, `<span class="nb-keyword">${kw}</span>`);
+            });
+
+            builtins.forEach(bi => {
+                const regex = new RegExp(`\\b${bi}\\b(?=\\()`, 'g');
+                highlighted = highlighted.replace(regex, `<span class="nb-builtin">${bi}</span>`);
+            });
+            
+            return highlighted;
+        }
+
+        // Add Chart.js if not present for chart rendering
+        if (!document.getElementById('chartjs-script')) {
+            const script = document.createElement('script');
+            script.id = 'chartjs-script';
+            script.src = 'https://cdn.jsdelivr.net/npm/chart.js';
+            document.head.appendChild(script);
+        }
+
+        let stepOutputRevealed = false;
+        let activeChart = null;
+
+        function updateStep() {
+            const step = steps[currentStep];
+            stepOutputRevealed = false;
+            
+            const stepStr = translations[currentLang]['notebook-step-of']
+                .replace('{n}', currentStep + 1).replace('{total}', steps.length);
+            stepCounter.textContent = stepStr;
+            
+            const isIt = currentLang === 'it';
+            stepTitle.textContent = isIt ? step.title_it : step.title_en;
+            desc.textContent = isIt ? step.description_it : step.description_en;
+            
+            progressBar.style.width = `${((currentStep) / steps.length) * 100}%`;
+            
+            codePre.innerHTML = highlightPython(step.code);
+
+            // Set placeholder output
+            outputPanel.innerHTML = `
+                <div class="notebook-output-placeholder">
+                    <div class="placeholder-icon">⚙️</div>
+                    <p>${translations[currentLang]['notebook-run']}</p>
+                </div>
+            `;
+
+            prevBtn.disabled = currentStep === 0;
+            runBtn.textContent = translations[currentLang]['notebook-run'];
+            
+            Array.from(dots.children).forEach((dot, i) => {
+                dot.className = 'step-dot';
+                if (i < currentStep) dot.classList.add('completed');
+                if (i === currentStep) dot.classList.add('active');
+            });
+        }
+
+        function revealOutput() {
+            const step = steps[currentStep];
+            stepOutputRevealed = true;
+            
+            progressBar.style.width = `${((currentStep + 1) / steps.length) * 100}%`;
+            runBtn.textContent = currentStep === steps.length - 1 ? '✓' : translations[currentLang]['notebook-next'];
+
+            // Reveal
+            const outDiv = document.createElement('div');
+            outDiv.className = `notebook-output-content ${step.outputType}-output`;
+            
+            if (step.outputType === 'text') {
+                outDiv.textContent = step.outputContent;
+            } else if (step.outputType === 'table') {
+                outDiv.innerHTML = step.outputContent;
+            } else if (step.outputType === 'chart' && step.chartConfig) {
+                outDiv.innerHTML = '<div class="notebook-chart-container"><canvas id="nb-chart"></canvas></div>';
+            }
+
+            outputPanel.innerHTML = '';
+            outputPanel.appendChild(outDiv);
+            
+            // Trigger animation
+            setTimeout(() => outDiv.classList.add('visible'), 50);
+
+            // Render chart if needed
+            if (step.outputType === 'chart' && typeof Chart !== 'undefined') {
+                setTimeout(() => {
+                    if (activeChart) activeChart.destroy();
+                    const ctx = document.getElementById('nb-chart').getContext('2d');
+                    activeChart = new Chart(ctx, {
+                        ...step.chartConfig,
+                        options: {
+                            responsive: true,
+                            maintainAspectRatio: false,
+                            plugins: { legend: { display: false } }
+                        }
+                    });
+                }, 100);
+            }
+        }
+
+        prevBtn.addEventListener('click', () => {
+            if (currentStep > 0) {
+                currentStep--;
+                updateStep();
+                revealOutput();
+            }
+        });
+
+        runBtn.addEventListener('click', () => {
+            if (!stepOutputRevealed) {
+                revealOutput();
+            } else {
+                if (currentStep < steps.length - 1) {
+                    currentStep++;
+                    updateStep();
+                }
+            }
+        });
+
+        // Initialize first step
+        updateStep();
     }
 }
 
