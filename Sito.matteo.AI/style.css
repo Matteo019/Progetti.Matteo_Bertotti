@@ -1452,6 +1452,11 @@ body.modal-open * {
     z-index: 3;
 }
 
+.modal-error[hidden],
+.modal-error.hidden {
+    display: none !important;
+}
+
 .modal-error-icon {
     font-size: 3rem;
     animation: modalErrorFloat 3s ease-in-out infinite alternate;
@@ -1522,11 +1527,13 @@ body.modal-open * {
 .notebook-step-desc {
     font-size: .82rem;
     color: var(--text-muted);
-    padding: .5rem 1.25rem;
+    padding: 1.25rem;
     background: var(--bg-alt);
-    border-bottom: 1px solid rgba(26, 58, 42, .08);
-    line-height: 1.5;
-    flex-shrink: 0;
+    border-right: 1px solid rgba(26, 58, 42, .08);
+    white-space: pre-wrap;
+    line-height: 1.6;
+    overflow-y: auto;
+    height: 100%;
 }
 
 /* Progress Bar */
@@ -1545,7 +1552,7 @@ body.modal-open * {
 /* Two-column Content */
 .notebook-content {
     display: grid;
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: 28% 42% 30%;
     flex: 1;
     overflow: hidden;
 }
@@ -1583,13 +1590,16 @@ body.modal-open * {
     background: var(--bg);
     padding: 1.25rem;
     overflow-y: auto;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    overflow-x: hidden;
     border-left: 1px solid rgba(26, 58, 42, .1);
+    position: relative;
 }
 
 .notebook-output-placeholder {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
     text-align: center;
     color: var(--text-muted);
     opacity: .5;
@@ -1632,8 +1642,35 @@ body.modal-open * {
     line-height: 1.7;
     color: var(--text);
     white-space: pre-wrap;
+    word-break: break-word;
     align-items: flex-start;
+    justify-content: flex-start;
+    text-align: left;
+    width: 100%;
+    box-sizing: border-box;
     padding: .5rem;
+}
+
+/* Image lightbox effect */
+.notebook-output-content img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 4px;
+    cursor: zoom-in;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.notebook-output-content img.zoomed {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 99999;
+    max-width: 90vw;
+    max-height: 90vh;
+    box-shadow: 0 0 0 100vmax rgba(0, 0, 0, 0.85);
+    cursor: zoom-out;
+    border-radius: 8px;
 }
 
 /* Table output */
@@ -2161,7 +2198,12 @@ footer p {
 
     .notebook-content {
         grid-template-columns: 1fr;
-        grid-template-rows: 1fr 1fr;
+        grid-template-rows: min-content 1fr 1fr;
+    }
+
+    .notebook-step-desc {
+        border-right: none;
+        border-bottom: 1px solid rgba(26, 58, 42, .08);
     }
 
     .notebook-code-panel {

@@ -12,6 +12,7 @@ const translations = {
         "about-title": "Chi Sono",
         "about-text": "Sono uno studente appassionato con un forte interesse per la gestione, analisi e valorizzazione dei dati. Mi occupo di automazione dei processi, sviluppo di soluzioni data-driven e applicazione di modelli di machine learning per supportare decisioni efficienti e scalabili. Sono orientato all'apprendimento continuo e alla risoluzione di problemi complessi.",
         "nav-experience": "Esperienza",
+        "nav-education": "Formazione",
         "experience-title": "Esperienza Lavorativa",
         "exp-job-title": "Software Developer Apprendista",
         "exp-company": "Metline Software & Sistemi \u2014 Gruppo Maestrale",
@@ -43,8 +44,8 @@ const translations = {
         "skill-title-6": "Backend & Frameworks",
         "skill-desc-6": "FastAPI, Flask, Python",
         "projects-title": "I Miei Progetti",
-        "project-1-title": "Metline Chatbox",
-        "project-1-desc": "Chatbot AI per assistenza clienti, con integrazione MCP e modello Groq.",
+        "project-1-title": "AKID Chatbox",
+        "project-1-desc": "Chatbot AI multi-agente per analisi dati e KPI, con integrazione MCP verso database SQL e modelli LLM via Nvidia NIM e Groq.",
         "project-2-title": "Gestione Magazzino Bar",
         "project-2-desc": "Applicazione web per la gestione completa del magazzino alcolico di un bar.",
         "project-3-title": "Notebook Analisi Dati",
@@ -70,6 +71,8 @@ const translations = {
         "cookie-reject": "Rifiuta",
         "cookie-accept": "Accetta Tutti",
         "footer-rights": "© 2025 Matteo Augustinho Bertotti. Tutti i diritti riservati.",
+        "notebook-small-title": "Schermo troppo piccolo",
+        "notebook-small-desc": "Ingrandisci la finestra A Fullscreen e riapri la pagina",
         "typing-phrases": ['AI Dev & Data Analyst', 'Appassionato di Python', 'Studente di Machine Learning', 'Risolutore di Problemi Data-Driven']
     },
     en: {
@@ -83,6 +86,7 @@ const translations = {
         "about-title": "About Me",
         "about-text": "I am a passionate student with a strong interest in data management, analysis, and valorization. I work on process automation, data-driven solutions development, and machine learning models application to support efficient and scalable decisions. I am focused on continuous learning and solving complex problems.",
         "nav-experience": "Experience",
+        "nav-education": "Education",
         "experience-title": "Work Experience",
         "exp-job-title": "Apprentice Software Developer",
         "exp-company": "Metline Software & Systems \u2014 Maestrale Group",
@@ -115,7 +119,7 @@ const translations = {
         "skill-desc-6": "FastAPI, Flask, Python",
         "projects-title": "My Projects",
         "project-1-title": "Metline Chatbox",
-        "project-1-desc": "AI Chatbot for customer support with MCP integration and Groq model.",
+        "project-1-desc": "AI Chatbot for analysis and KPIs with MCP sql Database, Nvidia NIM and GRoq integration.",
         "project-2-title": "Bar Inventory Management",
         "project-2-desc": "Web application for complete bar inventory management.",
         "project-3-title": "Data Analysis Notebook",
@@ -141,6 +145,8 @@ const translations = {
         "cookie-reject": "Reject",
         "cookie-accept": "Accept All",
         "footer-rights": "© 2025 Matteo Augustinho Bertotti. All rights reserved.",
+        "notebook-small-title": "Screen too small",
+        "notebook-small-desc": "Maximize the window to Fullscreen and reopen the page",
         "typing-phrases": ['AI Dev & Data Analyst', 'Python Enthusiast', 'Machine Learning Student', 'Data Driven Problem Solver']
     }
 };
@@ -854,8 +860,21 @@ function initProjectModals() {
     const titleEl = document.getElementById('modal-title');
     const addressBar = document.getElementById('modal-address-bar');
     const bodyEl = document.getElementById('modal-body');
-    const loadingEl = document.getElementById('modal-loading');
-    const errorEl = document.getElementById('modal-error');
+
+    const modalBodyTemplate = `
+        <div class="modal-loading" id="modal-loading">
+            <div class="modal-spinner"></div>
+            <p data-i18n="modal-loading">Caricamento in corso...</p>
+        </div>
+        <div class="modal-error" id="modal-error" hidden>
+            <div class="modal-error-icon">🚀</div>
+            <h4 data-i18n="modal-error-title">Progetto in fase di deploy</h4>
+            <p data-i18n="modal-error-desc">Questo progetto sarà disponibile a breve.</p>
+        </div>
+    `;
+
+    let loadingEl;
+    let errorEl;
 
     let iframeTimeout;
 
@@ -869,13 +888,36 @@ function initProjectModals() {
         const url = card.getAttribute('data-modal-url');
         const title = card.getAttribute('data-modal-title');
 
+        if (type === 'notebook' && window.innerWidth < 960) {
+            const smallTitle = translations[currentLang]["notebook-small-title"];
+            const smallDesc = translations[currentLang]["notebook-small-desc"];
+            
+            titleEl.textContent = smallTitle;
+            addressBar.textContent = 'local://error';
+            bodyEl.innerHTML = `
+                <div class="modal-error" style="display:flex; flex-direction:column; align-items:center; justify-content:center; height:100%; text-align:center; padding:2rem;">
+                    <div style="font-size:3rem; margin-bottom:1rem;">🖥️</div>
+                    <h4 style="color:var(--text); margin:0;" data-i18n="notebook-small-title">${smallTitle}</h4>
+                    <p style="margin-top:0.5rem; color:var(--text-muted); line-height:1.5;" data-i18n="notebook-small-desc">${smallDesc}</p>
+                </div>
+            `;
+            
+            modal.removeAttribute('hidden');
+            void modal.offsetWidth;
+            modal.classList.add('active');
+            document.body.style.overflow = 'hidden';
+            document.body.classList.add('modal-open');
+            return;
+        }
+
         titleEl.textContent = title;
         addressBar.textContent = url || 'local://notebook';
         
-        // Reset state
-        bodyEl.innerHTML = '';
-        bodyEl.appendChild(loadingEl);
-        bodyEl.appendChild(errorEl);
+        // Reset state from template to avoid detached DOM node issues
+        bodyEl.innerHTML = modalBodyTemplate;
+        loadingEl = document.getElementById('modal-loading');
+        errorEl = document.getElementById('modal-error');
+        
         loadingEl.classList.remove('hidden');
         errorEl.setAttribute('hidden', '');
 
@@ -886,15 +928,24 @@ function initProjectModals() {
             
             iframeTimeout = setTimeout(() => {
                 loadingEl.classList.add('hidden');
+                errorEl.querySelector('h4').textContent = "TIMEOUT 20s";
                 errorEl.removeAttribute('hidden');
                 iframe.style.display = 'none';
-            }, 8000); // 8s timeout
+            }, 20000); // 20s timeout (ultima rete di salvataggio)
 
             iframe.onload = () => {
                 clearTimeout(iframeTimeout);
                 loadingEl.classList.add('hidden');
                 errorEl.setAttribute('hidden', '');
                 iframe.style.display = 'block';
+            };
+
+            iframe.onerror = (e) => {
+                clearTimeout(iframeTimeout);
+                loadingEl.classList.add('hidden');
+                errorEl.querySelector('h4').textContent = "ONERROR FIRED";
+                errorEl.removeAttribute('hidden');
+                iframe.style.display = 'none';
             };
             
             bodyEl.appendChild(iframe);
@@ -910,6 +961,7 @@ function initProjectModals() {
         void modal.offsetWidth;
         modal.classList.add('active');
         document.body.style.overflow = 'hidden';
+        document.body.classList.add('modal-open');
 
         // Set up focus trap
         focusableElements = modal.querySelectorAll('button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])');
@@ -922,6 +974,7 @@ function initProjectModals() {
 
     function closeModal() {
         modal.classList.remove('active');
+        document.body.classList.remove('modal-open');
         setTimeout(() => {
             modal.setAttribute('hidden', '');
             bodyEl.innerHTML = '';
@@ -945,10 +998,7 @@ function initProjectModals() {
         });
     });
 
-    if (redDot) redDot.addEventListener('click', closeModal);
-    modal.addEventListener('click', (e) => {
-        if (e.target === modal) closeModal();
-    });
+
 
     document.addEventListener('keydown', (e) => {
         if (!modal.classList.contains('active')) return;
@@ -974,17 +1024,88 @@ function initProjectModals() {
         }
     });
 
+    // Image Zoom Logic
+    document.addEventListener('click', (e) => {
+        if (e.target.tagName === 'IMG' && e.target.closest('.notebook-output-content')) {
+            e.target.classList.toggle('zoomed');
+        }
+    });
+
     // Notebook Logic
     async function loadNotebook() {
+        const fallbackData = {
+          "title_it": "Analisi Mental Health & Lavoro",
+          "title_en": "Mental Health & Work Analysis",
+          "steps": [
+            {
+              "id": 1,
+              "title_it": "Import Librerie",
+              "title_en": "Import Libraries",
+              "description_it": "Importiamo le librerie necessarie: Pandas per la manipolazione, Matplotlib e Seaborn per la visualizzazione statistica.",
+              "description_en": "We import the necessary libraries: Pandas for manipulation, Matplotlib and Seaborn for statistical visualization.",
+              "code": "import pandas as pd\nimport numpy as np\nimport matplotlib.pyplot as plt\nimport seaborn as sns\nfrom scipy import stats\n\nsns.set_theme(style='whitegrid', palette='muted')\nplt.rcParams['figure.figsize'] = (9, 5)\nprint('Librerie importate con successo ✓')",
+              "outputType": "text",
+              "outputContent": "Librerie importate con successo ✓"
+            },
+            {
+              "id": 2,
+              "title_it": "Caricamento Dataset",
+              "title_en": "Load Dataset",
+              "description_it": "Carichiamo il dataset fittizio sui 1500 lavoratori e visualizziamo le prime 5 righe per capire la struttura.",
+              "description_en": "We load the mock dataset of 1500 workers and display the first 5 rows to understand the structure.",
+              "code": "df = pd.read_csv('mental_health_productivity_2026.csv')\n\nprint(f'Dimensioni del dataset: {df.shape[0]} osservazioni x {df.shape[1]} variabili')\ndf.head()",
+              "outputType": "table",
+              "outputContent": "<table><thead><tr><th></th><th>Employee_ID</th><th>Age</th><th>Gender</th><th>Industry</th><th>Work_Mode</th><th>Work_Hours</th><th>Stress_Level</th><th>Burnout_Risk</th></tr></thead><tbody><tr><td>0</td><td>EMP_0001</td><td>50</td><td>Male</td><td>Manufacturing</td><td>Remote</td><td>40</td><td>9</td><td>High</td></tr><tr><td>1</td><td>EMP_0002</td><td>36</td><td>Male</td><td>Finance</td><td>Remote</td><td>35</td><td>1</td><td>Low</td></tr><tr><td>2</td><td>EMP_0003</td><td>29</td><td>Male</td><td>Finance</td><td>Remote</td><td>52</td><td>4</td><td>Low</td></tr><tr><td>3</td><td>EMP_0004</td><td>42</td><td>Female</td><td>Manufacturing</td><td>Remote</td><td>56</td><td>10</td><td>High</td></tr><tr><td>4</td><td>EMP_0005</td><td>40</td><td>Male</td><td>Tech</td><td>On-site</td><td>35</td><td>2</td><td>Low</td></tr></tbody></table><p class='nb-shape'>Dimensioni del dataset: 1500 osservazioni x 13 variabili</p>"
+            },
+            {
+              "id": 3,
+              "title_it": "Analisi Valori Mancanti",
+              "title_en": "Missing Values Analysis",
+              "description_it": "Verifichiamo quanti valori mancanti (NaN) ci sono e identifichiamo i tipi di variabili (continue vs categoriali).",
+              "description_en": "We check how many missing values (NaN) exist and identify variable types (continuous vs categorical).",
+              "code": "var_quant = ['Age', 'Work_Hours_Per_Week', 'Stress_Level',\n             'Sleep_Hours', 'Productivity_Score', 'Physical_Activity_Hours']\nvar_cat   = ['Gender', 'Country', 'Industry', 'Work_Mode',\n             'Mental_Health_Support_Access', 'Burnout_Risk']\n\nprint('\\nValori mancanti per variabile')\nmissing = df.isnull().sum()\nprint(missing[missing > 0] if missing.sum() > 0 else 'Nessun valore mancante rilevato.')",
+              "outputType": "text",
+              "outputContent": "Valori mancanti per variabile\nNessun valore mancante rilevato."
+            },
+            {
+              "id": 4,
+              "title_it": "Statistica Descrittiva",
+              "title_en": "Descriptive Statistics",
+              "description_it": "Calcoliamo le misure di posizione e dispersione (media, mediana, quartili, asimmetria) per le variabili quantitative.",
+              "description_en": "We calculate measures of central tendency and dispersion (mean, median, quartiles, skewness) for quantitative variables.",
+              "code": "desc = df[var_quant].describe().T\ndesc['median'] = df[var_quant].median()\ndesc['skewness'] = df[var_quant].skew()\ndesc = desc[['count','mean','median','std','min','25%','75%','max','skewness']]\ndesc.columns = ['N','Media','Mediana','Dev.Std','Min','Q1','Q3','Max','Asimmetria']\npd.options.display.float_format = '{:.3f}'.format\ndesc",
+              "outputType": "table",
+              "outputContent": "<table><thead><tr><th></th><th>N</th><th>Media</th><th>Mediana</th><th>Dev.Std</th><th>Min</th><th>Q1</th><th>Q3</th><th>Max</th><th>Asimmetria</th></tr></thead><tbody><tr><td>Age</td><td>1500.000</td><td>41.003</td><td>42.000</td><td>11.063</td><td>22.000</td><td>31.000</td><td>50.000</td><td>59.000</td><td>-0.085</td></tr><tr><td>Work_Hours_Per_Week</td><td>1500.000</td><td>46.980</td><td>47.000</td><td>10.042</td><td>30.000</td><td>38.000</td><td>55.250</td><td>64.000</td><td>-0.003</td></tr><tr><td>Stress_Level</td><td>1500.000</td><td>6.245</td><td>7.000</td><td>2.988</td><td>1.000</td><td>4.000</td><td>9.000</td><td>10.000</td><td>-0.284</td></tr><tr><td>Sleep_Hours</td><td>1500.000</td><td>6.973</td><td>6.982</td><td>1.216</td><td>4.000</td><td>6.138</td><td>7.818</td><td>10.000</td><td>-0.013</td></tr><tr><td>Productivity_Score</td><td>1500.000</td><td>69.837</td><td>70.000</td><td>17.397</td><td>40.000</td><td>55.000</td><td>84.000</td><td>100.000</td><td>0.020</td></tr><tr><td>Physical_Activity_Hours</td><td>1500.000</td><td>5.005</td><td>5.023</td><td>2.899</td><td>0.011</td><td>2.526</td><td>7.526</td><td>9.996</td><td>-0.016</td></tr></tbody></table>"
+            },
+            {
+              "id": 5,
+              "title_it": "Distribuzione Rischio Burnout",
+              "title_en": "Burnout Risk Distribution",
+              "description_it": "Visualizziamo quanti dipendenti rientrano in categorie di rischio Alto, Medio o Basso.",
+              "description_en": "Let's visualize how many employees fall into High, Medium, or Low burnout risk categories.",
+              "code": "risk_counts = df['Burnout_Risk'].value_counts()\n\nfig, ax = plt.subplots()\nsns.barplot(x=risk_counts.index, y=risk_counts.values,\n            palette=['#ff5f57', '#ffbd2e', '#28c840'], ax=ax)\nax.set_xlabel('Rischio Burnout')\nax.set_ylabel('Numero di Dipendenti')\nax.set_title('Distribuzione Rischio Burnout nel Campione')\nplt.tight_layout()\nplt.show()",
+              "outputType": "chart",
+              "chartConfig": {
+                "type": "bar",
+                "labels": ["Medium", "High", "Low"],
+                "datasets": [{
+                  "label": "Numero Dipendenti",
+                  "data": [620, 450, 430],
+                  "backgroundColor": ["#ffbd2e", "#ff5f57", "#28c840"]
+                }]
+              }
+            }
+          ]
+        };
+
         try {
-            const response = await fetch('notebook-steps.json');
+            const response = await fetch('notebook-steps.json?v=1.0.8');
+            if (!response.ok) throw new Error('Network response was not ok');
             const data = await response.json();
             renderNotebook(data);
         } catch (err) {
-            console.error('Failed to load notebook:', err);
-            loadingEl.classList.add('hidden');
-            errorEl.removeAttribute('hidden');
-        }
+            console.error('Failed to fetch notebook, using fallback:', err);
+            renderNotebook(fallbackData);
     }
 
     function renderNotebook(data) {
@@ -1035,6 +1156,7 @@ function initProjectModals() {
         const outputPanel = document.createElement('div');
         outputPanel.className = 'notebook-output-panel';
 
+        content.appendChild(desc);
         content.appendChild(codePanel);
         content.appendChild(outputPanel);
 
@@ -1067,7 +1189,6 @@ function initProjectModals() {
 
         layout.appendChild(header);
         layout.appendChild(progress);
-        layout.appendChild(desc);
         layout.appendChild(content);
         layout.appendChild(controls);
 
@@ -1081,19 +1202,16 @@ function initProjectModals() {
             
             let highlighted = code
                 .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;') // escape HTML
-                .replace(/(#.*)/g, '<span class="nb-comment">$1</span>') // comments
-                .replace(/('(?:\\'|[^'])*'|"(?:\\"|[^"])*")/g, '<span class="nb-string">$1</span>') // strings
-                .replace(/\b(\d+\.?\d*)\b/g, '<span class="nb-number">$1</span>'); // numbers
-            
-            keywords.forEach(kw => {
-                const regex = new RegExp(`\\b${kw}\\b`, 'g');
-                highlighted = highlighted.replace(regex, `<span class="nb-keyword">${kw}</span>`);
-            });
+                .replace(/('(?:\\'|[^'])*'|"(?:\\"|[^"])*"|#.*)/g, function(m) {
+                    if (m.startsWith('#')) return '<span class="nb-comment">' + m + '</span>';
+                    return '<span class="nb-string">' + m + '</span>';
+                })
+                .replace(/\b(\d+\.?\d*)\b(?![^<]*>)/g, '<span class="nb-number">$1</span>'); // numbers
+            const kwRegex = new RegExp(`\\b(${keywords.join('|')})\\b(?![^<]*>)`, 'g');
+            highlighted = highlighted.replace(kwRegex, '<span class="nb-keyword">$1</span>');
 
-            builtins.forEach(bi => {
-                const regex = new RegExp(`\\b${bi}\\b(?=\\()`, 'g');
-                highlighted = highlighted.replace(regex, `<span class="nb-builtin">${bi}</span>`);
-            });
+            const biRegex = new RegExp(`\\b(${builtins.join('|')})\\b(?=\\()(?![^<]*>)`, 'g');
+            highlighted = highlighted.replace(biRegex, '<span class="nb-builtin">$1</span>');
             
             return highlighted;
         }
@@ -1102,7 +1220,7 @@ function initProjectModals() {
         if (!document.getElementById('chartjs-script')) {
             const script = document.createElement('script');
             script.id = 'chartjs-script';
-            script.src = 'https://cdn.jsdelivr.net/npm/chart.js';
+            script.src = 'vendor/chart.js';
             document.head.appendChild(script);
         }
 
@@ -1156,7 +1274,7 @@ function initProjectModals() {
             
             if (step.outputType === 'text') {
                 outDiv.textContent = step.outputContent;
-            } else if (step.outputType === 'table') {
+            } else if (step.outputType === 'html' || step.outputType === 'table') {
                 outDiv.innerHTML = step.outputContent;
             } else if (step.outputType === 'chart' && step.chartConfig) {
                 outDiv.innerHTML = '<div class="notebook-chart-container"><canvas id="nb-chart"></canvas></div>';
@@ -1228,3 +1346,4 @@ navLinksItems.forEach(link => {
         hamburger.classList.remove('toggle');
     });
 });
+}

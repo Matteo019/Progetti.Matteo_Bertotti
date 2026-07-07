@@ -1,0 +1,155 @@
+[
+  {
+    "title_it": "Step 1",
+    "title_en": "Step 1",
+    "description_it": "## 1.1 Introduzione\n### Analisi salute mentale e lavoro\n\n\nQuesto progetto analizza i dati di 1500 lavoratori raccolti nel 2026. L'obiettivo è capire come variabili come lo stress, la produttività e la salute mentale interagiscano tra loro in settori diversi, dal tech alla sanità.\n\nIl problema:\n\nLo stress e il burnout sono problemi pesanti nelle aziende di oggi. Vogliamo capire cosa faccia scattare i livelli di allerta e se strumenti come il lavoro da remoto o il supporto psicologico servano davvero a qualcosa o se siano inutili.\n\nLe domande che ci siamo fatti:\n\n1. Ore e stress: lavorare di più significa per forza essere più stressati?\n\n2. Smart working e settori: la modalità di lavoro (casa, ufficio o ibrido) cambia in base al tipo di azienda?\n\n3. Età e orari: l'età conta qualcosa nel calcolo delle ore settimanali?\n\n4. Genere e carriera: uomini e donne finiscono a lavorare negli stessi settori o ci sono ancora differenze?",
+    "description_en": "## 1.1 Introduzione\n### Analisi salute mentale e lavoro\n\n\nQuesto progetto analizza i dati di 1500 lavoratori raccolti nel 2026. L'obiettivo è capire come variabili come lo stress, la produttività e la salute mentale interagiscano tra loro in settori diversi, dal tech alla sanità.\n\nIl problema:\n\nLo stress e il burnout sono problemi pesanti nelle aziende di oggi. Vogliamo capire cosa faccia scattare i livelli di allerta e se strumenti come il lavoro da remoto o il supporto psicologico servano davvero a qualcosa o se siano inutili.\n\nLe domande che ci siamo fatti:\n\n1. Ore e stress: lavorare di più significa per forza essere più stressati?\n\n2. Smart working e settori: la modalità di lavoro (casa, ufficio o ibrido) cambia in base al tipo di azienda?\n\n3. Età e orari: l'età conta qualcosa nel calcolo delle ore settimanali?\n\n4. Genere e carriera: uomini e donne finiscono a lavorare negli stessi settori o ci sono ancora differenze?",
+    "code": "import pandas as pd\nimport numpy as np\nimport matplotlib.pyplot as plt\nimport seaborn as sns\nfrom scipy import stats\nfrom scipy.stats import pearsonr, spearmanr, chi2_contingency, f_oneway\n\n# Impostazioni grafiche globali\nsns.set_theme(style=\"whitegrid\", palette=\"muted\")\nplt.rcParams[\"figure.figsize\"] = (9, 5)",
+    "outputType": "text",
+    "outputContent": "\n\n## 1.2 Data Understanding e Preprocessing\n\nPrima di qualsiasi analisi è necessario comprendere la struttura del dataset, verificare la qualità dei dati e preparare le variabili per le analisi successive."
+  },
+  {
+    "title_it": "Step 2",
+    "title_en": "Step 2",
+    "description_it": "",
+    "description_en": "",
+    "code": "# Caricamento del dataset fittizio che abbiamo trovato su Kaggle\ndf = pd.read_csv(\"mental_health_productivity_2026.csv\")\n\nprint(f\"Dimensioni del dataset: {df.shape[0]} osservazioni x {df.shape[1]} variabili\")\ndf.head()",
+    "outputType": "text",
+    "outputContent": "Dimensioni del dataset: 1500 osservazioni x 13 variabili\n"
+  },
+  {
+    "title_it": "Step 3",
+    "title_en": "Step 3",
+    "description_it": "",
+    "description_en": "",
+    "code": "# Tipologia delle variabili\nvar_quant = ['Age', 'Work_Hours_Per_Week', 'Stress_Level',\n             'Sleep_Hours', 'Productivity_Score', 'Physical_Activity_Hours']\nvar_cat   = ['Gender', 'Country', 'Industry', 'Work_Mode',\n             'Mental_Health_Support_Access', 'Burnout_Risk']\n\nprint(\"\\nVariabili quantitative continue\")\nfor v in var_quant:\n    print(f\"{v} ({df[v].dtype})\")\n\nprint(\"\\nVariabili categoriali\")\nfor v in var_cat:\n    vals = sorted(df[v].unique())\n    print(f\"{v}: {vals}\")\n\nprint(\"\\nValori mancanti per variabile\")\nmissing = df.isnull().sum()\nprint(missing[missing > 0] if missing.sum() > 0 else \"Nessun valore mancante rilevato.\")",
+    "outputType": "text",
+    "outputContent": "\nVariabili quantitative continue\nAge (int64)\nWork_Hours_Per_Week (int64)\nStress_Level (int64)\nSleep_Hours (float64)\nProductivity_Score (int64)\nPhysical_Activity_Hours (float64)\n\nVariabili categoriali\nGender: ['Female', 'Male', 'Non-binary']\nCountry: ['Australia', 'Brazil', 'Canada', 'France', 'Germany', 'India', 'Japan', 'Singapore', 'UK', 'USA']\nIndustry: ['Education', 'Finance', 'Healthcare', 'Manufacturing', 'Retail', 'Tech']\nWork_Mode: ['Hybrid', 'On-site', 'Remote']\nMental_Health_Support_Access: ['No', 'Yes']\nBurnout_Risk: ['High', 'Low', 'Medium']\n\nValori mancanti per variabile\nNessun valore mancante rilevato.\n\n\n### Valori mancanti\n\nEssendo un dataset fittizio, non ci sono valori mancanti (ma sappiamo che nel mondo reale questo non succede mai)\n\n### Tipologia variabili\n\n\nQuantitative continue: `Age`, `Work_Hours_Per_Week`, `Stress_Level`, `Sleep_Hours`, `Productivity_Score`, `Physical_Activity_Hours`\n\nCategoriali nominali: `Gender`, `Country`, `Industry`, `Work_Mode`, `Mental_Health_Support_Access`, `Burnout_Risk`\n\nIdentificatore: `Employee_ID` (non usato nelle analisi)\n\n\n### Outlier\nAbbiamo usato il metodo di Tukey (intervallo interquartile) su tutte le variabili numeriche e il risultato è che non ci sono outlier. Tutti i dati rientrano nei range previsti: non ci sono valori assurdi che dobbiamo cancellare o correggere.\n\n### Conclusione del Preprocessing\nIn pratica, il dataset fittizio è pulito e pronto all'uso. Non mancano dati, non ci sono errori strani e i formati sono tutti a posto. Non c'è bisogno di fare altro lavoro di pulizia o trasformazione: possiamo passare direttamente a vedere cosa dicono i dati.\n\n\n## 1.3 Statistica Descrittiva e Visualizzazioni\n\nCalcoliamo le principali misure di posizione e dispersione e produciamo grafici adeguati al tipo di variabile."
+  },
+  {
+    "title_it": "Step 4",
+    "title_en": "Step 4",
+    "description_it": "",
+    "description_en": "",
+    "code": "# Misure di posizione e dispersione per le variabili quantitative\ndesc = df[var_quant].describe().T\ndesc['median'] = df[var_quant].median()\ndesc['skewness'] = df[var_quant].skew()\ndesc = desc[['count','mean','median','std','min','25%','75%','max','skewness']]\ndesc.columns = ['N','Media','Mediana','Dev.Std','Min','Q1','Q3','Max','Asimmetria']\npd.options.display.float_format = '{:.3f}'.format\ndesc",
+    "outputType": "text",
+    "outputContent": "\n\n**Commento alla tabella descrittiva:**\n\nAge: età media di 41 anni (mediana 42), distribuzione quasi simmetrica.\n\nWork_Hours_Per_Week: media di circa 47 ore/settimana, sopra le classiche 40 ore.\n\nStress_Level: scala 1–10, media 6.24, mediana 7. Distribuzione leggermente spostata verso valori alti.\n\nSleep_Hours: media di 6.98 ore/notte, nella norma.\n\nProductivity_Score: media 69.8 su scala 0–100, distribuzione abbastanza uniforme.\n\nPhysical_Activity_Hours: media 5 ore/settimana, distribuzione uniforme."
+  },
+  {
+    "title_it": "Step 5",
+    "title_en": "Step 5",
+    "description_it": "",
+    "description_en": "",
+    "code": "# Istogrammi delle variabili quantitative principali\nfig, axes = plt.subplots(2, 3, figsize=(14, 8))\naxes = axes.flatten()\ncolors = ['#4C72B0','#DD8452','#55A868','#C44E52','#8172B2','#937860']\n\nfor i, (v, c) in enumerate(zip(var_quant, colors)):\n    axes[i].hist(df[v], bins=25, color=c, edgecolor='white', alpha=0.85)\n    axes[i].axvline(df[v].mean(), color='black', linestyle='--', linewidth=1.4,\n                    label=f'Media = {df[v].mean():.2f}')\n    axes[i].axvline(df[v].median(), color='red', linestyle=':', linewidth=1.4,\n                    label=f'Mediana = {df[v].median():.2f}')\n    axes[i].set_title(v, fontsize=11, fontweight='bold')\n    axes[i].set_xlabel('Valore')\n    axes[i].set_ylabel('Frequenza')\n    axes[i].legend(fontsize=8)\n\nfig.suptitle('Distribuzioni delle variabili quantitative', fontsize=14, fontweight='bold', y=1.01)\nplt.tight_layout()\nplt.show()",
+    "outputType": "text",
+    "outputContent": "<img src=\"images/notebook/nb_chart_1.png\" alt=\"Chart\" style=\"max-width:100%; border-radius:8px;\">\n\n\n\nGuardando i grafici, la prima cosa che spunta è che non c'è uno standard: ore di lavoro e produttività sono sparpagliate, segno che ogni dipendente lavora a modo suo... L'età è mista, dai 22 ai 59 anni senza gruppi prevalenti... Però lo stress tende a stare più sui valori alti che su quelli bassi."
+  },
+  {
+    "title_it": "Step 6",
+    "title_en": "Step 6",
+    "description_it": "",
+    "description_en": "",
+    "code": "# Scatterplot: Ore lavorate vs Livello di stress (Q1)\nplt.figure(figsize=(9, 5))\nsns.scatterplot(data=df, x='Work_Hours_Per_Week', y='Stress_Level',\n                alpha=0.35, color='#4C72B0', edgecolor='none', s=25)\n\n# Retta di regressione\nm, b = np.polyfit(df['Work_Hours_Per_Week'], df['Stress_Level'], 1)\nx_line = np.linspace(df['Work_Hours_Per_Week'].min(), df['Work_Hours_Per_Week'].max(), 100)\nplt.plot(x_line, m * x_line + b, color='crimson', linewidth=2, label=f'Retta OLS: y = {m:.3f}x + {b:.2f}')\n\nplt.title('Livello di stress in funzione delle ore lavorate settimanalmente', fontsize=12, fontweight='bold')\nplt.xlabel('Ore lavorate per settimana')\nplt.ylabel('Livello di stress (1–10)')\nplt.legend()\nplt.tight_layout()\nplt.show()",
+    "outputType": "text",
+    "outputContent": "<img src=\"images/notebook/nb_chart_2.png\" alt=\"Chart\" style=\"max-width:100%; border-radius:8px;\">\n\n\n\nPiù ore lavorate, più stress. La nuvola di punti è dispersa, quindi le ore non sono l'unico fattore, ma la direzione è chiara.\n"
+  },
+  {
+    "title_it": "Step 7",
+    "title_en": "Step 7",
+    "description_it": "",
+    "description_en": "",
+    "code": "# Boxplot: Productivity Score per Work Mode\nplt.figure(figsize=(8, 5))\norder = df.groupby('Work_Mode')['Productivity_Score'].median().sort_values(ascending=False).index\nsns.boxplot(data=df, x='Work_Mode', y='Productivity_Score',\n            order=order, palette='viridis')\nplt.title('Produttività per modalità di lavoro', fontsize=12, fontweight='bold')\nplt.xlabel('Modalità di lavoro')\nplt.ylabel('Productivity Score')\nplt.tight_layout()\nplt.show()",
+    "outputType": "text",
+    "outputContent": "/tmp/ipykernel_46685/3290350926.py:4: FutureWarning: \n\nPassing `palette` without assigning `hue` is deprecated and will be removed in v0.14.0. Assign the `x` variable to `hue` and set `legend=False` for the same effect.\n\n  sns.boxplot(data=df, x='Work_Mode', y='Productivity_Score',\n<img src=\"images/notebook/nb_chart_3.png\" alt=\"Chart\" style=\"max-width:100%; border-radius:8px;\">\n\n\n\nLe distribuzioni della produttività sono praticamente identiche tra remoto, ibrido e in presenza. Le mediane si sovrappongono, il che suggerisce che il modo in cui si lavora non cambia molto la produttività individuale.\n"
+  },
+  {
+    "title_it": "Step 8",
+    "title_en": "Step 8",
+    "description_it": "",
+    "description_en": "",
+    "code": "# Grafico a barre: distribuzione Work_Mode per Industry (Q2 - visualizzazione)\nct_mode_ind = pd.crosstab(df['Industry'], df['Work_Mode'], normalize='index') * 100\n\nct_mode_ind.plot(kind='bar', stacked=True, figsize=(10, 5),\n                 colormap='viridis', edgecolor='white', linewidth=0.5)\nplt.title('Distribuzione percentuale delle modalità di lavoro per settore industriale',\n          fontsize=12, fontweight='bold')\nplt.xlabel('Settore industriale')\nplt.ylabel('Percentuale (%)')\nplt.legend(title='Work Mode', bbox_to_anchor=(1.01, 1), loc='upper left')\nplt.tight_layout()\nplt.show()",
+    "outputType": "text",
+    "outputContent": "<img src=\"images/notebook/nb_chart_4.png\" alt=\"Chart\" style=\"max-width:100%; border-radius:8px;\">\n\n\n\nVisivamente, la distribuzione delle tre modalità di lavoro appare molto simile tra i settori. In ciascun settore, le percentuali di lavoratori Remote, Hybrid e On-site si avvicinano tutte a circa il 33%, senza che emerga un settore chiaramente più \"remoto\" o più \"in presenza\" degli altri."
+  },
+  {
+    "title_it": "Step 9",
+    "title_en": "Step 9",
+    "description_it": "",
+    "description_en": "",
+    "code": "# Scatterplot: Età vs Ore lavorate (con Jitter, Alpha e Linea di Regressione)\\nplt.figure(figsize=(8, 5))\nsns.scatterplot(data=df, x='Age', y='Work_Hours_Per_Week',\n                alpha=0.3, color='#55A868', edgecolor='none', s=22)\nm2, b2 = np.polyfit(df['Age'], df['Work_Hours_Per_Week'], 1)\nx2 = np.linspace(df['Age'].min(), df['Age'].max(), 100)\nplt.plot(x2, m2 * x2 + b2, color='darkred', linewidth=2,\n         label=f'Retta OLS: y = {m2:.4f}x + {b2:.2f}')\nplt.title('Ore lavorate settimanalmente in funzione dell\\'età', fontsize=12, fontweight='bold')\nplt.xlabel('Età (anni)')\nplt.ylabel('Ore lavorate per settimana')\nplt.legend()\nplt.tight_layout()\nplt.show()",
+    "outputType": "text",
+    "outputContent": "<img src=\"images/notebook/nb_chart_5.png\" alt=\"Chart\" style=\"max-width:100%; border-radius:8px;\">\n\n\n\nLa retta di regressione è quasi orizzontale: nessuna tendenza visibile tra età e ore lavorate. Le due variabili sembrano indipendenti."
+  },
+  {
+    "title_it": "Step 10",
+    "title_en": "Step 10",
+    "description_it": "",
+    "description_en": "",
+    "code": "# Grafico a barre: distribuzione industria per genere (Q4 - visualizzazione)\nct_gen_ind = pd.crosstab(df['Gender'], df['Industry'], normalize='index') * 100\n\nct_gen_ind.plot(kind='bar', figsize=(10, 5), colormap='tab10',\n                edgecolor='white', linewidth=0.5)\nplt.title('Distribuzione percentuale del settore industriale per genere',\n          fontsize=12, fontweight='bold')\nplt.xlabel('Genere')\nplt.ylabel('Percentuale (%)')\nplt.xticks(rotation=0)\nplt.legend(title='Industry', bbox_to_anchor=(1.01, 1), loc='upper left')\nplt.tight_layout()\nplt.show()",
+    "outputType": "text",
+    "outputContent": "<img src=\"images/notebook/nb_chart_6.png\" alt=\"Chart\" style=\"max-width:100%; border-radius:8px;\">\n\n\n\nLe barre mostrano proporzioni molto simili dei settori industriali tra uomini, donne e persone non-binary. Non emergono pattern evidenti che colleghino un genere a un settore specifico, ad eccezione di una leggera sovra-rappresentazione femminile in Healthcare."
+  },
+  {
+    "title_it": "Step 11",
+    "title_en": "Step 11",
+    "description_it": "",
+    "description_en": "",
+    "code": "# Boxplot: Stress Level per Burnout Risk (analisi esplorativa aggiuntiva)\nfig, axes = plt.subplots(1, 2, figsize=(12, 5))\n\norder_burnout = ['Low','Medium','High']\nsns.boxplot(data=df, x='Burnout_Risk', y='Stress_Level',\n            order=order_burnout, palette='RdYlGn_r', ax=axes[0])\naxes[0].set_title('Stress Level per Burnout Risk', fontsize=11, fontweight='bold')\naxes[0].set_xlabel('Rischio di burnout')\naxes[0].set_ylabel('Livello di stress (1–10)')\n\nsns.countplot(data=df, x='Mental_Health_Support_Access',\n              hue='Burnout_Risk', hue_order=order_burnout,\n              palette='RdYlGn_r', ax=axes[1])\naxes[1].set_title('Supporto psicologico vs Burnout Risk', fontsize=11, fontweight='bold')\naxes[1].set_xlabel('Accesso al supporto di salute mentale')\naxes[1].set_ylabel('Conteggio')\naxes[1].legend(title='Burnout Risk')\n\nplt.tight_layout()\nplt.show()",
+    "outputType": "text",
+    "outputContent": "/tmp/ipykernel_46685/275066272.py:5: FutureWarning: \n\nPassing `palette` without assigning `hue` is deprecated and will be removed in v0.14.0. Assign the `x` variable to `hue` and set `legend=False` for the same effect.\n\n  sns.boxplot(data=df, x='Burnout_Risk', y='Stress_Level',\n<img src=\"images/notebook/nb_chart_7.png\" alt=\"Chart\" style=\"max-width:100%; border-radius:8px;\">\n\n\n\nAnalisando i dati si capisce che più sei stressato, più rischi il burnout.\nIl supporto psicologico invece non sembra aiutare tanto, dato che con o senza il supporto il rischio di burnout è lo stesso...\n\n\n## 1.4 Analisi di Correlazione\nPer quantificare le relazioni tra variabili numeriche calcoliamo la correlazione di Pearson, scelta perché entrambe le variabili coinvolte sono quantitative continue e prive di outlier. Affianchiamo sempre la correlazione di Spearman come verifica di robustezza."
+  },
+  {
+    "title_it": "Step 12",
+    "title_en": "Step 12",
+    "description_it": "",
+    "description_en": "",
+    "code": "# Heatmap della matrice di correlazione di Pearson (solo variabili quantitative)\ncorr_matrix = df[var_quant].corr(method='pearson')\n\nplt.figure(figsize=(8, 6))\nmask = np.triu(np.ones_like(corr_matrix, dtype=bool))\nsns.heatmap(corr_matrix, annot=True, fmt='.3f', cmap='coolwarm',\n            vmin=-1, vmax=1, mask=mask,\n            linewidths=0.5, linecolor='white',\n            annot_kws={'size': 10})\nplt.title('Matrice di correlazione di Pearson (triangolare inferiore)',\n          fontsize=12, fontweight='bold')\nplt.tight_layout()\nplt.show()",
+    "outputType": "text",
+    "outputContent": "<img src=\"images/notebook/nb_chart_8.png\" alt=\"Chart\" style=\"max-width:100%; border-radius:8px;\">\n\n"
+  },
+  {
+    "title_it": "Step 13",
+    "title_en": "Step 13",
+    "description_it": "",
+    "description_en": "",
+    "code": "# Correlazione tra Work_Hours_Per_Week e Stress_Level\n\nr_pearson, p_pearson = pearsonr(df['Work_Hours_Per_Week'], df['Stress_Level'])\nr_spear,   p_spear   = spearmanr(df['Work_Hours_Per_Week'], df['Stress_Level'])\nn = len(df)\n\nprint(\"Work_Hours_Per_Week vs Stress_Level\")\nprint(f\"  Correlazione di Pearson  r  = {r_pearson:.4f}\")\nprint(f\"  p-value (Pearson)           = {p_pearson:.2e}\")\nprint(f\"  Correlazione di Spearman ρ  = {r_spear:.4f}\")\nprint(f\"  p-value (Spearman)          = {p_spear:.2e}\")\nprint(f\"  n = {n}\")",
+    "outputType": "text",
+    "outputContent": "Work_Hours_Per_Week vs Stress_Level\n  Correlazione di Pearson  r  = 0.5130\n  p-value (Pearson)           = 1.89e-101\n  Correlazione di Spearman ρ  = 0.5129\n  p-value (Spearman)          = 1.98e-101\n  n = 1500\n\n\ncorrelazione ore lavorate / stress\nIl coefficiente a 0.51 conferma che tra ore lavorate e stress c'è un legame diretto: se aumentano le ore, aumenta lo stress. Pearson e Spearman danno lo stesso risultato, quindi il dato è solido e non ci sono errori causati da outlier.\n\nScontato ma importante: chi lavora oltre le 45 ore a settimana è quasi sempre più stressato. Ovvio che lo stress dipenda anche da altri fattori, come il tipo di capo o l'ambiente, ma i numeri dicono chiaramente che il tempo passato a lavorare è una causa principale. In breve: più ore fai, più rischi il burnout.\n\ncorrelazione != causalità"
+  },
+  {
+    "title_it": "Step 14",
+    "title_en": "Step 14",
+    "description_it": "",
+    "description_en": "",
+    "code": "# Correlazione tra Age e Work_Hours_Per_Week\n\nr3_pearson, p3_pearson = pearsonr(df['Age'], df['Work_Hours_Per_Week'])\nr3_spear,   p3_spear   = spearmanr(df['Age'], df['Work_Hours_Per_Week'])\n\nprint(\"Age vs Work_Hours_Per_Week\")\nprint(f\"  Correlazione di Pearson  r  = {r3_pearson:.4f}\")\nprint(f\"  p-value (Pearson)           = {p3_pearson:.4f}\")\nprint(f\"  Correlazione di Spearman ρ  = {r3_spear:.4f}\")\nprint(f\"  p-value (Spearman)          = {p3_spear:.4f}\")\nprint(f\"  n = {n}\")",
+    "outputType": "text",
+    "outputContent": "Age vs Work_Hours_Per_Week\n  Correlazione di Pearson  r  = -0.0121\n  p-value (Pearson)           = 0.6398\n  Correlazione di Spearman ρ  = -0.0127\n  p-value (Spearman)          = 0.6243\n  n = 1500\n\n\n## 1.5 Analisi Statistica Inferenziale\n\nSulle variabili categoriali usiamo il test chi-quadro per vedere se ci sono legami reali o se è solo un caso. Per capire quanto è forte questo legame, calcoliamo anche la V di Cramér."
+  },
+  {
+    "title_it": "Step 15",
+    "title_en": "Step 15",
+    "description_it": "",
+    "description_en": "",
+    "code": "def cramers_v(chi2, n, r, c):\n    \"\"\"Calcola Cramér's V dalla statistica chi-quadro.\"\"\"\n    k = min(r, c)\n    return np.sqrt(chi2 / (n * (k - 1)))\n\n# Chi-quadro Work_Mode vs Industry\n\nct_Q2 = pd.crosstab(df['Work_Mode'], df['Industry'])\nchi2_Q2, p_Q2, dof_Q2, exp_Q2 = chi2_contingency(ct_Q2)\nV_Q2 = cramers_v(chi2_Q2, ct_Q2.values.sum(), *ct_Q2.shape)\n\nprint(\"Test chi-quadro — Work_Mode vs Industry\")\nprint(\"\\nTabella di contingenza:\")\nprint(ct_Q2)\nprint(f\"\\n  chi-quadro   = {chi2_Q2:.4f}\")\nprint(f\"  dof  = {dof_Q2}\")\nprint(f\"  p-value = {p_Q2:.4f}\")\nprint(f\"  Cramér's V = {V_Q2:.4f}\")",
+    "outputType": "text",
+    "outputContent": "Test chi-quadro — Work_Mode vs Industry\n\nTabella di contingenza:\nIndustry   Education  Finance  Healthcare  Manufacturing  Retail  Tech\nWork_Mode                                                             \nHybrid            87       75          76             81      92    69\nOn-site           94       87          94             85      73    88\nRemote            83       90          71             86      95    74\n\n  chi-quadro   = 9.9802\n  dof  = 10\n  p-value = 0.4422\n  Cramér's V = 0.0577\n"
+  },
+  {
+    "title_it": "Step 16",
+    "title_en": "Step 16",
+    "description_it": "",
+    "description_en": "",
+    "code": "# Chi-quadro Gender vs Industry\n\nct_Q4 = pd.crosstab(df['Gender'], df['Industry'])\nchi2_Q4, p_Q4, dof_Q4, exp_Q4 = chi2_contingency(ct_Q4)\nV_Q4 = cramers_v(chi2_Q4, ct_Q4.values.sum(), *ct_Q4.shape)\n\nprint(\"Q4: Test chi-quadro — Gender vs Industry\")\nprint(\"\\nTabella di contingenza (frequenze osservate):\")\nprint(ct_Q4)\nprint(f\"\\n  chi-quadro   = {chi2_Q4:.4f}\")\nprint(f\"  dof  = {dof_Q4}\")\nprint(f\"  p-value = {p_Q4:.4f}\")\nprint(f\"  Cramér's V = {V_Q4:.4f}\")",
+    "outputType": "text",
+    "outputContent": "Q4: Test chi-quadro — Gender vs Industry\n\nTabella di contingenza (frequenze osservate):\nIndustry    Education  Finance  Healthcare  Manufacturing  Retail  Tech\nGender                                                                 \nFemale             88       81         104             76      95    77\nMale               91       87          76             87      89    79\nNon-binary         85       84          61             89      76    75\n\n  chi-quadro   = 12.8543\n  dof  = 10\n  p-value = 0.2319\n  Cramér's V = 0.0655\n\n\n### Gender vs Industry\n\nL'ipotesi di partenza è che il genere non influenzi il settore in cui si lavora. Con un p-value di 0.23, che è molto più alto del limite di 0.05, non possiamo scartare questa idea. In pratica, non c'è nessuna prova statistica che uomini e donne scelgano settori diversi in questo dataset, e anche la V di Cramér è bassissima (0.065).\n"
+  },
+  {
+    "title_it": "Step 17",
+    "title_en": "Step 17",
+    "description_it": "",
+    "description_en": "",
+    "code": "# Intervallo di confidenza al 95% per lo Stress Level medio\n\nmu_stress = df['Stress_Level'].mean()\nse_stress  = stats.sem(df['Stress_Level'])\nci_stress  = stats.t.interval(0.95, df=len(df)-1, loc=mu_stress, scale=se_stress)\n\nprint(\"Intervallo di confidenza al 95% — Stress Level medio\")\nprint(f\"  Media campionaria  = {mu_stress:.4f}\")\nprint(f\"  Errore standard    = {se_stress:.4f}\")\nprint(f\"  IC 95%             = ({ci_stress[0]:.4f}, {ci_stress[1]:.4f})\")\nprint(f\"  n = {n}\")",
+    "outputType": "text",
+    "outputContent": "Intervallo di confidenza al 95% — Stress Level medio\n  Media campionaria  = 6.2447\n  Errore standard    = 0.0771\n  IC 95%             = (6.0934, 6.3960)\n  n = 1500\n\n\n## 1.6 Conclusioni e Limiti\n\n### Risposte alle domande statistiche\n\n**Q1** Correlazione lineare positiva tra ore lavorate e stress? Sì, correlazione positiva moderata-forte, statisticamente significativa\n\n**Q2** La distribuzione delle modalità di lavoro varia tra settori? No, nessuna associazione significativa\n\n**Q3** L'età influenza le ore lavorate? No, le due variabili risultano indipendenti\n\n**Q4** Associazione significativa tra genere e settore industriale? No, ancora nessuna associazione significativa\n\n### Sintesi\n\nL'unico risultato significativo è la correlazione tra ore lavorate e stress: lavorare di più è associato a più stress, in modo robusto e coerente con la letteratura. Tutte le altre relazioni analizzate, modalità di lavoro vs settore, età vs ore lavorate, genere vs settore , non raggiungono la significatività statistica. Il livello medio di stress nel campione è 6.24/10, medio-alto.\n\n### Limiti\n\nIl dataset è osservazionale, quindi non si possono stabilire relazioni causali. Le distribuzioni molto uniformi delle variabili (età, settori) suggeriscono un possibile campionamento stratificato , il che limita la generalizzabilità dei risultati. Sarebbe più interessenta se ci fossero altre variabili rilevanti tipo stipendio, ruolo e anzianità. Infine, aggregare 10 paesi con normative e culture del lavoro molto diverse può mascherare differenze importanti.\n\n"
+  }
+]
