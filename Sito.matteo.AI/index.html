@@ -221,7 +221,7 @@
             <h2 class="section-title" data-i18n="projects-title" data-split-text>I Miei Progetti</h2>
             <div class="projects-grid">
                 <!-- Card 1: Metline Chatbox -->
-                <article class="project-card" data-modal-type="iframe"
+                <article class="project-card" data-modal-type="deploying"
                     data-modal-url="https://progettochatboxmatteo.netlify.app/"
                     data-modal-title="Metline Chatbox" tabindex="0" role="button"
                     aria-label="Apri progetto Metline Chatbox">
@@ -304,6 +304,21 @@
                     <h3 data-i18n="cert-excel">Excel Avanzato</h3>
                     <p data-i18n="cert-view">Visualizza Certificato</p>
                 </a>
+                <a href="https://www.freecodecamp.org/certification/matteoabertotti/b1-english-for-developers"
+                    target="_blank" rel="noopener noreferrer" class="cert-card">
+                    <div class="cert-icon" style="display: flex; justify-content: center; align-items: center; height: 100%;">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 60 30" width="1em" height="0.5em" style="border-radius: 4px; box-shadow: 0 2px 4px rgba(0,0,0,0.2);">
+                            <clipPath id="t"><path d="M30,15 h30 v15 z v15 h-30 z h-30 v-15 z v-15 h30 z"/></clipPath>
+                            <path d="M0,0 v30 h60 v-30 z" fill="#012169"/>
+                            <path d="M0,0 L60,30 M60,0 L0,30" stroke="#fff" stroke-width="6"/>
+                            <path d="M0,0 L60,30 M60,0 L0,30" clip-path="url(#t)" stroke="#C8102E" stroke-width="4"/>
+                            <path d="M30,0 v30 M0,15 h60" stroke="#fff" stroke-width="10"/>
+                            <path d="M30,0 v30 M0,15 h60" stroke="#C8102E" stroke-width="6"/>
+                        </svg>
+                    </div>
+                    <h3 data-i18n="cert-english">B1 English for Developers</h3>
+                    <p data-i18n="cert-view">Visualizza Certificato</p>
+                </a>
             </div>
         </div>
     </section>
@@ -367,15 +382,11 @@
     <div class="modal-overlay" id="project-modal" role="dialog" aria-modal="true" aria-labelledby="modal-title" hidden>
         <div class="modal-container">
             <div class="modal-header">
-                <div class="modal-browser-dots">
-                    <span class="dot dot-red"></span>
-                    <span class="dot dot-yellow"></span>
-                    <span class="dot dot-green"></span>
-                </div>
                 <div class="modal-address-bar" id="modal-address-bar"></div>
                 <h3 class="modal-title" id="modal-title"></h3>
-                <button class="modal-close" id="modal-close" aria-label="Chiudi" data-i18n-aria="modal-close">&times;</button>
+                <button class="modal-close-btn" id="modal-close" aria-label="Chiudi">&times;</button>
             </div>
+
             <div class="modal-body" id="modal-body">
                 <!-- Dynamic content: iframe or notebook -->
                 <div class="modal-loading" id="modal-loading">

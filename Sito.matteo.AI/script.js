@@ -64,6 +64,7 @@ const translations = {
         "cert-db": "freeCodeCamp Python",
         "cert-python": "freeCodeCamp Python",
         "cert-excel": "Excel Avanzato",
+        "cert-english": "B1 English for Developers",
         "contact-title": "Contatti",
         "cookie-text": "Utilizziamo i cookie per personalizzare i contenuti e migliorare la vostra esperienza. Continuando a navigare, accettate il nostro uso dei cookie. Per saperne di più, consultate la nostra Informativa sulla Privacy.",
         "cookie-reject": "Rifiuta",
@@ -134,6 +135,7 @@ const translations = {
         "cert-db": "freeCodeCamp Python",
         "cert-python": "freeCodeCamp Python",
         "cert-excel": "Advanced Excel",
+        "cert-english": "B1 English for Developers",
         "contact-title": "Contact",
         "cookie-text": "We use cookies to personalize content and improve your experience. By continuing to browse, you agree to our use of cookies. To learn more, see our Privacy Policy.",
         "cookie-reject": "Reject",
@@ -896,6 +898,9 @@ function initProjectModals() {
             };
             
             bodyEl.appendChild(iframe);
+        } else if (type === 'deploying') {
+            loadingEl.classList.add('hidden');
+            errorEl.removeAttribute('hidden');
         } else if (type === 'notebook') {
             loadNotebook();
         }
@@ -925,6 +930,11 @@ function initProjectModals() {
         }, 350);
     }
 
+    if (closeBtn) closeBtn.addEventListener('click', closeModal);
+    modal.addEventListener('click', (e) => {
+        if (e.target === modal) closeModal();
+    });
+
     cards.forEach(card => {
         card.addEventListener('click', () => openModal(card));
         card.addEventListener('keydown', (e) => {
@@ -935,7 +945,7 @@ function initProjectModals() {
         });
     });
 
-    closeBtn.addEventListener('click', closeModal);
+    if (redDot) redDot.addEventListener('click', closeModal);
     modal.addEventListener('click', (e) => {
         if (e.target === modal) closeModal();
     });

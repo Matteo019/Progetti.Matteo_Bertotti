@@ -101,7 +101,7 @@ img {
     border-radius: 50%;
     background: radial-gradient(circle, rgba(27, 188, 94, .07) 0%, transparent 70%);
     pointer-events: none;
-    z-index: 10000;
+    z-index: 12000;
     pointer-events: none;
     transform: translate(-50%, -50%);
     transition: opacity .4s, transform .2s ease-out;
@@ -120,7 +120,7 @@ body:hover .cursor-glow {
     left: 0;
     transform: translate(-50%, -50%);
     border-radius: 50%;
-    z-index: 9999;
+    z-index: 12000;
     pointer-events: none;
     display: none;
     /* Hidden by default, shown on desktop */
@@ -166,6 +166,18 @@ body.hovering .cursor-outline {
     .nav-links li a {
         cursor: none;
     }
+}
+
+/* Disable custom cursor when modal is open */
+body.modal-open .cursor-dot,
+body.modal-open .cursor-outline,
+body.modal-open .cursor-glow {
+    display: none !important;
+}
+
+body.modal-open,
+body.modal-open * {
+    cursor: auto !important;
 }
 
 /* ---------- Preloader ---------- */
@@ -1249,12 +1261,12 @@ body.hovering .cursor-outline {
     position: fixed;
     inset: 0;
     z-index: 10000;
-    background: rgba(0, 0, 0, .65);
-    backdrop-filter: blur(6px);
-    -webkit-backdrop-filter: blur(6px);
+    background: rgba(10, 24, 18, .6);
+    backdrop-filter: blur(10px);
+    pointer-events: auto;
     display: flex;
-    align-items: center;
     justify-content: center;
+    align-items: center;
     opacity: 0;
     visibility: hidden;
     transition: opacity .35s var(--ease), visibility .35s;
@@ -1270,22 +1282,24 @@ body.hovering .cursor-outline {
 }
 
 .modal-container {
-    width: 92vw;
-    max-width: 1100px;
-    height: 88vh;
-    max-height: 88vh;
+    width: 1000px;
+    max-width: 90vw;
+    height: 700px;
+    max-height: 85vh;
+    pointer-events: auto;
     background: var(--bg);
     border: 1px solid rgba(26, 58, 42, .15);
     display: flex;
     flex-direction: column;
     overflow: hidden;
     box-shadow: 0 30px 80px rgba(0, 0, 0, .4);
-    transform: scale(.92) translateY(20px);
+    transform: scale(.92);
     transition: transform .4s var(--ease-bounce);
+    border-radius: 16px;
 }
 
 .modal-overlay.active .modal-container {
-    transform: scale(1) translateY(0);
+    transform: scale(1);
 }
 
 /* Modal Header — Browser Bar */
@@ -1305,15 +1319,25 @@ body.hovering .cursor-outline {
     flex-shrink: 0;
 }
 
-.modal-browser-dots .dot {
-    width: 12px;
-    height: 12px;
-    border-radius: 50%;
+.modal-close-btn {
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    color: #ff5f57;
+    font-size: 2rem;
+    line-height: 1;
+    padding: 0 .5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: transform .2s, color .2s;
+    outline: none;
 }
 
-.dot-red { background: #ff5f57; }
-.dot-yellow { background: #ffbd2e; }
-.dot-green { background: #28c840; }
+.modal-close-btn:hover {
+    transform: scale(1.1);
+    color: #ff3b30;
+}
 
 .modal-address-bar {
     flex: 1;
@@ -1334,11 +1358,12 @@ body.hovering .cursor-outline {
     font-family: var(--font-display);
     font-weight: 600;
     font-size: .9rem;
-    color: var(--white);
-    text-transform: uppercase;
-    letter-spacing: .05em;
+    color: rgba(255, 255, 255, .9);
     white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
+
 
 .modal-close {
     background: none;
@@ -1741,7 +1766,7 @@ body.hovering .cursor-outline {
    ============================================================ */
 .cert-grid {
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: repeat(4, 1fr);
     gap: 1.5rem;
 }
 
@@ -2053,12 +2078,13 @@ footer p {
         height: 100vh;
         flex-direction: column;
         justify-content: center;
+        align-items: center;
         background: var(--bg);
         border: none;
         border-left: 1px solid rgba(26, 58, 42, .1);
         border-radius: 0;
         padding: 2rem;
-        gap: .5rem;
+        gap: 1.5rem;
         transition: right .35s var(--ease);
         z-index: 1000;
     }
@@ -2071,6 +2097,7 @@ footer p {
         font-size: .85rem;
         padding: .8rem 1.25rem;
         border-radius: 0;
+        text-align: center;
     }
 
     .hamburger {

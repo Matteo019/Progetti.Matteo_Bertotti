@@ -1,14 +1,14 @@
 {
-  "title_it": "Pulizia e Analisi Dataset CSV",
-  "title_en": "CSV Dataset Cleaning & Analysis",
+  "title_it": "Analisi Mental Health & Lavoro",
+  "title_en": "Mental Health & Work Analysis",
   "steps": [
     {
       "id": 1,
       "title_it": "Import Librerie",
       "title_en": "Import Libraries",
-      "description_it": "Importiamo le librerie necessarie per l'analisi dei dati: Pandas per la manipolazione, Matplotlib e Seaborn per la visualizzazione.",
-      "description_en": "We import the necessary libraries for data analysis: Pandas for manipulation, Matplotlib and Seaborn for visualization.",
-      "code": "import pandas as pd\nimport numpy as np\nimport matplotlib.pyplot as plt\nimport seaborn as sns\n\nsns.set_theme(style='whitegrid')\nplt.rcParams['figure.figsize'] = (10, 6)\nprint('Librerie importate con successo ✓')",
+      "description_it": "Importiamo le librerie necessarie: Pandas per la manipolazione, Matplotlib e Seaborn per la visualizzazione statistica.",
+      "description_en": "We import the necessary libraries: Pandas for manipulation, Matplotlib and Seaborn for statistical visualization.",
+      "code": "import pandas as pd\nimport numpy as np\nimport matplotlib.pyplot as plt\nimport seaborn as sns\nfrom scipy import stats\n\nsns.set_theme(style='whitegrid', palette='muted')\nplt.rcParams['figure.figsize'] = (9, 5)\nprint('Librerie importate con successo ✓')",
       "outputType": "text",
       "outputContent": "Librerie importate con successo ✓"
     },
@@ -16,70 +16,47 @@
       "id": 2,
       "title_it": "Caricamento Dataset",
       "title_en": "Load Dataset",
-      "description_it": "Carichiamo il CSV e visualizziamo le prime 5 righe per capire la struttura dei dati.",
-      "description_en": "We load the CSV file and display the first 5 rows to understand the data structure.",
-      "code": "df = pd.read_csv('sales_data.csv')\nprint(f'Shape: {df.shape}')\nprint(f'Colonne: {list(df.columns)}')\ndf.head()",
+      "description_it": "Carichiamo il dataset fittizio sui 1500 lavoratori e visualizziamo le prime 5 righe per capire la struttura.",
+      "description_en": "We load the mock dataset of 1500 workers and display the first 5 rows to understand the structure.",
+      "code": "df = pd.read_csv('mental_health_productivity_2026.csv')\n\nprint(f'Dimensioni del dataset: {df.shape[0]} osservazioni x {df.shape[1]} variabili')\ndf.head()",
       "outputType": "table",
-      "outputContent": "<table><thead><tr><th></th><th>date</th><th>product</th><th>category</th><th>quantity</th><th>price</th><th>region</th></tr></thead><tbody><tr><td>0</td><td>2024-01-05</td><td>Widget A</td><td>Electronics</td><td>12</td><td>29.99</td><td>Nord</td></tr><tr><td>1</td><td>2024-01-07</td><td>Widget B</td><td>Electronics</td><td>NaN</td><td>49.99</td><td>Sud</td></tr><tr><td>2</td><td>2024-01-10</td><td>Gadget X</td><td>Home</td><td>5</td><td>NaN</td><td>Centro</td></tr><tr><td>3</td><td>2024-01-12</td><td>Tool Y</td><td>Tools</td><td>8</td><td>15.50</td><td>Nord</td></tr><tr><td>4</td><td>2024-01-15</td><td>Widget A</td><td>Electronics</td><td>20</td><td>29.99</td><td>NaN</td></tr></tbody></table><p class='nb-shape'>Shape: (1200, 6) &bull; Colonne: ['date', 'product', 'category', 'quantity', 'price', 'region']</p>"
+      "outputContent": "<table><thead><tr><th></th><th>Employee_ID</th><th>Age</th><th>Gender</th><th>Industry</th><th>Work_Mode</th><th>Work_Hours</th><th>Stress_Level</th><th>Burnout_Risk</th></tr></thead><tbody><tr><td>0</td><td>EMP_0001</td><td>50</td><td>Male</td><td>Manufacturing</td><td>Remote</td><td>40</td><td>9</td><td>High</td></tr><tr><td>1</td><td>EMP_0002</td><td>36</td><td>Male</td><td>Finance</td><td>Remote</td><td>35</td><td>1</td><td>Low</td></tr><tr><td>2</td><td>EMP_0003</td><td>29</td><td>Male</td><td>Finance</td><td>Remote</td><td>52</td><td>4</td><td>Low</td></tr><tr><td>3</td><td>EMP_0004</td><td>42</td><td>Female</td><td>Manufacturing</td><td>Remote</td><td>56</td><td>10</td><td>High</td></tr><tr><td>4</td><td>EMP_0005</td><td>40</td><td>Male</td><td>Tech</td><td>On-site</td><td>35</td><td>2</td><td>Low</td></tr></tbody></table><p class='nb-shape'>Dimensioni del dataset: 1500 osservazioni x 13 variabili</p>"
     },
     {
       "id": 3,
       "title_it": "Analisi Valori Mancanti",
       "title_en": "Missing Values Analysis",
-      "description_it": "Verifichiamo quanti valori mancanti (NaN) ci sono per ogni colonna e visualizziamo la distribuzione.",
-      "description_en": "We check how many missing values (NaN) exist per column and visualize the distribution.",
-      "code": "missing = df.isnull().sum()\nmissing_pct = (missing / len(df) * 100).round(2)\n\nmissing_df = pd.DataFrame({\n    'Mancanti': missing,\n    'Percentuale': missing_pct\n}).sort_values('Mancanti', ascending=False)\n\nprint(missing_df)\nprint(f'\\nTotale NaN: {missing.sum()}')",
-      "outputType": "table",
-      "outputContent": "<table><thead><tr><th>Colonna</th><th>Mancanti</th><th>Percentuale %</th></tr></thead><tbody><tr><td>quantity</td><td>45</td><td>3.75</td></tr><tr><td>price</td><td>32</td><td>2.67</td></tr><tr><td>region</td><td>28</td><td>2.33</td></tr><tr><td>date</td><td>0</td><td>0.00</td></tr><tr><td>product</td><td>0</td><td>0.00</td></tr><tr><td>category</td><td>0</td><td>0.00</td></tr></tbody></table><p class='nb-shape'>Totale NaN: 105 su 7200 celle (1.46%)</p>"
+      "description_it": "Verifichiamo quanti valori mancanti (NaN) ci sono e identifichiamo i tipi di variabili (continue vs categoriali).",
+      "description_en": "We check how many missing values (NaN) exist and identify variable types (continuous vs categorical).",
+      "code": "var_quant = ['Age', 'Work_Hours_Per_Week', 'Stress_Level',\n             'Sleep_Hours', 'Productivity_Score', 'Physical_Activity_Hours']\nvar_cat   = ['Gender', 'Country', 'Industry', 'Work_Mode',\n             'Mental_Health_Support_Access', 'Burnout_Risk']\n\nprint('\\nValori mancanti per variabile')\nmissing = df.isnull().sum()\nprint(missing[missing > 0] if missing.sum() > 0 else 'Nessun valore mancante rilevato.')",
+      "outputType": "text",
+      "outputContent": "Valori mancanti per variabile\nNessun valore mancante rilevato."
     },
     {
       "id": 4,
-      "title_it": "Pulizia Dati",
-      "title_en": "Data Cleaning",
-      "description_it": "Riempiamo i valori mancanti: mediana per le colonne numeriche, moda per le categoriche. Convertiamo anche la colonna 'date' in formato datetime.",
-      "description_en": "We fill missing values: median for numerical columns, mode for categorical ones. We also convert the 'date' column to datetime format.",
-      "code": "# Conversione data\ndf['date'] = pd.to_datetime(df['date'])\n\n# Impute numerici con mediana\ndf['quantity'].fillna(df['quantity'].median(), inplace=True)\ndf['price'].fillna(df['price'].median(), inplace=True)\n\n# Impute categorici con moda\ndf['region'].fillna(df['region'].mode()[0], inplace=True)\n\n# Verifica\nassert df.isnull().sum().sum() == 0\nprint('Pulizia completata ✓')\nprint(f'NaN rimanenti: {df.isnull().sum().sum()}')\ndf.dtypes",
-      "outputType": "text",
-      "outputContent": "Pulizia completata ✓\nNaN rimanenti: 0\n\ndate        datetime64[ns]\nproduct             object\ncategory            object\nquantity           float64\nprice              float64\nregion              object\ndtype: object"
+      "title_it": "Statistica Descrittiva",
+      "title_en": "Descriptive Statistics",
+      "description_it": "Calcoliamo le misure di posizione e dispersione (media, mediana, quartili, asimmetria) per le variabili quantitative.",
+      "description_en": "We calculate measures of central tendency and dispersion (mean, median, quartiles, skewness) for quantitative variables.",
+      "code": "desc = df[var_quant].describe().T\ndesc['median'] = df[var_quant].median()\ndesc['skewness'] = df[var_quant].skew()\ndesc = desc[['count','mean','median','std','min','25%','75%','max','skewness']]\ndesc.columns = ['N','Media','Mediana','Dev.Std','Min','Q1','Q3','Max','Asimmetria']\npd.options.display.float_format = '{:.3f}'.format\ndesc",
+      "outputType": "table",
+      "outputContent": "<table><thead><tr><th></th><th>N</th><th>Media</th><th>Mediana</th><th>Dev.Std</th><th>Min</th><th>Q1</th><th>Q3</th><th>Max</th><th>Asimmetria</th></tr></thead><tbody><tr><td>Age</td><td>1500.000</td><td>41.003</td><td>42.000</td><td>11.063</td><td>22.000</td><td>31.000</td><td>50.000</td><td>59.000</td><td>-0.085</td></tr><tr><td>Work_Hours_Per_Week</td><td>1500.000</td><td>46.980</td><td>47.000</td><td>10.042</td><td>30.000</td><td>38.000</td><td>55.250</td><td>64.000</td><td>-0.003</td></tr><tr><td>Stress_Level</td><td>1500.000</td><td>6.245</td><td>7.000</td><td>2.988</td><td>1.000</td><td>4.000</td><td>9.000</td><td>10.000</td><td>-0.284</td></tr><tr><td>Sleep_Hours</td><td>1500.000</td><td>6.973</td><td>6.982</td><td>1.216</td><td>4.000</td><td>6.138</td><td>7.818</td><td>10.000</td><td>-0.013</td></tr><tr><td>Productivity_Score</td><td>1500.000</td><td>69.837</td><td>70.000</td><td>17.397</td><td>40.000</td><td>55.000</td><td>84.000</td><td>100.000</td><td>0.020</td></tr><tr><td>Physical_Activity_Hours</td><td>1500.000</td><td>5.005</td><td>5.023</td><td>2.899</td><td>0.011</td><td>2.526</td><td>7.526</td><td>9.996</td><td>-0.016</td></tr></tbody></table>"
     },
     {
       "id": 5,
-      "title_it": "Vendite per Categoria",
-      "title_en": "Sales by Category",
-      "description_it": "Calcoliamo il fatturato per categoria e visualizziamo il risultato con un grafico a barre.",
-      "description_en": "We calculate revenue by category and visualize the result with a bar chart.",
-      "code": "df['revenue'] = df['quantity'] * df['price']\n\nrev_by_cat = df.groupby('category')['revenue'] \\\n    .sum().sort_values(ascending=False)\n\nfig, ax = plt.subplots()\nsns.barplot(x=rev_by_cat.values, y=rev_by_cat.index,\n            palette='Greens_r', ax=ax)\nax.set_xlabel('Fatturato (€)')\nax.set_title('Fatturato per Categoria')\nplt.tight_layout()\nplt.show()",
+      "title_it": "Distribuzione Rischio Burnout",
+      "title_en": "Burnout Risk Distribution",
+      "description_it": "Visualizziamo quanti dipendenti rientrano in categorie di rischio Alto, Medio o Basso.",
+      "description_en": "Let's visualize how many employees fall into High, Medium, or Low burnout risk categories.",
+      "code": "risk_counts = df['Burnout_Risk'].value_counts()\n\nfig, ax = plt.subplots()\nsns.barplot(x=risk_counts.index, y=risk_counts.values,\n            palette=['#ff5f57', '#ffbd2e', '#28c840'], ax=ax)\nax.set_xlabel('Rischio Burnout')\nax.set_ylabel('Numero di Dipendenti')\nax.set_title('Distribuzione Rischio Burnout nel Campione')\nplt.tight_layout()\nplt.show()",
       "outputType": "chart",
       "chartConfig": {
         "type": "bar",
-        "labels": ["Electronics", "Home", "Tools", "Garden", "Sports"],
+        "labels": ["Medium", "High", "Low"],
         "datasets": [{
-          "label": "Fatturato (€)",
-          "data": [48500, 32100, 21800, 18400, 12700],
-          "backgroundColor": ["#0f3d24", "#1a5c38", "#2d8c4e", "#1bbc5e", "#5cd88a"]
-        }]
-      }
-    },
-    {
-      "id": 6,
-      "title_it": "Trend Temporale",
-      "title_en": "Time Trend",
-      "description_it": "Analizziamo l'andamento del fatturato mensile per individuare trend e stagionalità.",
-      "description_en": "We analyze the monthly revenue trend to identify patterns and seasonality.",
-      "code": "monthly = df.set_index('date') \\\n    .resample('M')['revenue'].sum()\n\nfig, ax = plt.subplots()\nax.plot(monthly.index, monthly.values,\n        color='#1a5c38', linewidth=2, marker='o',\n        markerfacecolor='#1bbc5e', markersize=6)\nax.fill_between(monthly.index, monthly.values,\n                alpha=0.15, color='#1bbc5e')\nax.set_title('Fatturato Mensile')\nax.set_ylabel('Fatturato (€)')\nplt.xticks(rotation=45)\nplt.tight_layout()\nplt.show()",
-      "outputType": "chart",
-      "chartConfig": {
-        "type": "line",
-        "labels": ["Gen", "Feb", "Mar", "Apr", "Mag", "Giu", "Lug", "Ago", "Set", "Ott", "Nov", "Dic"],
-        "datasets": [{
-          "label": "Fatturato (€)",
-          "data": [8200, 9500, 11200, 10800, 12400, 14100, 13500, 11800, 12900, 15200, 16800, 18400],
-          "borderColor": "#1a5c38",
-          "backgroundColor": "rgba(27, 188, 94, 0.15)",
-          "fill": true,
-          "tension": 0.3,
-          "pointBackgroundColor": "#1bbc5e",
-          "pointRadius": 5
+          "label": "Numero Dipendenti",
+          "data": [620, 450, 430],
+          "backgroundColor": ["#ffbd2e", "#ff5f57", "#28c840"]
         }]
       }
     }
