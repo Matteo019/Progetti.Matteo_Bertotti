@@ -1293,13 +1293,13 @@ body.modal-open * {
     flex-direction: column;
     overflow: hidden;
     box-shadow: 0 30px 80px rgba(0, 0, 0, .4);
-    transform: scale(.92);
-    transition: transform .4s var(--ease-bounce);
+    opacity: 0;
+    transition: opacity .4s var(--ease-bounce);
     border-radius: 16px;
 }
 
 .modal-overlay.active .modal-container {
-    transform: scale(1);
+    opacity: 1;
 }
 
 /* Modal Header — Browser Bar */
@@ -1633,7 +1633,7 @@ body.modal-open * {
 
 .notebook-output-content.visible {
     opacity: 1;
-    transform: translateY(0);
+    transform: none;
 }
 
 .notebook-output-content.text-output {
@@ -2197,6 +2197,11 @@ footer p {
         border-radius: 0;
         border: none;
         transform: translateY(100%);
+        transition: opacity .4s var(--ease-bounce), transform .4s var(--ease-bounce);
+    }
+
+    .modal-overlay.active .modal-container {
+        transform: translateY(0);
     }
 
     .notebook-content {

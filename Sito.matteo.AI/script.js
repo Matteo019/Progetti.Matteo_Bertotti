@@ -48,7 +48,7 @@ const translations = {
         "project-1-desc": "Chatbot AI multi-agente per analisi dati e KPI, con integrazione MCP verso database SQL e modelli LLM via Nvidia NIM e Groq.",
         "project-2-title": "Gestione Magazzino Bar",
         "project-2-desc": "Applicazione web per la gestione completa del magazzino alcolico di un bar.",
-        "project-3-title": "Notebook Analisi Dati",
+        "project-3-title": "Mental Health & Work",
         "project-3-desc": "Pulizia e analisi guidata di un dataset CSV con Python, step by step.",
         "project-open": "Apri Progetto",
         "project-explore": "Esplora il Notebook",
@@ -122,7 +122,7 @@ const translations = {
         "project-1-desc": "AI Chatbot for analysis and KPIs with MCP sql Database, Nvidia NIM and GRoq integration.",
         "project-2-title": "Bar Inventory Management",
         "project-2-desc": "Web application for complete bar inventory management.",
-        "project-3-title": "Data Analysis Notebook",
+        "project-3-title": "Mental Health & Work",
         "project-3-desc": "Guided CSV dataset cleaning and analysis with Python, step by step.",
         "project-open": "Open Project",
         "project-explore": "Explore Notebook",
@@ -1318,6 +1318,8 @@ function initProjectModals() {
                 if (currentStep < steps.length - 1) {
                     currentStep++;
                     updateStep();
+                } else {
+                    closeModal();
                 }
             }
         });
