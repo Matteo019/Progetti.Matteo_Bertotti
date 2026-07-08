@@ -1590,7 +1590,7 @@ body.modal-open * {
     background: var(--bg);
     padding: 1.25rem;
     overflow-y: auto;
-    overflow-x: hidden;
+    overflow-x: auto;
     border-left: 1px solid rgba(26, 58, 42, .1);
     position: relative;
 }
@@ -1676,6 +1676,9 @@ body.modal-open * {
 /* Table output */
 .notebook-output-content table {
     width: 100%;
+    display: block;
+    overflow-x: auto;
+    white-space: nowrap;
     border-collapse: collapse;
     font-family: var(--font-mono);
     font-size: .72rem;
