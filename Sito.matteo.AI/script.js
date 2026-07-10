@@ -71,7 +71,7 @@ const translations = {
         "cookie-accept": "Accetta Tutti",
         "footer-rights": "© 2025 Matteo Augustinho Bertotti. Tutti i diritti riservati.",
         "notebook-small-title": "Schermo troppo piccolo",
-        "notebook-small-desc": "Ingrandisci la finestra A Fullscreen e riapri la pagina",
+        "notebook-small-desc": "Ingrandisci la finestra a schermo intero e ricarica la pagina",
         "typing-phrases": ['AI Dev & Data Analyst', 'Appassionato di Python', 'Studente di Machine Learning', 'Risolutore di Problemi Data-Driven']
     },
     en: {
@@ -144,7 +144,7 @@ const translations = {
         "cookie-accept": "Accept All",
         "footer-rights": "© 2025 Matteo Augustinho Bertotti. All rights reserved.",
         "notebook-small-title": "Screen too small",
-        "notebook-small-desc": "Maximize the window to Fullscreen and reopen the page",
+        "notebook-small-desc": "Maximize the window to full screen and reload the page",
         "typing-phrases": ['AI Dev & Data Analyst', 'Python Enthusiast', 'Machine Learning Student', 'Data Driven Problem Solver']
     }
 };

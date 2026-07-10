@@ -1,0 +1,3 @@
+[build]
+  base = "Sito.matteo.AI"
+  publish = "."
