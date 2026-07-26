@@ -1,0 +1,12 @@
+services:
+  mio-backend:
+    build: .
+    container_name: backend-vetrina
+    restart: unless-stopped
+    # NON apriamo porte verso l'esterno (es. 8000:8000), ci pensa Nginx!
+    networks:
+      - proxy-net
+
+networks:
+  proxy-net:
+    external: true
