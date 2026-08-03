@@ -1,0 +1,17 @@
+name: Deploy Automatico Sito AI
+
+on:
+  push:
+    branches: [ master, main ]
+
+jobs:
+  deploy:
+    runs-on: self-hosted
+    steps:
+      - name: Aggiorna repo e riavvia Docker Compose
+        run: |
+          cd ~/github/Progetti.Matteo_Bertotti
+          git pull
+          cd Sito.matteo.AI
+          docker rm -f backend-vetrina || true
+          docker compose up -d --build
