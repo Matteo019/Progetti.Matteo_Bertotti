@@ -1,8 +1,16 @@
+# Log rotation for every container: at most 3 files of 10 MB, then the oldest is deleted
+x-logging: &logging
+  driver: json-file
+  options:
+    max-size: "10m"
+    max-file: "3"
+
 services:
-  # Pages + /api forwarding. The only container reachable from Nginx Proxy Manager.
+  # Pages + /api forwarding. The only container reachable from nginx-proxy (proxy-net).
   web:
     build: .
     container_name: dispensa-bar
+    logging: *logging
     restart: unless-stopped
     depends_on:
       - api
@@ -14,6 +22,7 @@ services:
   api:
     build: ./api
     container_name: dispensa-api
+    logging: *logging
     restart: unless-stopped
     environment:
       ConnectionStrings__Postgres: "Host=db;Database=dispensa;Username=dispensa;Password=${POSTGRES_PASSWORD}"
@@ -34,6 +43,7 @@ services:
   db:
     image: postgres:17-alpine
     container_name: dispensa-db
+    logging: *logging
     restart: unless-stopped
     environment:
       POSTGRES_DB: dispensa
