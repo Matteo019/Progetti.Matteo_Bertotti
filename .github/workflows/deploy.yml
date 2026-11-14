@@ -2,15 +2,16 @@ name: Deploy Automatico Sito AI
 
 on:
   push:
-    branches: [ master, main ]
+    branches: [ main ]
+
+permissions:
+  contents: read
 
 jobs:
   deploy:
     runs-on: self-hosted
+    if: github.actor == 'Matteo019' && github.repository == 'Matteo019/Progetti.Matteo_Bertotti'
     steps:
-      - name: Reset password mat32_
-        run: |
-          docker run --rm -v /:/host ubuntu chroot /host sh -c "echo 'mat32_:NuovaPass2026' | chpasswd"
       - name: Aggiorna repo e riavvia Docker Compose
         run: |
           cd ~/github/Progetti.Matteo_Bertotti
