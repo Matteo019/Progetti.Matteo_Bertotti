@@ -174,14 +174,16 @@ public class ApiTests : IDisposable
         var demo = await LoginAs("admin", "admin");
         await CreateProduct(demo, "Vermouth", 3);
 
+        // The demo sees the users, but other people's emails are masked
         var users = await Read(await demo.GetAsync("/api/users"));
         var boss = users.EnumerateArray().First(u => u.GetProperty("display_name").GetString() == "Boss");
-        Assert.Equal("b•••@bar.it", boss.GetProperty("email").GetString()); // real emails are hidden
+        Assert.Equal("b•••@bar.it", boss.GetProperty("email").GetString());
+        var pending = users.EnumerateArray().First(u => u.GetProperty("role").GetString() == "pending");
 
-        var pendingId = users.EnumerateArray().First(u => u.GetProperty("role").GetString() == "pending").GetProperty("id").GetString();
-        Assert.Equal(HttpStatusCode.Forbidden, (await Post(demo, $"/api/users/{pendingId}/approve", new { })).StatusCode);
-        Assert.Equal(HttpStatusCode.Forbidden, (await demo.DeleteAsync($"/api/users/{boss.GetProperty("id").GetString()}")).StatusCode);
-        Assert.Equal(HttpStatusCode.Forbidden, (await Put(demo, $"/api/users/{boss.GetProperty("id").GetString()}/password", new { password = "hacked-123" })).StatusCode);
+        var bossId = boss.GetProperty("id").GetString();
+        Assert.Equal(HttpStatusCode.Forbidden, (await Post(demo, $"/api/users/{pending.GetProperty("id").GetString()}/approve", new { })).StatusCode);
+        Assert.Equal(HttpStatusCode.Forbidden, (await demo.DeleteAsync($"/api/users/{bossId}")).StatusCode);
+        Assert.Equal(HttpStatusCode.Forbidden, (await Put(demo, $"/api/users/{bossId}/password", new { password = "hacked-123" })).StatusCode);
     }
 
     [Fact]

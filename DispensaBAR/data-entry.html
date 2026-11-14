@@ -25,13 +25,41 @@
                 autocomplete="off" />
         </div>
 
-        <!-- Results -->
-        <section id="search-results" class="de-results" aria-label="Risultati ricerca">
-            <div class="empty-state" id="empty-state">
-                <div class="empty-state__icon">📦</div>
-                <p class="empty-state__text">Inizia a cercare un prodotto</p>
+        <!-- Dashboard: shown while the search box is empty -->
+        <section id="dashboard" class="dash" aria-label="Riepilogo magazzino">
+            <div class="dash__stats">
+                <div class="dash-stat glass-card">
+                    <span class="dash-stat__label">Prodotti</span>
+                    <span class="dash-stat__value" id="stat-products">—</span>
+                </div>
+                <div class="dash-stat glass-card">
+                    <span class="dash-stat__label">Bottiglie in magazzino</span>
+                    <span class="dash-stat__value" id="stat-bottles">—</span>
+                </div>
+                <div class="dash-stat glass-card dash-stat--warning">
+                    <span class="dash-stat__label">In esaurimento</span>
+                    <span class="dash-stat__value" id="stat-low">—</span>
+                </div>
+                <div class="dash-stat glass-card dash-stat--danger">
+                    <span class="dash-stat__label">Esauriti</span>
+                    <span class="dash-stat__value" id="stat-empty">—</span>
+                </div>
+            </div>
+
+            <div class="dash__panels">
+                <div class="dash-panel">
+                    <h2 class="dash-panel__title">⚠️ In esaurimento <span class="dash-panel__hint">mezza bottiglia o meno</span></h2>
+                    <div id="low-stock-list" class="de-results"></div>
+                </div>
+                <div class="dash-panel">
+                    <h2 class="dash-panel__title">🔥 I più consumati <span class="dash-panel__hint">bottiglie scaricate</span></h2>
+                    <div id="top-used-list" class="dash-bars"></div>
+                </div>
             </div>
         </section>
+
+        <!-- Search results -->
+        <section id="search-results" class="de-results" aria-label="Risultati ricerca"></section>
 
         <!-- History -->
         <section class="de-history" aria-label="Cronologia recente">

@@ -13,10 +13,74 @@ async function init() {
         initNavbar(profile, 'data-entry');
         setupNavToggle();
         setupSearch();
+        loadDashboard();
         loadRecentHistory();
     } catch {
         // requireAuth handles redirect
     }
+}
+
+// ---- Dashboard (shown while the search box is empty) ----
+const LOW_STOCK = 0.5; // bottles: half a bottle or less
+
+async function loadDashboard() {
+    try {
+        const [products, outs] = await Promise.all([
+            api.get('/products'),
+            api.get('/activity/discards?days=3650'), // all the "OUT" movements
+        ]);
+
+        const totalBottles = products.reduce((sum, p) => sum + Number(p.quantity), 0);
+        const lowStock = products
+            .filter(p => p.quantity <= LOW_STOCK)
+            .sort((a, b) => a.quantity - b.quantity || a.name.localeCompare(b.name));
+
+        document.getElementById('stat-products').textContent = products.length;
+        document.getElementById('stat-bottles').textContent = formatItalianFloat(totalBottles);
+        document.getElementById('stat-low').textContent = lowStock.length;
+        document.getElementById('stat-empty').textContent = products.filter(p => Number(p.quantity) === 0).length;
+
+        renderLowStock(lowStock.slice(0, 6));
+        renderTopUsed(outs);
+    } catch (err) {
+        showToast('Errore caricamento riepilogo: ' + err.message, 'error');
+    }
+}
+
+function renderLowStock(products) {
+    const container = document.getElementById('low-stock-list');
+    if (!products.length) {
+        container.innerHTML = `<div class="empty-state"><p class="empty-state__text">Nessun prodotto in esaurimento 🎉</p></div>`;
+        return;
+    }
+    container.innerHTML = products.map(renderProductCard).join('');
+    attachProductActions(container);
+}
+
+function renderTopUsed(outs) {
+    const container = document.getElementById('top-used-list');
+
+    // Total bottles taken out per product
+    const totals = new Map();
+    for (const log of outs) {
+        const amount = Number(log.details?.amount ?? (log.previous_value - log.new_value)) || 0;
+        totals.set(log.product_name, (totals.get(log.product_name) || 0) + amount);
+    }
+    const top = [...totals.entries()].sort((a, b) => b[1] - a[1]).slice(0, 8);
+
+    if (!top.length) {
+        container.innerHTML = `<div class="empty-state"><p class="empty-state__text">Nessuno scarico registrato</p></div>`;
+        return;
+    }
+
+    const max = top[0][1];
+    container.innerHTML = top.map(([name, total]) => `
+    <div class="dash-bar">
+      <span class="dash-bar__fill" style="width:${Math.round((total / max) * 100)}%"></span>
+      <span class="dash-bar__name">${escapeHtml(name)}</span>
+      <span class="dash-bar__value">${formatItalianFloat(total)} bott</span>
+    </div>
+  `).join('');
 }
 
 // ---- Search ----
@@ -30,14 +94,16 @@ function setupSearch() {
 
 async function searchProducts(query) {
     const container = document.getElementById('search-results');
-    const emptyState = document.getElementById('empty-state');
+    const dashboard = document.getElementById('dashboard');
 
+    // Empty search: back to the dashboard
     if (!query) {
         container.innerHTML = '';
-        container.appendChild(emptyState);
-        emptyState.style.display = '';
+        dashboard.hidden = false;
+        loadDashboard();
         return;
     }
+    dashboard.hidden = true;
 
     try {
         const data = await api.get(`/products?q=${encodeURIComponent(query)}&limit=20`);
@@ -53,7 +119,7 @@ async function searchProducts(query) {
         }
 
         container.innerHTML = data.map(product => renderProductCard(product)).join('');
-        attachProductActions();
+        attachProductActions(container);
     } catch (err) {
         showToast('Errore nella ricerca: ' + err.message, 'error');
     }
@@ -90,8 +156,9 @@ function renderProductCard(product) {
   `;
 }
 
-function attachProductActions() {
-    document.querySelectorAll('.btn-in, .btn-out').forEach(btn => {
+// Only inside the given container: otherwise the dashboard cards would get the click handler twice
+function attachProductActions(container) {
+    container.querySelectorAll('.btn-in, .btn-out').forEach(btn => {
         btn.addEventListener('click', handleQuantityChange);
     });
 }
@@ -125,6 +192,7 @@ async function handleQuantityChange(e) {
             'success'
         );
         loadRecentHistory();
+        if (!document.getElementById('dashboard').hidden) loadDashboard();
     } catch (err) {
         showToast('Errore aggiornamento: ' + err.message, 'error');
     }

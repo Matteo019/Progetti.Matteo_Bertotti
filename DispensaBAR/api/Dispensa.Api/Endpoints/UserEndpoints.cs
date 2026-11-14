@@ -18,7 +18,7 @@ public static class UserEndpoints
             var me = http.CurrentUser();
             var list = await db.Users.OrderByDescending(u => u.CreatedAt).ToListAsync();
 
-            // On the public demo, don't show the real users' emails
+            // On the public demo, other people's emails are masked (someone may sign up with a real one)
             return list.Select(u => ProfileDto.From(u) with
             {
                 Email = me.IsDemo && u.Id != me.Id ? MaskEmail(u.Email) : u.Email
