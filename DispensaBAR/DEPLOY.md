@@ -48,9 +48,9 @@ In locale il backend usa un file SQLite (`dispensa-dev.db`), Vite inoltra `/api`
    docker compose up -d --build
    ```
 
-3. **Cloudflare Tunnel** — *Public Hostname* `dispensa.matteobertotti.tech` → Nginx Proxy Manager.
+3. **Cloudflare Tunnel** — *Public Hostname* `dispensabar.matteobertotti.tech` → Nginx Proxy Manager.
 
-4. **Nginx Proxy Manager** — *Proxy Host* `dispensa.matteobertotti.tech` → `http` → `dispensa-bar` → porta `80`.
+4. **Nginx Proxy Manager** — *Proxy Host* `dispensabar.matteobertotti.tech` → `http` → `dispensa-bar` → porta `80`.
 
 ## Account demo (admin / admin)
 
