@@ -4,18 +4,16 @@
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="Content-Security-Policy"
-        content="default-src 'self' mailto: tel:; script-src 'self'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data:; connect-src 'self'; frame-src 'self' https://progettochatboxmatteo.netlify.app https://progettodispensamatteo.netlify.app; form-action 'self' mailto: tel:;">
+        content="default-src 'self' mailto: tel:; script-src 'self'; style-src 'self' 'unsafe-inline'; font-src 'self'; img-src 'self' data:; connect-src 'self'; frame-src 'self' https://progettochatboxmatteo.netlify.app https://progettodispensamatteo.netlify.app; form-action 'self' mailto: tel:;">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Matteo Augustinho Bertotti | AI Dev & Data Analyst</title>
     <meta name="description" content="Portfolio di Matteo Augustinho Bertotti, studente di AI e Data Analysis.">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link
-        href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=Outfit:wght@300;400;500;700&family=Space+Mono:wght@400;700&display=swap"
-        rel="stylesheet">
+    <link rel="preload" href="fonts/outfit-latin.woff2" as="font" type="font/woff2" crossorigin>
+    <link rel="preload" href="fonts/oswald-latin.woff2" as="font" type="font/woff2" crossorigin>
     <link rel="icon" href="images/favicon.svg" type="image/svg+xml">
-    <link rel="stylesheet" href="style.css">
-    <link rel="stylesheet" href="cookie-banner.css">
+    <link rel="stylesheet" href="fonts.css?v=1.0.2">
+    <link rel="stylesheet" href="style.css?v=1.0.2">
+    <link rel="stylesheet" href="cookie-banner.css?v=1.0.2">
 </head>
 
 <body>
@@ -63,7 +61,7 @@
             <div class="hero-visual">
                 <span class="hero-big-text hero-big-top" aria-hidden="true">AI DEV &amp;</span>
                 <div class="hero-image fade-in delay-2">
-                    <img src="images/profile.png" alt="Matteo Augustinho Bertotti">
+                    <img src="images/profile.webp" alt="Matteo Augustinho Bertotti" width="864" height="980" fetchpriority="high">
                 </div>
                 <span class="hero-big-text hero-big-bottom" aria-hidden="true">DATA ANALYST</span>
                 <span class="hero-code-icon" aria-hidden="true">&lt;/&gt;</span>
@@ -132,7 +130,7 @@
                     </div>
                 </div>
                 <div class="edu-skills">
-                    <p data-i18n="exp-desc" style="color: var(--text-muted); line-height: 1.6; font-size: 0.95rem;">Progetto e sviluppo soluzioni verticali, gestionali su misura, piattaforme SaaS e applicazioni on-premise. Gestisco l'intero ciclo dei processi aziendali (contabilità, logistica, CRM e flussi documentali) tramite l'ERP Panthera, implementando inoltre automazioni avanzate e integrazioni basate sull'Intelligenza Artificiale per ottimizzare l'efficienza operativa.</p>
+                    <p data-i18n="exp-desc" style="color: var(--text-muted); line-height: 1.6; font-size: 0.95rem;">Progetto e sviluppo soluzioni verticali, gestionali su misura, piattaforme SaaS e applicazioni on-premise, adattando ogni soluzione alle esigenze di aziende diverse tra loro. Sviluppo soluzioni AI multi-agente, elaboro e analizzo dati tramite Python, SQL e pandas per il monitoraggio di KPI logistici, e ho realizzato soluzioni per la gestione di flussi di trasporto in ambito logistico e ferroviario. Inoltre implemento automazioni avanzate e integrazioni basate sull'Intelligenza Artificiale per ottimizzare l'efficienza operativa.</p>
                 </div>
                 <div class="edu-skills">
                     <h4 data-i18n="exp-stack-title">Stack Tecnologico:</h4>
@@ -221,13 +219,13 @@
         <div class="container">
             <h2 class="section-title" data-i18n="projects-title" data-split-text>I Miei Progetti</h2>
             <div class="projects-grid">
-                <!-- Card 1: Metline Chatbox -->
+                <!-- Card 1: AKID Chatbox -->
                 <article class="project-card" data-modal-type="deploying"
                     data-modal-url="https://progettochatboxmatteo.netlify.app/"
-                    data-modal-title="Metline Chatbox" tabindex="0" role="button"
-                    aria-label="Apri progetto Metline Chatbox">
+                    data-modal-title="AKID Chatbox" tabindex="0" role="button"
+                    aria-label="Apri progetto AKID Chatbox">
                     <div class="project-card-image">
-                        <img src="images/chatbox.png" alt="Metline Chatbox Preview">
+                        <img src="images/chatbox.webp" alt="AKID Chatbox Preview" width="1200" height="844" loading="lazy">
                         <div class="project-card-overlay">
                             <span data-i18n="project-open">Apri Progetto</span>
                         </div>
@@ -246,7 +244,7 @@
                     data-modal-title="Mental Health & Work" tabindex="0" role="button"
                     aria-label="Apri notebook analisi dati">
                     <div class="project-card-image">
-                        <img src="images/AnalisiDati.png" alt="Notebook Analisi Dati Preview">
+                        <img src="images/AnalisiDati.webp" alt="Notebook Analisi Dati Preview" width="1200" height="836" loading="lazy">
                         <div class="project-card-overlay">
                             <span data-i18n="project-explore">Esplora il Notebook</span>
                         </div>
@@ -266,7 +264,7 @@
                     data-modal-title="Gestione Magazzino Bar" tabindex="0" role="button"
                     aria-label="Apri progetto Gestione Magazzino Bar">
                     <div class="project-card-image">
-                        <img src="images/dispensa.png" alt="Gestione Magazzino Bar Preview">
+                        <img src="images/dispensa.webp" alt="Gestione Magazzino Bar Preview" width="1200" height="848" loading="lazy">
                         <div class="project-card-overlay">
                             <span data-i18n="project-open">Apri Progetto</span>
                         </div>
@@ -279,7 +277,48 @@
                         </div>
                     </div>
                 </article>
+
+                <!-- Card 4: Trascrizioni AI -->
+                <article class="project-card" data-modal-type="info"
+                    data-modal-url="https://github.com/Matteo019/trascrizioni"
+                    data-modal-template="tpl-trascrizioni"
+                    data-modal-title="Trascrizioni AI" tabindex="0" role="button"
+                    aria-label="Apri progetto Trascrizioni AI">
+                    <div class="project-card-image">
+                        <img src="images/trascrizioni.svg" alt="Trascrizioni AI Preview" width="1200" height="844" loading="lazy">
+                        <div class="project-card-overlay">
+                            <span data-i18n="project-details">Scopri il Progetto</span>
+                        </div>
+                    </div>
+                    <div class="project-card-body">
+                        <h3 data-i18n="project-4-title">Trascrizioni AI</h3>
+                        <p data-i18n="project-4-desc">Trascrizione in tempo reale di lezioni e video con Whisper, riassunti automatici in Markdown e chat sulle proprie sessioni.</p>
+                        <div class="project-tags">
+                            <span>Python</span><span>FastAPI</span><span>Whisper</span><span>Groq</span><span>LLM</span>
+                        </div>
+                    </div>
+                </article>
             </div>
+
+            <template id="tpl-trascrizioni">
+                <div class="project-info-modal">
+                    <img class="project-info-hero" src="images/trascrizioni.svg" alt="" width="1200" height="844">
+                    <div class="project-info-text">
+                        <p class="project-info-lead" data-i18n="trx-lead"></p>
+                        <h4 data-i18n="trx-features-title"></h4>
+                        <ul>
+                            <li data-i18n="trx-f1"></li>
+                            <li data-i18n="trx-f2"></li>
+                            <li data-i18n="trx-f3"></li>
+                            <li data-i18n="trx-f4"></li>
+                            <li data-i18n="trx-f5"></li>
+                        </ul>
+                        <p class="project-info-note" data-i18n="trx-note"></p>
+                        <a class="btn btn-primary" href="https://github.com/Matteo019/trascrizioni" target="_blank"
+                            rel="noopener noreferrer" data-i18n="trx-github"></a>
+                    </div>
+                </div>
+            </template>
         </div>
     </section>
 
@@ -360,22 +399,19 @@
     <div id="cookie-banner" class="cookie-banner">
         <div class="cookie-container">
             <div class="cookie-text">
-                <p data-i18n="cookie-text">Utilizziamo i cookie per personalizzare i contenuti e migliorare la vostra
-                    esperienza. Continuando a
-                    navigare, accettate il nostro uso dei cookie. Per saperne di più, consultate la nostra <a
-                        href="privacy.html">Informativa sulla Privacy</a>.</p>
+                <p data-i18n="cookie-text">Questo sito non usa cookie di profilazione né strumenti di tracciamento:
+                    salva solo nel tuo browser la lingua scelta e la chiusura di questo avviso. Per saperne di più,
+                    consulta l'<a href="privacy.html">Informativa sulla Privacy</a>.</p>
             </div>
             <div class="cookie-actions">
-                <button id="cookie-reject" class="cookie-btn btn-reject" data-i18n="cookie-reject">Rifiuta</button>
-                <button id="cookie-accept" class="cookie-btn btn-accept" data-i18n="cookie-accept">Accetta
-                    Tutti</button>
+                <button id="cookie-accept" class="cookie-btn btn-accept" data-i18n="cookie-accept">Ho capito</button>
             </div>
         </div>
     </div>
 
     <footer>
         <div class="container">
-            <p data-i18n="footer-rights">&copy; 2025 Matteo Augustinho Bertotti. Tutti i diritti riservati.</p>
+            <p data-i18n="footer-rights">&copy; 2026 Matteo Augustinho Bertotti. Tutti i diritti riservati.</p>
         </div>
     </footer>
 
@@ -385,6 +421,8 @@
             <div class="modal-header">
                 <div class="modal-address-bar" id="modal-address-bar"></div>
                 <h3 class="modal-title" id="modal-title"></h3>
+                <a class="modal-external-btn" id="modal-external" href="#" target="_blank" rel="noopener noreferrer"
+                    aria-label="Apri in una nuova scheda" title="Apri in una nuova scheda" hidden>&#8599;</a>
                 <button class="modal-close-btn" id="modal-close" aria-label="Chiudi">&times;</button>
             </div>
 
@@ -403,8 +441,8 @@
         </div>
     </div>
 
-    <script src="script.js?v=1.0.1"></script>
-    <script src="cookie-banner.js?v=1.0.1"></script>
+    <script src="script.js?v=1.0.2"></script>
+    <script src="cookie-banner.js?v=1.0.2"></script>
 </body>
 
 </html>

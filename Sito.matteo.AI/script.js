@@ -10,7 +10,7 @@ const translations = {
         "hero-cv": "Scarica il CV",
         "hero-projects": "Vedi Progetti",
         "about-title": "Chi Sono",
-        "about-text": "Sono uno studente appassionato con un forte interesse per la gestione, analisi e valorizzazione dei dati. Mi occupo di automazione dei processi, sviluppo di soluzioni data-driven e applicazione di modelli di machine learning per supportare decisioni efficienti e scalabili. Sono orientato all'apprendimento continuo e alla risoluzione di problemi complessi.",
+        "about-text": "Sono uno studente appassionato con un forte interesse per la <strong>gestione, analisi e valorizzazione dei dati</strong>. Mi occupo di automazione dei processi, sviluppo di soluzioni <em>data-driven</em> e applicazione di modelli di machine learning per supportare decisioni efficienti e scalabili. Sono orientato all'apprendimento continuo e alla risoluzione di problemi complessi.",
         "nav-experience": "Esperienza",
         "nav-education": "Formazione",
         "experience-title": "Esperienza Lavorativa",
@@ -46,34 +46,44 @@ const translations = {
         "skill-desc-6": "FastAPI, Flask, Python",
         "projects-title": "I Miei Progetti",
         "project-1-title": "AKID Chatbox",
-        "project-1-desc": "Chatbot AI multi-agente per analisi dati e KPI, con integrazione MCP verso database SQL e modelli LLM via Nvidia NIM e Groq.",
+        "project-1-desc": "Chatbot AI multi-agente per analisi dati e KPI, con integrazione MCP verso database SQL e modelli LLM via NVIDIA NIM e Groq.",
         "project-2-title": "Gestione Magazzino Bar",
         "project-2-desc": "Applicazione web per la gestione completa del magazzino alcolico di un bar.",
         "project-3-title": "Mental Health & Work",
         "project-3-desc": "Pulizia e analisi guidata di un dataset CSV con Python, step by step.",
         "project-open": "Apri Progetto",
         "project-explore": "Esplora il Notebook",
+        "project-details": "Scopri il Progetto",
+        "project-4-title": "Trascrizioni AI",
+        "project-4-desc": "Trascrizione in tempo reale di lezioni e video con Whisper, riassunti automatici in Markdown e chat sulle proprie sessioni.",
+        "trx-lead": "Applicazione per Windows che trascrive in tempo reale una lezione dal vivo (dal microfono) o qualsiasi audio del PC, come YouTube, Teams o un video, e ne genera un riassunto in Markdown. Tutto si gestisce da una dashboard locale nel browser, senza terminale e senza database.",
+        "trx-features-title": "Funzionalità principali",
+        "trx-f1": "Trascrizione con Whisper tramite Groq, OpenAI o direttamente sul PC: in modalità locale l'audio non esce dal computer.",
+        "trx-f2": "Riassunti e titoli delle sessioni generati dall'AI, esportabili in PDF e Markdown (pronti per Notion).",
+        "trx-f3": "Chat sulle proprie sessioni: risponde dai documenti citando le fonti e approfondisce con Wikipedia.",
+        "trx-f4": "Multi-provider: NVIDIA, OpenAI, Gemini, Claude, DeepSeek, Mistral, OpenRouter, Ollama e LM Studio.",
+        "trx-f5": "Pensata per sessioni lunghe: audio tagliato nelle pause, recupero automatico se la rete cade e glossario per i termini tecnici.",
+        "trx-note": "È un'applicazione desktop locale, quindi non ha una demo online: il codice è disponibile su GitHub.",
+        "trx-github": "Vedi su GitHub",
         "modal-close": "Chiudi",
         "modal-loading": "Caricamento in corso...",
         "modal-error-title": "Progetto in fase di deploy",
         "modal-error-desc": "Questo progetto sarà disponibile a breve.",
+        "modal-timeout-title": "Il progetto non risponde",
+        "modal-timeout-desc": "Il caricamento sta richiedendo troppo tempo. Riprova più tardi.",
         "notebook-run": "Esegui questo step",
         "notebook-prev": "Precedente",
         "notebook-next": "Successivo",
         "notebook-step-of": "Step {n} di {total}",
         "certs-title": "Certificazioni",
         "cert-view": "Visualizza Certificato",
-        "cert-db": "freeCodeCamp Python",
         "cert-python": "freeCodeCamp Python",
         "cert-excel": "Excel Avanzato",
         "cert-english": "B1 English for Developers",
         "contact-title": "Contatti",
-        "cookie-text": "Utilizziamo i cookie per personalizzare i contenuti e migliorare la vostra esperienza. Continuando a navigare, accettate il nostro uso dei cookie. Per saperne di più, consultate la nostra Informativa sulla Privacy.",
-        "cookie-reject": "Rifiuta",
-        "cookie-accept": "Accetta Tutti",
-        "footer-rights": "© 2025 Matteo Augustinho Bertotti. Tutti i diritti riservati.",
-        "notebook-small-title": "Schermo troppo piccolo",
-        "notebook-small-desc": "Ingrandisci la finestra a schermo intero e ricarica la pagina",
+        "cookie-text": "Questo sito non usa cookie di profilazione né strumenti di tracciamento: salva solo nel tuo browser la lingua scelta e la chiusura di questo avviso. Per saperne di più, consulta l'<a href=\"privacy.html\">Informativa sulla Privacy</a>.",
+        "cookie-accept": "Ho capito",
+        "footer-rights": "© {year} Matteo Augustinho Bertotti. Tutti i diritti riservati.",
         "typing-phrases": ['AI Dev & Data Analyst', 'Appassionato di Python', 'Studente di Machine Learning', 'Risolutore di Problemi Data-Driven']
     },
     en: {
@@ -85,7 +95,7 @@ const translations = {
         "hero-cv": "Download CV",
         "hero-projects": "View Projects",
         "about-title": "About Me",
-        "about-text": "I am a passionate student with a strong interest in data management, analysis, and valorization. I work on process automation, data-driven solutions development, and machine learning models application to support efficient and scalable decisions. I am focused on continuous learning and solving complex problems.",
+        "about-text": "I am a passionate student with a strong interest in <strong>data management, analysis, and valorization</strong>. I work on process automation, <em>data-driven</em> solutions development, and machine learning models application to support efficient and scalable decisions. I am focused on continuous learning and solving complex problems.",
         "nav-experience": "Experience",
         "nav-education": "Education",
         "experience-title": "Work Experience",
@@ -120,58 +130,81 @@ const translations = {
         "skill-title-6": "Backend & Frameworks",
         "skill-desc-6": "FastAPI, Flask, Python",
         "projects-title": "My Projects",
-        "project-1-title": "Metline Chatbox",
-        "project-1-desc": "AI Chatbot for analysis and KPIs with MCP sql Database, Nvidia NIM and GRoq integration.",
+        "project-1-title": "AKID Chatbox",
+        "project-1-desc": "Multi-agent AI chatbot for data and KPI analysis, with MCP integration to SQL databases and LLMs via NVIDIA NIM and Groq.",
         "project-2-title": "Bar Inventory Management",
         "project-2-desc": "Web application for complete bar inventory management.",
         "project-3-title": "Mental Health & Work",
         "project-3-desc": "Guided CSV dataset cleaning and analysis with Python, step by step.",
         "project-open": "Open Project",
         "project-explore": "Explore Notebook",
+        "project-details": "View Project",
+        "project-4-title": "AI Transcriptions",
+        "project-4-desc": "Real-time transcription of lectures and videos with Whisper, automatic Markdown summaries and a chat over your own sessions.",
+        "trx-lead": "Windows application that transcribes a live lecture (from the microphone) or any audio playing on the PC, such as YouTube, Teams or a video, in real time and turns it into a Markdown summary. Everything is managed from a local dashboard in the browser, with no terminal and no database.",
+        "trx-features-title": "Key features",
+        "trx-f1": "Whisper transcription via Groq, OpenAI or directly on the PC: in local mode the audio never leaves the computer.",
+        "trx-f2": "AI-generated summaries and session titles, exportable to PDF and Markdown (ready for Notion).",
+        "trx-f3": "Chat over your sessions: it answers from your documents, citing sources, and expands with Wikipedia.",
+        "trx-f4": "Multi-provider: NVIDIA, OpenAI, Gemini, Claude, DeepSeek, Mistral, OpenRouter, Ollama and LM Studio.",
+        "trx-f5": "Built for long sessions: audio split at pauses, automatic recovery when the network drops, and a glossary for technical terms.",
+        "trx-note": "It is a local desktop application, so there is no online demo: the source code is available on GitHub.",
+        "trx-github": "View on GitHub",
         "modal-close": "Close",
         "modal-loading": "Loading...",
         "modal-error-title": "Project being deployed",
         "modal-error-desc": "This project will be available soon.",
+        "modal-timeout-title": "The project is not responding",
+        "modal-timeout-desc": "Loading is taking too long. Please try again later.",
         "notebook-run": "Run this step",
         "notebook-prev": "Previous",
         "notebook-next": "Next",
         "notebook-step-of": "Step {n} of {total}",
         "certs-title": "Certifications",
         "cert-view": "View Certificate",
-        "cert-db": "freeCodeCamp Python",
         "cert-python": "freeCodeCamp Python",
         "cert-excel": "Advanced Excel",
         "cert-english": "B1 English for Developers",
         "contact-title": "Contact",
-        "cookie-text": "We use cookies to personalize content and improve your experience. By continuing to browse, you agree to our use of cookies. To learn more, see our Privacy Policy.",
-        "cookie-reject": "Reject",
-        "cookie-accept": "Accept All",
-        "footer-rights": "© 2025 Matteo Augustinho Bertotti. All rights reserved.",
-        "notebook-small-title": "Screen too small",
-        "notebook-small-desc": "Maximize the window to full screen and reload the page",
+        "cookie-text": "This site uses no profiling cookies or tracking tools: it only stores your language choice and the dismissal of this notice in your browser. To learn more, see our <a href=\"privacy.html\">Privacy Policy</a>.",
+        "cookie-accept": "Got it",
+        "footer-rights": "© {year} Matteo Augustinho Bertotti. All rights reserved.",
         "typing-phrases": ['AI Dev & Data Analyst', 'Python Enthusiast', 'Machine Learning Student', 'Data Driven Problem Solver']
     }
 };
 
-let currentLang = 'it'; // Always start in Italian
+function getSavedLanguage() {
+    try {
+        const saved = localStorage.getItem('preferredLanguage');
+        return translations[saved] ? saved : 'it';
+    } catch (e) {
+        return 'it';
+    }
+}
+
+let currentLang = getSavedLanguage();
 let phrases = translations[currentLang]["typing-phrases"];
+
+// Update text for elements with data-i18n (translations are static, trusted strings)
+function applyTranslations(root, lang) {
+    root.querySelectorAll('[data-i18n]').forEach(element => {
+        const value = translations[lang][element.getAttribute('data-i18n')];
+        if (typeof value !== 'string') return;
+        const text = value.replace('{year}', new Date().getFullYear());
+        if (text.includes('<')) {
+            element.innerHTML = text;
+        } else {
+            element.textContent = text;
+        }
+    });
+}
 
 function setLanguage(lang) {
     currentLang = lang;
-    localStorage.setItem('preferredLanguage', lang);
+    try { localStorage.setItem('preferredLanguage', lang); } catch (e) { /* storage unavailable */ }
     document.documentElement.lang = lang;
 
-    // Update text content for elements with data-i18n
-    document.querySelectorAll('[data-i18n]').forEach(element => {
-        const key = element.getAttribute('data-i18n');
-        if (translations[lang][key]) {
-            if (element.querySelector('strong, em, span')) {
-                element.innerHTML = translations[lang][key];
-            } else {
-                element.textContent = translations[lang][key];
-            }
-        }
-    });
+    applyTranslations(document, lang);
 
     // Update typing effect phrases
     phrases = translations[lang]["typing-phrases"];
@@ -198,7 +231,6 @@ document.addEventListener('DOMContentLoaded', () => {
     initSplitText();
     initScrollScale();
     initGridPaths(); // NEW: Shadcn Grid Effect
-    initSmoothScroll();
     initScrollReveal();
     initScrollProgress();
     initBackToTop();
@@ -581,9 +613,6 @@ function initNavbarScroll() {
 }
 
 // ============================================================
-//  CURSOR GLOW (desktop only)
-// ============================================================
-// ============================================================
 //  PRELOADER
 // ============================================================
 function initPreloader() {
@@ -692,28 +721,6 @@ function initSplitText() {
     }, { threshold: 0.5 });
 
     targets.forEach(el => splitObserver.observe(el));
-}
-
-// ============================================================
-//  SMOOTH INERTIA SCROLL (Lightweight)
-// ============================================================
-function initSmoothScroll() {
-    // Only enable on desktop
-    if (window.innerWidth < 1024) return;
-
-    let currentY = 0;
-    let targetY = 0;
-    const ease = 0.07; // Smoothness factor
-
-    document.addEventListener('scroll', () => {
-        targetY = window.scrollY;
-    }, { passive: true });
-
-    // Note: A full custom scroll implementation (like Lenis) intercepts wheel events.
-    // Here we're just accepting the native scroll but we can add effects linked to it.
-    // For true "smooth scroll" affecting the whole body, we'd need to set body height
-    // and translate a fixed container. Given the complexity/risk, let's stick to
-    // native scroll logic but use the interpolated value for effects.
 }
 
 // ============================================================
@@ -862,6 +869,7 @@ function initProjectModals() {
     const titleEl = document.getElementById('modal-title');
     const addressBar = document.getElementById('modal-address-bar');
     const bodyEl = document.getElementById('modal-body');
+    const externalLink = document.getElementById('modal-external');
 
     const modalBodyTemplate = `
         <div class="modal-loading" id="modal-loading">
@@ -890,31 +898,17 @@ function initProjectModals() {
         const url = card.getAttribute('data-modal-url');
         const title = card.getAttribute('data-modal-title');
 
-        if (type === 'notebook' && window.innerWidth < 960) {
-            const smallTitle = translations[currentLang]["notebook-small-title"];
-            const smallDesc = translations[currentLang]["notebook-small-desc"];
-            
-            titleEl.textContent = smallTitle;
-            addressBar.textContent = 'local://error';
-            bodyEl.innerHTML = `
-                <div class="modal-error" style="display:flex; flex-direction:column; align-items:center; justify-content:center; height:100%; text-align:center; padding:2rem;">
-                    <div style="font-size:3rem; margin-bottom:1rem;">🖥️</div>
-                    <h4 style="color:var(--text); margin:0;" data-i18n="notebook-small-title">${smallTitle}</h4>
-                    <p style="margin-top:0.5rem; color:var(--text-muted); line-height:1.5;" data-i18n="notebook-small-desc">${smallDesc}</p>
-                </div>
-            `;
-            
-            modal.removeAttribute('hidden');
-            void modal.offsetWidth;
-            modal.classList.add('active');
-            document.body.style.overflow = 'hidden';
-            document.body.classList.add('modal-open');
-            return;
-        }
-
         titleEl.textContent = title;
         addressBar.textContent = url || 'local://notebook';
-        
+
+        // "Open in new tab" button: handy on phones, where an embedded app is cramped
+        if (url && (type === 'iframe' || type === 'deploying' || type === 'info')) {
+            externalLink.href = url;
+            externalLink.removeAttribute('hidden');
+        } else {
+            externalLink.setAttribute('hidden', '');
+        }
+
         // Reset state from template to avoid detached DOM node issues
         bodyEl.innerHTML = modalBodyTemplate;
         loadingEl = document.getElementById('modal-loading');
@@ -930,10 +924,11 @@ function initProjectModals() {
             
             iframeTimeout = setTimeout(() => {
                 loadingEl.classList.add('hidden');
-                errorEl.querySelector('h4').textContent = "TIMEOUT 20s";
+                errorEl.querySelector('h4').textContent = translations[currentLang]['modal-timeout-title'];
+                errorEl.querySelector('p').textContent = translations[currentLang]['modal-timeout-desc'];
                 errorEl.removeAttribute('hidden');
                 iframe.style.display = 'none';
-            }, 20000); // 20s timeout (ultima rete di salvataggio)
+            }, 20000); // 20s safety timeout
 
             iframe.onload = () => {
                 clearTimeout(iframeTimeout);
@@ -945,7 +940,8 @@ function initProjectModals() {
             iframe.onerror = (e) => {
                 clearTimeout(iframeTimeout);
                 loadingEl.classList.add('hidden');
-                errorEl.querySelector('h4').textContent = "ONERROR FIRED";
+                errorEl.querySelector('h4').textContent = translations[currentLang]['modal-timeout-title'];
+                errorEl.querySelector('p').textContent = translations[currentLang]['modal-timeout-desc'];
                 errorEl.removeAttribute('hidden');
                 iframe.style.display = 'none';
             };
@@ -956,6 +952,14 @@ function initProjectModals() {
             errorEl.removeAttribute('hidden');
         } else if (type === 'notebook') {
             loadNotebook();
+        } else if (type === 'info') {
+            const tpl = document.getElementById(card.getAttribute('data-modal-template'));
+            loadingEl.classList.add('hidden');
+            if (tpl) {
+                const content = tpl.content.cloneNode(true);
+                applyTranslations(content, currentLang);
+                bodyEl.appendChild(content);
+            }
         }
 
         modal.removeAttribute('hidden');
@@ -1108,6 +1112,7 @@ function initProjectModals() {
         } catch (err) {
             console.error('Failed to fetch notebook, using fallback:', err);
             renderNotebook(fallbackData);
+        }
     }
 
     function renderNotebook(data) {
@@ -1236,6 +1241,7 @@ function initProjectModals() {
             const stepStr = translations[currentLang]['notebook-step-of']
                 .replace('{n}', currentStep + 1).replace('{total}', steps.length);
             stepCounter.textContent = stepStr;
+            content.scrollTop = 0; // mobile: new step starts from its description
             
             const isIt = currentLang === 'it';
             stepTitle.textContent = isIt ? step.title_it : step.title_en;
@@ -1284,6 +1290,11 @@ function initProjectModals() {
 
             outputPanel.innerHTML = '';
             outputPanel.appendChild(outDiv);
+
+            // Mobile (single column): bring the output into view
+            if (window.matchMedia('(max-width: 768px)').matches) {
+                outputPanel.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }
             
             // Trigger animation
             setTimeout(() => outDiv.classList.add('visible'), 50);
@@ -1350,4 +1361,3 @@ navLinksItems.forEach(link => {
         hamburger.classList.remove('toggle');
     });
 });
-}

@@ -1,0 +1,44 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 844" width="1200" height="844">
+  <defs>
+    <radialGradient id="bg" cx="50%" cy="50%" r="65%">
+      <stop offset="0" stop-color="#101418"/>
+      <stop offset="1" stop-color="#030405"/>
+    </radialGradient>
+    <linearGradient id="neon" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#3cf2a6"/>
+      <stop offset="1" stop-color="#1ba8ff"/>
+    </linearGradient>
+    <linearGradient id="wave" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#1ba8ff" stop-opacity="0"/>
+      <stop offset=".25" stop-color="#1ba8ff"/>
+      <stop offset=".75" stop-color="#3cf2a6"/>
+      <stop offset="1" stop-color="#3cf2a6" stop-opacity="0"/>
+    </linearGradient>
+    <filter id="glow" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="9" result="b"/>
+      <feMerge><feMergeNode in="b"/><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+  </defs>
+  <rect width="1200" height="844" fill="url(#bg)"/>
+
+  <!-- waveform -->
+  <g filter="url(#glow)" stroke="url(#wave)" stroke-width="10" stroke-linecap="round" fill="none">
+    <path d="M150 422 h40 M230 392 v60 M270 362 v120 M310 402 v40 M350 342 v160 M390 382 v80
+             M810 382 v80 M850 342 v160 M890 402 v40 M930 362 v120 M970 392 v60 M1010 422 h40"/>
+  </g>
+
+  <!-- microphone -->
+  <g filter="url(#glow)" stroke="url(#neon)" stroke-width="14" stroke-linecap="round" stroke-linejoin="round" fill="none">
+    <rect x="530" y="200" width="140" height="250" rx="70"/>
+    <path d="M480 380 a120 120 0 0 0 240 0"/>
+    <path d="M600 500 v70 M540 580 h120"/>
+    <path d="M565 270 h70 M565 320 h70 M565 370 h70" stroke-width="8" opacity=".8"/>
+  </g>
+
+  <!-- transcript lines -->
+  <g filter="url(#glow)" stroke-linecap="round" stroke-width="10">
+    <path d="M430 660 h340" stroke="#3cf2a6" opacity=".9"/>
+    <path d="M470 700 h260" stroke="#1ba8ff" opacity=".7"/>
+    <path d="M520 740 h160" stroke="#3cf2a6" opacity=".5"/>
+  </g>
+</svg>
