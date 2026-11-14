@@ -17,13 +17,13 @@ const translations = {
         "exp-job-title": "Software Developer Apprendista",
         "exp-company": "Metline Software & Sistemi \u2014 Gruppo Maestrale",
         "exp-year": "2026 - Presente",
-        "exp-desc": "Progetto e sviluppo soluzioni verticali, gestionali su misura, piattaforme SaaS e applicazioni on-premise, adattando ogni soluzione alle esigenze di aziende diverse tra loro. Sviluppo soluzioni AI multi-agente, elaboro e analizzo dati tramite Python, SQL e pandas per il monitoraggio di KPI logistici, e ho realizzato soluzioni per la gestione di flussi di trasporto in ambito logistico e ferroviario. Inoltre implemento automazioni avanzate e integrazioni basate sull'Intelligenza Artificiale per ottimizzare l'efficienza operativa.",
+        "exp-desc": "Sviluppo soluzioni verticali, gestionali su misura, piattaforme SaaS e applicazioni on-premise in C# su .NET 10, con il framework proprietario del Gruppo Maestrale e database SQL Server, adattando ogni soluzione alle esigenze di aziende diverse tra loro. Ho lavorato a progetti per clienti industriali: nel primo ho guidato lo sviluppo con l'AI tramite prompt engineering; in quello attuale leggo, scrivo e rifattorizzo direttamente il codice C#, approfondendo .NET mentre lo sviluppo. Creo automazioni e integrazioni basate sull'Intelligenza Artificiale, sviluppo soluzioni AI multi-agente e analizzo dati con Python, SQL e pandas per il monitoraggio di KPI logistici; ho inoltre realizzato soluzioni per la gestione di flussi di trasporto in ambito logistico e ferroviario.",
         "exp-stack-title": "Stack Tecnologico:",
+        "exp-stack-framework": "Framework Maestrale",
         "exp-stack-erp": "Gestionali",
-        "exp-stack-vertical": "Soluzioni Verticali",
+        "exp-stack-automation": "Automazioni",
         "exp-stack-integration": "Integrazioni AI & MCP",
         "exp-stack-kpi": "Analisi KPI Logistici",
-        "exp-stack-dataquery": "Interrogazione Dati",
         "education-title": "Formazione",
         "edu-course-name": "Artificial Intelligence Developer and Data Analyst",
         "edu-course-desc": "Corso Biennale ITS per Tecnico Superiore Data Manager (EQF 5)",
@@ -43,7 +43,7 @@ const translations = {
         "skill-title-5": "Tecnologie AI",
         "skill-desc-5": "N8N, Prompt Engineering, Sistemi Multi-Agente",
         "skill-title-6": "Backend e Framework",
-        "skill-desc-6": "FastAPI, Flask, Python",
+        "skill-desc-6": "C# / .NET, FastAPI, Flask, Python",
         "projects-title": "I Miei Progetti",
         "project-1-title": "AKID Chatbox",
         "project-1-desc": "Chatbot AI multi-agente per analisi dati e KPI, con integrazione MCP verso database SQL e modelli LLM via NVIDIA NIM e Groq.",
@@ -64,7 +64,22 @@ const translations = {
         "trx-f4": "Multi-provider: NVIDIA, OpenAI, Gemini, Claude, DeepSeek, Mistral, OpenRouter, Ollama e LM Studio.",
         "trx-f5": "Pensata per sessioni lunghe: audio tagliato nelle pause, recupero automatico se la rete cade e glossario per i termini tecnici.",
         "trx-note": "È un'applicazione desktop locale, quindi non ha una demo online: il codice è disponibile su GitHub.",
-        "trx-github": "Vedi su GitHub",
+        "sheet-github": "Vedi il codice su GitHub",
+        "sheet-status-soon": "Demo in arrivo",
+        "sheet-status-desktop": "App desktop",
+        "sheet-status-live": "Online",
+        "project-5-title": "Home Server & CI/CD",
+        "project-5-desc": "Server Linux self-hosted che ospita questo sito: container Docker, deploy automatico con GitHub Actions ed esposizione sicura con Cloudflare Tunnel.",
+        "hs-lead": "Server domestico su Ubuntu Server 26.04 LTS che fa girare servizi containerizzati, tra cui questo portfolio: a ogni push sul branch principale il sito viene ricostruito e messo in produzione in automatico.",
+        "hs-features-title": "Cosa ho realizzato",
+        "hs-f1": "Servizi isolati in container con Docker, Docker Compose e Portainer: web hosting, media streaming con Jellyfin e condivisione file in rete con Samba.",
+        "hs-f2": "Pipeline CI/CD con GitHub Actions e runner self-hosted che ricostruisce e rilascia i container a ogni push, con policy restrittive su utente e repository.",
+        "hs-f3": "Networking Zero-Trust: servizi esposti su internet senza aprire porte sul router, tramite Cloudflare Tunnel e Nginx Proxy Manager come reverse proxy.",
+        "hs-f4": "Accesso remoto protetto con VPN mesh Tailscale e autenticazione SSH a chiave Ed25519.",
+        "hs-f5": "Amministrazione da riga di comando (Bash), hardening, permessi granulari sulle pipeline e procedure di manutenzione e disaster recovery.",
+        "hs-note": "Il sito che stai guardando è servito proprio da questo server.",
+        "hs-figure": "Portainer: 5 stack e 6 container attivi sul server.",
+        "sheet-soon-note": "La demo online è in fase di pubblicazione e sarà disponibile a breve.",
         "modal-close": "Chiudi",
         "modal-loading": "Caricamento in corso...",
         "modal-error-title": "Progetto in fase di deploy",
@@ -102,13 +117,13 @@ const translations = {
         "exp-job-title": "Apprentice Software Developer",
         "exp-company": "Metline Software & Systems \u2014 Maestrale Group",
         "exp-year": "2026 - Present",
-        "exp-desc": "I design and develop vertical solutions, custom management systems, SaaS platforms, and on-premise applications, tailoring each solution to the needs of different companies. I develop multi-agent AI solutions, process and analyze data using Python, SQL, and pandas for logistics KPI monitoring, and I have built solutions for managing transport flows in logistics and railway environments. I also implement advanced automations and AI-driven integrations to optimize operational efficiency.",
+        "exp-desc": "I develop vertical solutions, custom management systems, SaaS platforms and on-premise applications in C# on .NET 10, using the Maestrale Group's proprietary framework and SQL Server databases, tailoring each solution to the needs of very different companies. I have worked on projects for industrial clients: on the first one I drove development with AI through prompt engineering; on the current one I read, write and refactor the C# code myself, deepening my .NET knowledge as I build it. I create AI-driven automations and integrations, develop multi-agent AI solutions and analyze data with Python, SQL and pandas for logistics KPI monitoring; I have also built solutions for managing transport flows in logistics and railway environments.",
         "exp-stack-title": "Tech Stack:",
+        "exp-stack-framework": "Maestrale Framework",
         "exp-stack-erp": "Management Systems",
-        "exp-stack-vertical": "Vertical Solutions",
+        "exp-stack-automation": "Automations",
         "exp-stack-integration": "AI & MCP Integrations",
         "exp-stack-kpi": "Logistics KPI Analysis",
-        "exp-stack-dataquery": "Data Querying",
         "education-title": "Education",
         "edu-course-name": "Artificial Intelligence Developer and Data Analyst",
         "edu-course-desc": "Two-year ITS Course for Senior Data Manager Technician (EQF 5)",
@@ -128,7 +143,7 @@ const translations = {
         "skill-title-5": "AI Technologies",
         "skill-desc-5": "N8N, Prompt Engineering, Multi-Agent Systems",
         "skill-title-6": "Backend & Frameworks",
-        "skill-desc-6": "FastAPI, Flask, Python",
+        "skill-desc-6": "C# / .NET, FastAPI, Flask, Python",
         "projects-title": "My Projects",
         "project-1-title": "AKID Chatbox",
         "project-1-desc": "Multi-agent AI chatbot for data and KPI analysis, with MCP integration to SQL databases and LLMs via NVIDIA NIM and Groq.",
@@ -149,7 +164,22 @@ const translations = {
         "trx-f4": "Multi-provider: NVIDIA, OpenAI, Gemini, Claude, DeepSeek, Mistral, OpenRouter, Ollama and LM Studio.",
         "trx-f5": "Built for long sessions: audio split at pauses, automatic recovery when the network drops, and a glossary for technical terms.",
         "trx-note": "It is a local desktop application, so there is no online demo: the source code is available on GitHub.",
-        "trx-github": "View on GitHub",
+        "sheet-github": "View the code on GitHub",
+        "sheet-status-soon": "Demo coming soon",
+        "sheet-status-desktop": "Desktop app",
+        "sheet-status-live": "Live",
+        "project-5-title": "Home Server & CI/CD",
+        "project-5-desc": "Self-hosted Linux server running this very site: Docker containers, automated deployment with GitHub Actions and secure exposure through Cloudflare Tunnel.",
+        "hs-lead": "Home server on Ubuntu Server 26.04 LTS running containerized services, including this portfolio: every push to the main branch rebuilds the site and ships it to production automatically.",
+        "hs-features-title": "What I built",
+        "hs-f1": "Isolated containerized services with Docker, Docker Compose and Portainer: web hosting, Jellyfin media streaming and Samba network file sharing.",
+        "hs-f2": "CI/CD pipeline with GitHub Actions and a self-hosted runner that rebuilds and redeploys containers on every push, enforcing strict actor and repository policies.",
+        "hs-f3": "Zero-Trust networking: services exposed to the internet without router port forwarding, through Cloudflare Tunnel and Nginx Proxy Manager as reverse proxy.",
+        "hs-f4": "Secure remote access with Tailscale mesh VPN and Ed25519 SSH key authentication.",
+        "hs-f5": "Command-line administration (Bash), hardening, granular pipeline permissions, and maintenance and disaster recovery procedures.",
+        "hs-note": "The site you are looking at is served by this very server.",
+        "hs-figure": "Portainer: 5 stacks and 6 containers running on the server.",
+        "sheet-soon-note": "The online demo is being published and will be available soon.",
         "modal-close": "Close",
         "modal-loading": "Loading...",
         "modal-error-title": "Project being deployed",
@@ -870,6 +900,7 @@ function initProjectModals() {
     const addressBar = document.getElementById('modal-address-bar');
     const bodyEl = document.getElementById('modal-body');
     const externalLink = document.getElementById('modal-external');
+    const modalContainer = modal.querySelector('.modal-container');
 
     const modalBodyTemplate = `
         <div class="modal-loading" id="modal-loading">
@@ -901,8 +932,13 @@ function initProjectModals() {
         titleEl.textContent = title;
         addressBar.textContent = url || 'local://notebook';
 
-        // "Open in new tab" button: handy on phones, where an embedded app is cramped
-        if (url && (type === 'iframe' || type === 'deploying' || type === 'info')) {
+        // Info / coming-soon projects use a compact "project sheet" instead of the browser frame
+        const isSheet = type === 'info' || type === 'deploying';
+        modalContainer.classList.toggle('modal--sheet', isSheet);
+        modal.setAttribute('aria-labelledby', isSheet ? 'sheet-title' : 'modal-title');
+
+        // "Open in new tab" button: only where the URL points to something usable
+        if (url && type === 'iframe') {
             externalLink.href = url;
             externalLink.removeAttribute('hidden');
         } else {
@@ -947,19 +983,11 @@ function initProjectModals() {
             };
             
             bodyEl.appendChild(iframe);
-        } else if (type === 'deploying') {
-            loadingEl.classList.add('hidden');
-            errorEl.removeAttribute('hidden');
         } else if (type === 'notebook') {
             loadNotebook();
-        } else if (type === 'info') {
-            const tpl = document.getElementById(card.getAttribute('data-modal-template'));
-            loadingEl.classList.add('hidden');
-            if (tpl) {
-                const content = tpl.content.cloneNode(true);
-                applyTranslations(content, currentLang);
-                bodyEl.appendChild(content);
-            }
+        } else if (isSheet) {
+            bodyEl.innerHTML = '';
+            bodyEl.appendChild(buildProjectSheet(card, type, url));
         }
 
         modal.removeAttribute('hidden');
@@ -969,13 +997,99 @@ function initProjectModals() {
         document.body.style.overflow = 'hidden';
         document.body.classList.add('modal-open');
 
-        // Set up focus trap
-        focusableElements = modal.querySelectorAll('button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])');
+        // Set up focus trap (visible elements only)
+        focusableElements = Array.from(modal.querySelectorAll('button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'))
+            .filter(el => !el.hasAttribute('hidden') && el.getClientRects().length > 0);
         if (focusableElements.length > 0) {
             firstFocusableElement = focusableElements[0];
             lastFocusableElement = focusableElements[focusableElements.length - 1];
-            firstFocusableElement.focus();
+            // Wait for the overlay to become visible, otherwise focus() is ignored
+            setTimeout(() => (closeBtn || firstFocusableElement).focus({ preventScroll: true }), 60);
         }
+    }
+
+    // Compact sheet: banner image, title, status, description, tags, extra details, actions
+    function buildProjectSheet(card, type, url) {
+        const t = translations[currentLang];
+        const sheet = document.createElement('div');
+        sheet.className = 'project-sheet';
+
+        const banner = document.createElement('div');
+        banner.className = 'sheet-banner';
+        const cardImg = card.querySelector('.project-card-image img');
+        if (cardImg) {
+            const img = document.createElement('img');
+            img.src = cardImg.getAttribute('src');
+            img.alt = '';
+            if (card.dataset.bannerPosition) img.style.objectPosition = card.dataset.bannerPosition;
+            banner.appendChild(img);
+        }
+        sheet.appendChild(banner);
+
+        const body = document.createElement('div');
+        body.className = 'sheet-body';
+
+        const head = document.createElement('div');
+        head.className = 'sheet-head';
+        const h = document.createElement('h3');
+        h.id = 'sheet-title';
+        h.textContent = card.querySelector('.project-card-body h3')?.textContent || card.getAttribute('data-modal-title');
+        head.appendChild(h);
+
+        // Status pill: "soon" for deploying projects, otherwise from data-sheet-status
+        const statusKey = type === 'deploying' ? 'soon' : (card.getAttribute('data-sheet-status') || 'desktop');
+        const status = document.createElement('span');
+        status.className = 'sheet-status is-' + statusKey;
+        status.textContent = t['sheet-status-' + statusKey] || '';
+        head.appendChild(status);
+        body.appendChild(head);
+
+        const tpl = document.getElementById(card.getAttribute('data-modal-template') || '');
+        if (tpl) {
+            const extra = tpl.content.cloneNode(true);
+            applyTranslations(extra, currentLang);
+            body.appendChild(extra);
+        } else {
+            const lead = document.createElement('p');
+            lead.className = 'sheet-lead';
+            lead.textContent = card.querySelector('.project-card-body p')?.textContent || '';
+            body.appendChild(lead);
+            if (type === 'deploying') {
+                const note = document.createElement('p');
+                note.className = 'sheet-note';
+                note.textContent = t['sheet-soon-note'];
+                body.appendChild(note);
+            }
+        }
+
+        const tags = card.querySelector('.project-tags');
+        if (tags) {
+            const tagsClone = tags.cloneNode(true);
+            tagsClone.classList.add('sheet-tags');
+            body.appendChild(tagsClone);
+        }
+
+        const actions = document.createElement('div');
+        actions.className = 'sheet-actions';
+        if (type === 'info' && url) {
+            const gh = document.createElement('a');
+            gh.className = 'btn btn-primary';
+            gh.href = url;
+            gh.target = '_blank';
+            gh.rel = 'noopener noreferrer';
+            gh.textContent = t['sheet-github'];
+            actions.appendChild(gh);
+        }
+        const back = document.createElement('button');
+        back.type = 'button';
+        back.className = 'btn btn-secondary';
+        back.textContent = t['modal-close'];
+        back.addEventListener('click', closeModal);
+        actions.appendChild(back);
+        body.appendChild(actions);
+
+        sheet.appendChild(body);
+        return sheet;
     }
 
     function closeModal() {

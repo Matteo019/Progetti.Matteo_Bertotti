@@ -1,0 +1,17 @@
+services:
+  dispensa:
+    build:
+      context: .
+      args:
+        # Letti dal file .env accanto a questo compose (mai su git)
+        VITE_SUPABASE_URL: ${VITE_SUPABASE_URL}
+        VITE_SUPABASE_ANON_KEY: ${VITE_SUPABASE_ANON_KEY}
+    container_name: dispensa-bar
+    restart: unless-stopped
+    # NON apriamo porte verso l'esterno: ci pensa Nginx Proxy Manager
+    networks:
+      - proxy-net
+
+networks:
+  proxy-net:
+    external: true

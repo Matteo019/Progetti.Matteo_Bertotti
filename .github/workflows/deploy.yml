@@ -12,10 +12,22 @@ jobs:
     runs-on: self-hosted
     if: github.actor == 'Matteo019' && github.repository == 'Matteo019/Progetti.Matteo_Bertotti'
     steps:
-      - name: Aggiorna repo e riavvia Docker Compose
+      - name: Aggiorna repo
         run: |
           cd ~/github/Progetti.Matteo_Bertotti
           git pull
-          cd Sito.matteo.AI
+
+      - name: Riavvia Docker Compose (sito)
+        run: |
+          cd ~/github/Progetti.Matteo_Bertotti/Sito.matteo.AI
           docker rm -f backend-vetrina || true
+          docker compose up -d --build
+
+      - name: Riavvia Docker Compose (Dispensa)
+        run: |
+          cd ~/github/Progetti.Matteo_Bertotti/DispensaBAR
+          if [ ! -f .env ]; then
+            echo "::warning::DispensaBAR/.env non trovato sul server: deploy della Dispensa saltato (vedi DispensaBAR/.env.example)"
+            exit 0
+          fi
           docker compose up -d --build
