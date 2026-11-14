@@ -1,13 +1,12 @@
 // ============================================
-// Auth — Login / Signup / Recovery
+// Auth — Login / Signup
 // ============================================
-import { supabase, showToast, getProfile } from './supabase-config.js';
+import { api, getMe } from './api.js';
 
 // ---- Determine current page ----
 const page = window.location.pathname;
 const isLogin = page === '/' || page === '/index.html';
 const isSignup = page === '/signup.html';
-const isRecovery = page === '/recovery.html';
 
 // ---- DOM refs ----
 const messageEl = document.getElementById('auth-message');
@@ -35,22 +34,20 @@ if (isLogin) {
     const btn = document.getElementById('login-btn');
     if (btn) btn.dataset.originalText = btn.textContent;
 
-    // Check if already logged in
-    supabase.auth.getUser().then(async ({ data: { user } }) => {
-        if (user) {
-            try {
-                const profile = await getProfile(user.id);
-                if (profile.role === 'pending') {
-                    showMessage('Il tuo account è in attesa di approvazione. Contatta l\'amministratore.', 'warning');
-                    await supabase.auth.signOut();
-                } else {
-                    window.location.href = '/data-entry.html';
-                }
-            } catch {
-                window.location.href = '/data-entry.html';
-            }
-        }
-    });
+    // Already logged in? Go straight to the inventory
+    getMe().then(profile => {
+        if (profile) window.location.href = '/data-entry.html';
+    }).catch(() => { /* server unreachable: stay on the login page */ });
+
+    // Demo account hint (only if enabled on the server)
+    api.get('/auth/demo').then(demo => {
+        document.getElementById('demo-credentials').textContent = `${demo.username} / ${demo.password}`;
+        document.getElementById('demo-hint').classList.add('visible');
+        document.getElementById('demo-fill').addEventListener('click', () => {
+            document.getElementById('email').value = demo.username;
+            document.getElementById('password').value = demo.password;
+        });
+    }).catch(() => { /* demo disabled */ });
 
     form?.addEventListener('submit', async (e) => {
         e.preventDefault();
@@ -61,23 +58,11 @@ if (isLogin) {
         const password = document.getElementById('password').value;
 
         try {
-            const { data, error } = await supabase.auth.signInWithPassword({ email, password });
-            if (error) throw error;
-
-            // Check if user is approved
-            const profile = await getProfile(data.user.id);
-            if (profile.role === 'pending') {
-                showMessage('Il tuo account è in attesa di approvazione dall\'amministratore.', 'warning');
-                await supabase.auth.signOut();
-                setLoading(btn, false);
-                return;
-            }
-
+            await api.post('/auth/login', { email, password });
             window.location.href = '/data-entry.html';
         } catch (err) {
-            showMessage(err.message === 'Invalid login credentials'
-                ? 'Email o password non corretti.'
-                : err.message);
+            // 403 = account still waiting for approval
+            showMessage(err.message, err.status === 403 ? 'warning' : 'error');
             setLoading(btn, false);
         }
     });
@@ -99,49 +84,9 @@ if (isSignup) {
         const password = document.getElementById('password').value;
 
         try {
-            const { data, error } = await supabase.auth.signUp({
-                email,
-                password,
-                options: {
-                    data: { display_name: displayName }
-                }
-            });
-            if (error) throw error;
-
+            await api.post('/auth/register', { email, password, display_name: displayName });
             showMessage(
                 'Registrazione completata! Il tuo account è in attesa di approvazione dall\'amministratore. Riceverai accesso a breve.',
-                'success'
-            );
-            form.reset();
-        } catch (err) {
-            showMessage(err.message);
-        } finally {
-            setLoading(btn, false);
-        }
-    });
-}
-
-// ---- Recovery ----
-if (isRecovery) {
-    const form = document.getElementById('recovery-form');
-    const btn = document.getElementById('recovery-btn');
-    if (btn) btn.dataset.originalText = btn.textContent;
-
-    form?.addEventListener('submit', async (e) => {
-        e.preventDefault();
-        hideMessage();
-        setLoading(btn, true);
-
-        const email = document.getElementById('email').value.trim();
-
-        try {
-            const { error } = await supabase.auth.resetPasswordForEmail(email, {
-                redirectTo: window.location.origin + '/',
-            });
-            if (error) throw error;
-
-            showMessage(
-                'Se l\'email è registrata, riceverai un link per reimpostare la password.',
                 'success'
             );
             form.reset();

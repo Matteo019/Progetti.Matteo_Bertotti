@@ -1,7 +1,7 @@
 // ============================================
 // Dashboard & Search — Multi-view Logic
 // ============================================
-import { supabase, showToast, formatItalianFloat, setupNavToggle } from './supabase-config.js';
+import { api, showToast, formatItalianFloat, setupNavToggle } from './api.js';
 import { requireAuth, initNavbar } from './auth-guard.js';
 
 let allCategories = [];
@@ -70,13 +70,10 @@ function setupDropdowns() {
 // ---- Data Loading ----
 async function loadFilters() {
   try {
-    const [catRes, locRes] = await Promise.all([
-      supabase.from('categories').select('*').order('name'),
-      supabase.from('locations').select('*').order('name'),
+    [allCategories, allLocations] = await Promise.all([
+      api.get('/categories'),
+      api.get('/locations'),
     ]);
-
-    allCategories = catRes.data || [];
-    allLocations = locRes.data || [];
 
     renderChips('category-chips', allCategories, 'category');
     renderChips('location-chips', allLocations, 'location');
@@ -127,17 +124,12 @@ async function renderCurrentView() {
   }
 
   try {
-    let query = supabase
-      .from('products')
-      .select('*, categories(name), locations(name)')
-      .order('name');
+    const params = new URLSearchParams();
+    if (activeCategory) params.set('category_id', activeCategory);
+    if (activeLocation) params.set('location_id', activeLocation);
+    if (searchQuery) params.set('q', searchQuery);
 
-    if (activeCategory) query = query.eq('category_id', activeCategory);
-    if (activeLocation) query = query.eq('location_id', activeLocation);
-    if (searchQuery) query = query.ilike('name', `%${searchQuery}%`);
-
-    const { data, error } = await query;
-    if (error) throw error;
+    const data = await api.get(`/products?${params}`);
 
     if (activeView === 'overview') {
       renderOverview(container, data);
@@ -225,27 +217,9 @@ function renderStockTable(container, products) {
 
 async function renderDiscardsView(container) {
   try {
-    const thirtyDaysAgo = new Date();
-    thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
-
-    let query = supabase
-      .from('activity_log')
-      .select(`
-                *,
-                products (category_id, categories (name))
-            `)
-      .eq('action', 'OUT')
-      .gte('created_at', thirtyDaysAgo.toISOString())
-      .order('created_at', { ascending: false });
-
-    if (activeCategory) {
-      query = query.eq('products.category_id', activeCategory);
-    }
-
-    const { data: logs, error } = await query;
-    if (error) throw error;
-
-    const validLogs = logs.filter(log => log.products);
+    // OUT movements of the last 30 days (only products that still exist)
+    const categoryParam = activeCategory ? `&category_id=${activeCategory}` : '';
+    const validLogs = await api.get(`/activity/discards?days=30${categoryParam}`);
 
     if (!validLogs.length) {
       container.innerHTML = '<div class="empty-state">Nessun flacone finito trovato</div>';
@@ -268,7 +242,7 @@ async function renderDiscardsView(container) {
                             </div>
                             <div class="discard-card-mid">
                                 <span class="discard-card-name">${escapeHtml(log.product_name)}</span>
-                                <span class="discard-card-cat">📁 ${escapeHtml(log.products?.categories?.name)}</span>
+                                <span class="discard-card-cat">📁 ${escapeHtml(log.category_name)}</span>
                             </div>
                             <div class="discard-card-bottom">
                                 <span class="discard-card-date">📅 ${new Date(log.created_at).toLocaleDateString('it-IT')}</span>

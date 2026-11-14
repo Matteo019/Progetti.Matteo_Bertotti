@@ -29,3 +29,9 @@ lerna-debug.log*
 # System Files
 .DS_Store
 Thumbs.db
+# .NET backend
+api/**/bin/
+api/**/obj/
+api/**/*.db
+api/**/keys/
+!api/Dispensa.sln

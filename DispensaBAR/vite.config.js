@@ -2,7 +2,12 @@ import { resolve } from 'path';
 import { defineConfig } from 'vite';
 
 export default defineConfig({
-    envPrefix: ['VITE_', 'SUPABASE_'],
+    // In development (npm run dev) the /api calls go to the .NET backend (dotnet run)
+    server: {
+        proxy: {
+            '/api': 'http://localhost:5033',
+        },
+    },
     build: {
         rollupOptions: {
             input: {

@@ -1,29 +1,46 @@
 // ============================================
-// Supabase Client Configuration
+// API client — talks to the .NET backend on /api
 // ============================================
-import { createClient } from '@supabase/supabase-js';
 
-// 🔑 Configuration from environment variables (Vite / Netlify Supabase Integration)
-const SUPABASE_URL = import.meta.env.VITE_SUPABASE_URL || import.meta.env.SUPABASE_DATABASE_URL;
-const SUPABASE_ANON_KEY = import.meta.env.VITE_SUPABASE_ANON_KEY || import.meta.env.SUPABASE_ANON_KEY;
+// Every request sends the session cookie and the X-Requested-With header (the server rejects
+// changes without it: CSRF protection). Errors come back as { error: "message" }.
+async function request(method, url, body) {
+    const options = {
+        method,
+        credentials: 'same-origin',
+        headers: { 'X-Requested-With': 'dispensa' },
+    };
+    if (body !== undefined) {
+        options.headers['Content-Type'] = 'application/json';
+        options.body = JSON.stringify(body);
+    }
 
-export const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+    const res = await fetch('/api' + url, options);
+    const data = res.status === 204 ? null : await res.json().catch(() => null);
 
-// ---- Helper: get current user ----
-export async function getCurrentUser() {
-    const { data: { user } } = await supabase.auth.getUser();
-    return user;
+    if (!res.ok) {
+        const err = new Error(data?.error || `Errore ${res.status}`);
+        err.status = res.status;
+        throw err;
+    }
+    return data;
 }
 
-// ---- Helper: get profile with role ----
-export async function getProfile(userId) {
-    const { data, error } = await supabase
-        .from('profiles')
-        .select('*')
-        .eq('id', userId)
-        .single();
-    if (error) throw error;
-    return data;
+export const api = {
+    get: (url) => request('GET', url),
+    post: (url, body = {}) => request('POST', url, body),
+    put: (url, body = {}) => request('PUT', url, body),
+    del: (url) => request('DELETE', url),
+};
+
+// ---- Helper: logged-in user's profile, or null ----
+export async function getMe() {
+    try {
+        return await api.get('/auth/me');
+    } catch (err) {
+        if (err.status === 401 || err.status === 403) return null;
+        throw err;
+    }
 }
 
 // ---- Helper: show toast ----

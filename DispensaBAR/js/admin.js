@@ -1,7 +1,7 @@
 // ============================================
 // Admin Dashboard — User Mgmt, Activity, CRUD
 // ============================================
-import { supabase, showToast, formatItalianFloat, parseItalianFloat, formatDate, formatDateTime, setupNavToggle } from './supabase-config.js';
+import { api, showToast, formatItalianFloat, parseItalianFloat, formatDate, formatDateTime, setupNavToggle } from './api.js';
 import { requireAuth, initNavbar } from './auth-guard.js';
 
 let currentProfile = null;
@@ -50,12 +50,10 @@ function setupTabs() {
 
 // ---- Load Categories/Locations metadata ----
 async function loadMetadata() {
-    const [catRes, locRes] = await Promise.all([
-        supabase.from('categories').select('*').order('name'),
-        supabase.from('locations').select('*').order('name'),
+    [allCategories, allLocations] = await Promise.all([
+        api.get('/categories'),
+        api.get('/locations'),
     ]);
-    allCategories = catRes.data || [];
-    allLocations = locRes.data || [];
 }
 
 // ============================================
@@ -63,12 +61,7 @@ async function loadMetadata() {
 // ============================================
 async function loadUsers() {
     try {
-        const { data, error } = await supabase
-            .from('profiles')
-            .select('*')
-            .order('created_at', { ascending: false });
-
-        if (error) throw error;
+        const data = await api.get('/users');
 
         const pending = data.filter(u => u.role === 'pending');
         const approved = data.filter(u => u.role !== 'pending');
@@ -98,15 +91,16 @@ function renderUserList(containerId, users, isPending) {
         ${u.role}
       </span>
       <div class="user-card__actions">
-        ${isPending ? `
+        ${currentProfile.is_demo ? '' : isPending ? `
           <button class="btn btn--success btn--sm" onclick="window.approveUser('${u.id}')">✓ Approva</button>
           <button class="btn btn--danger btn--sm" onclick="window.denyUser('${u.id}')">✕ Nega</button>
-        ` : `
+        ` : u.id === currentProfile.id || u.is_demo ? '' : `
           ${u.role !== 'admin' ? `
             <button class="btn btn--secondary btn--sm" onclick="window.toggleAdmin('${u.id}', true)">Rendi Admin</button>
           ` : `
             <button class="btn btn--secondary btn--sm" onclick="window.toggleAdmin('${u.id}', false)">Rimuovi Admin</button>
           `}
+          <button class="btn btn--secondary btn--sm" onclick="window.resetPassword('${u.id}')">Nuova password</button>
         `}
       </div>
     </div>
@@ -115,11 +109,7 @@ function renderUserList(containerId, users, isPending) {
 
 window.approveUser = async function (userId) {
     try {
-        const { error } = await supabase
-            .from('profiles')
-            .update({ role: 'user', approved_at: new Date().toISOString() })
-            .eq('id', userId);
-        if (error) throw error;
+        await api.post(`/users/${userId}/approve`);
         showToast('Utente approvato!', 'success');
         loadUsers();
     } catch (err) {
@@ -130,11 +120,7 @@ window.approveUser = async function (userId) {
 window.denyUser = async function (userId) {
     if (!confirm('Sei sicuro di voler negare questa richiesta?')) return;
     try {
-        const { error } = await supabase
-            .from('profiles')
-            .delete()
-            .eq('id', userId);
-        if (error) throw error;
+        await api.del(`/users/${userId}`);
         showToast('Richiesta negata', 'success');
         loadUsers();
     } catch (err) {
@@ -144,13 +130,21 @@ window.denyUser = async function (userId) {
 
 window.toggleAdmin = async function (userId, makeAdmin) {
     try {
-        const { error } = await supabase
-            .from('profiles')
-            .update({ role: makeAdmin ? 'admin' : 'user' })
-            .eq('id', userId);
-        if (error) throw error;
+        await api.put(`/users/${userId}/role`, { role: makeAdmin ? 'admin' : 'user' });
         showToast(makeAdmin ? 'Utente promosso ad Admin' : 'Rimosso ruolo Admin', 'success');
         loadUsers();
+    } catch (err) {
+        showToast('Errore: ' + err.message, 'error');
+    }
+};
+
+// Replaces the old "forgot password" email: the admin sets a new password and tells the user
+window.resetPassword = async function (userId) {
+    const password = prompt('Nuova password per questo utente (almeno 8 caratteri):');
+    if (!password) return;
+    try {
+        await api.put(`/users/${userId}/password`, { password });
+        showToast('Password aggiornata', 'success');
     } catch (err) {
         showToast('Errore: ' + err.message, 'error');
     }
@@ -164,21 +158,16 @@ async function loadActivity() {
         const dateFilter = document.getElementById('activity-date-filter')?.value;
         const userFilter = document.getElementById('activity-user-filter')?.value?.trim()?.toLowerCase();
 
-        let query = supabase
-            .from('activity_log')
-            .select('*')
-            .order('created_at', { ascending: false })
-            .limit(100);
-
+        const params = new URLSearchParams({ limit: 100 });
         if (dateFilter) {
             const start = new Date(dateFilter);
             const end = new Date(dateFilter);
             end.setDate(end.getDate() + 1);
-            query = query.gte('created_at', start.toISOString()).lt('created_at', end.toISOString());
+            params.set('from', start.toISOString());
+            params.set('to', end.toISOString());
         }
 
-        const { data, error } = await query;
-        if (error) throw error;
+        const data = await api.get(`/activity?${params}`);
 
         let filtered = data || [];
         if (userFilter) {
@@ -246,12 +235,7 @@ document.getElementById('activity-user-filter')?.addEventListener('input', debou
 // ============================================
 async function loadProducts() {
     try {
-        const { data, error } = await supabase
-            .from('products')
-            .select('*, categories(name), locations(name)')
-            .order('name');
-
-        if (error) throw error;
+        const data = await api.get('/products');
 
         const container = document.getElementById('products-list');
         if (!data.length) {
@@ -339,8 +323,8 @@ async function saveProduct() {
     const id = document.getElementById('product-id').value;
     const productData = {
         name: document.getElementById('product-name').value.trim(),
-        category_id: document.getElementById('product-category').value || null,
-        location_id: document.getElementById('product-location').value || null,
+        category_id: parseInt(document.getElementById('product-category').value) || null,
+        location_id: parseInt(document.getElementById('product-location').value) || null,
         quantity: parseItalianFloat(document.getElementById('product-quantity').value),
         origin: document.getElementById('product-origin').value.trim() || null,
         aroma: document.getElementById('product-aroma').value.trim() || null,
@@ -354,12 +338,10 @@ async function saveProduct() {
 
     try {
         if (id) {
-            const { error } = await supabase.from('products').update(productData).eq('id', id);
-            if (error) throw error;
+            await api.put(`/products/${id}`, productData);
             showToast('Prodotto aggiornato!', 'success');
         } else {
-            const { error } = await supabase.from('products').insert(productData);
-            if (error) throw error;
+            await api.post('/products', productData);
             showToast('Prodotto creato!', 'success');
         }
 
@@ -375,8 +357,7 @@ async function deleteProduct() {
     if (!id || !confirm('Sei sicuro di voler eliminare questo prodotto?')) return;
 
     try {
-        const { error } = await supabase.from('products').delete().eq('id', id);
-        if (error) throw error;
+        await api.del(`/products/${id}`);
         showToast('Prodotto eliminato', 'success');
         document.getElementById('product-modal').classList.remove('active');
         loadProducts();
@@ -411,8 +392,7 @@ function setupCategoryAdd() {
         const name = input?.value.trim();
         if (!name) return;
         try {
-            const { error } = await supabase.from('categories').insert({ name });
-            if (error) throw error;
+            await api.post('/categories', { name });
             input.value = '';
             showToast('Categoria aggiunta!', 'success');
             loadCategories();
@@ -425,8 +405,7 @@ function setupCategoryAdd() {
 window.deleteCategory = async function (id) {
     if (!confirm('Eliminare questa categoria?')) return;
     try {
-        const { error } = await supabase.from('categories').delete().eq('id', id);
-        if (error) throw error;
+        await api.del(`/categories/${id}`);
         showToast('Categoria eliminata', 'success');
         loadCategories();
     } catch (err) {
@@ -457,8 +436,7 @@ function setupLocationAdd() {
         const name = input?.value.trim();
         if (!name) return;
         try {
-            const { error } = await supabase.from('locations').insert({ name });
-            if (error) throw error;
+            await api.post('/locations', { name });
             input.value = '';
             showToast('Posizione aggiunta!', 'success');
             loadLocations();
@@ -471,8 +449,7 @@ function setupLocationAdd() {
 window.deleteLocation = async function (id) {
     if (!confirm('Eliminare questa posizione?')) return;
     try {
-        const { error } = await supabase.from('locations').delete().eq('id', id);
-        if (error) throw error;
+        await api.del(`/locations/${id}`);
         showToast('Posizione eliminata', 'success');
         loadLocations();
     } catch (err) {

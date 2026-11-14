@@ -1,16 +1,43 @@
-# Deploy della Dispensa sull'home server
+# Dispensa Bar — architettura e deploy
 
-La Dispensa gira in un container Nginx (`dispensa-bar`) sulla rete Docker `proxy-net`, come il portfolio.
-Il workflow `.github/workflows/deploy.yml` la ricostruisce a ogni push su `main`.
+Tutto gira sul tuo home server, senza servizi esterni:
+
+```
+Cloudflare Tunnel → Nginx Proxy Manager → dispensa-bar (Nginx: pagine + /api)
+                                                └─ /api → dispensa-api (ASP.NET Core, .NET 10)
+                                                              └─ dispensa-db (PostgreSQL 17)
+```
+
+- `DispensaBAR/` — frontend (HTML/CSS/JS, build con Vite). `js/api.js` parla con il backend.
+- `DispensaBAR/api/Dispensa.Api/` — backend:
+  - `Program.cs` — configurazione (database, cookie di login, limiti di tentativi, CSRF)
+  - `Data/` — tabelle (`Entities.cs`), `AppDb.cs` (Entity Framework), account demo
+  - `Endpoints/` — un file per area: auth, utenti, categorie/posizioni, prodotti, storico
+- `DispensaBAR/api/Dispensa.Api.Tests/` — test automatici (`dotnet test`)
+
+Le tabelle vengono create da sole al primo avvio (`EnsureCreated`).
+Il primo utente che si registra diventa admin; gli altri restano in attesa di approvazione.
+
+## Sviluppo in locale
+
+```bash
+cd DispensaBAR/api && dotnet run --project Dispensa.Api --urls http://localhost:5033 --Demo:Enabled=true
+```
+
+```bash
+cd DispensaBAR && npm install && npm run dev
+```
+
+In locale il backend usa un file SQLite (`dispensa-dev.db`), Vite inoltra `/api` al backend.
 
 ## Una volta sola, sul server
 
-1. **Chiavi Supabase** — accanto a `docker-compose.yaml`:
+1. **File `.env`** accanto a `docker-compose.yaml`:
 
    ```bash
    cd ~/github/Progetti.Matteo_Bertotti/DispensaBAR
    cp .env.example .env
-   nano .env   # VITE_SUPABASE_URL e VITE_SUPABASE_ANON_KEY (Supabase → Project Settings → API)
+   nano .env   # POSTGRES_PASSWORD lunga e casuale: openssl rand -base64 24
    ```
 
    Senza `.env` il workflow salta la Dispensa con un avviso, il sito viene comunque pubblicato.
@@ -21,26 +48,23 @@ Il workflow `.github/workflows/deploy.yml` la ricostruisce a ogni push su `main`
    docker compose up -d --build
    ```
 
-3. **Cloudflare Tunnel** — aggiungi un *Public Hostname* `dispensa.matteobertotti.tech` che punta a Nginx Proxy Manager
-   (lo stesso servizio usato per il portfolio).
+3. **Cloudflare Tunnel** — *Public Hostname* `dispensa.matteobertotti.tech` → Nginx Proxy Manager.
 
-4. **Nginx Proxy Manager** — nuovo *Proxy Host*:
-   - Domain: `dispensa.matteobertotti.tech`
-   - Forward: `http` → `dispensa-bar` → porta `80`
+4. **Nginx Proxy Manager** — *Proxy Host* `dispensa.matteobertotti.tech` → `http` → `dispensa-bar` → porta `80`.
 
-5. **Supabase** → Authentication → URL Configuration:
-   - *Site URL*: `https://dispensa.matteobertotti.tech`
-   - *Redirect URLs*: aggiungi `https://dispensa.matteobertotti.tech/**`
+## Account demo (admin / admin)
 
-   Serve per i link di conferma registrazione e di recupero password.
+Attivo di default per chi prova l'app dal portfolio. Può gestire prodotti, categorie e posizioni,
+ma **non** gli utenti (non vede le email reali, non approva, non cancella, non cambia password).
+Usa lo stesso database dei dati reali: se la Dispensa serve davvero a un bar, valuta di spegnerlo
+con `DEMO_ENABLED=false` nel `.env` (poi `docker compose up -d`).
 
-## Nel portfolio
+## Password dimenticata
 
-Già fatto: la card in `Sito.matteo.AI/index.html` e la `frame-src` della CSP puntano a
-`https://dispensa.matteobertotti.tech/`. Finché l'indirizzo non è attivo, il popup mostrerà un errore di caricamento.
+Non ci sono più email: l'admin assegna una nuova password da **Admin → Utenti → Nuova password**.
 
-## Note
+## Backup del database
 
-- L'app usa percorsi assoluti (`/css/...`, `/js/...`): va servita alla radice di un sottodominio, non in una sottocartella.
-- La anon key di Supabase finisce comunque nel JavaScript pubblicato (è pensata per questo): la sicurezza dei dati
-  dipende dalle policy RLS su Supabase, non dal nasconderla.
+```bash
+docker exec dispensa-db pg_dump -U dispensa dispensa > dispensa-$(date +%F).sql
+```

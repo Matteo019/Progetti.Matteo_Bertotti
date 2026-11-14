@@ -27,7 +27,7 @@ jobs:
         run: |
           cd ~/github/Progetti.Matteo_Bertotti/DispensaBAR
           if [ ! -f .env ]; then
-            echo "::warning::DispensaBAR/.env non trovato sul server: deploy della Dispensa saltato (vedi DispensaBAR/.env.example)"
+            echo "::warning::DispensaBAR/.env non trovato sul server: deploy della Dispensa saltato (vedi DispensaBAR/DEPLOY.md)"
             exit 0
           fi
           docker compose up -d --build

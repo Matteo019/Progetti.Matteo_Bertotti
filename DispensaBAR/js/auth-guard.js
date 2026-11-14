@@ -1,7 +1,7 @@
 // ============================================
 // Auth Guard — Page Access Control
 // ============================================
-import { supabase, getProfile, showToast } from './supabase-config.js';
+import { api, getMe } from './api.js';
 import { initTheme, setupThemeToggle } from './theme-toggle.js';
 
 /**
@@ -13,19 +13,12 @@ import { initTheme, setupThemeToggle } from './theme-toggle.js';
 export async function requireAuth({ requireAdmin = false } = {}) {
   initTheme();
   try {
-    const { data: { user } } = await supabase.auth.getUser();
+    // null if not logged in or still pending approval
+    const profile = await getMe();
 
-    if (!user) {
+    if (!profile) {
       window.location.href = '/';
       throw new Error('Non autenticato');
-    }
-
-    const profile = await getProfile(user.id);
-
-    if (profile.role === 'pending') {
-      await supabase.auth.signOut();
-      window.location.href = '/';
-      throw new Error('Account in attesa');
     }
 
     if (requireAdmin && profile.role !== 'admin') {
@@ -36,7 +29,7 @@ export async function requireAuth({ requireAdmin = false } = {}) {
     // Show the page content (hidden by default to prevent flash)
     document.body.classList.add('authenticated');
 
-    return { user, profile };
+    return { user: profile, profile };
   } catch (err) {
     // Keep throwing to prevent page scripts from continuing
     throw err;
@@ -47,7 +40,7 @@ export async function requireAuth({ requireAdmin = false } = {}) {
  * Logout handler
  */
 export async function logout() {
-  await supabase.auth.signOut();
+  await api.post('/auth/logout').catch(() => {});
   window.location.href = '/';
 }
 

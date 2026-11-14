@@ -1,17 +1,59 @@
 services:
-  dispensa:
-    build:
-      context: .
-      args:
-        # Letti dal file .env accanto a questo compose (mai su git)
-        VITE_SUPABASE_URL: ${VITE_SUPABASE_URL}
-        VITE_SUPABASE_ANON_KEY: ${VITE_SUPABASE_ANON_KEY}
+  # Pages + /api forwarding. The only container reachable from Nginx Proxy Manager.
+  web:
+    build: .
     container_name: dispensa-bar
     restart: unless-stopped
-    # NON apriamo porte verso l'esterno: ci pensa Nginx Proxy Manager
+    depends_on:
+      - api
     networks:
       - proxy-net
+      - internal
+
+  # .NET backend
+  api:
+    build: ./api
+    container_name: dispensa-api
+    restart: unless-stopped
+    environment:
+      ConnectionStrings__Postgres: "Host=db;Database=dispensa;Username=dispensa;Password=${POSTGRES_PASSWORD}"
+      SecureCookie: "true"
+      KeysPath: /data/keys
+      Demo__Enabled: "${DEMO_ENABLED:-true}"
+      Demo__Username: "${DEMO_USERNAME:-admin}"
+      Demo__Password: "${DEMO_PASSWORD:-admin}"
+    volumes:
+      - dispensa-keys:/data/keys
+    depends_on:
+      db:
+        condition: service_healthy
+    networks:
+      - internal
+
+  # PostgreSQL: data stays in the dispensa-db-data volume, no port exposed
+  db:
+    image: postgres:17-alpine
+    container_name: dispensa-db
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: dispensa
+      POSTGRES_USER: dispensa
+      POSTGRES_PASSWORD: "${POSTGRES_PASSWORD}"
+    volumes:
+      - dispensa-db-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U dispensa -d dispensa"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+    networks:
+      - internal
+
+volumes:
+  dispensa-db-data:
+  dispensa-keys:
 
 networks:
   proxy-net:
     external: true
+  internal:

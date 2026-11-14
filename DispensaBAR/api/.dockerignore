@@ -1,0 +1,5 @@
+**/bin
+**/obj
+**/*.db
+**/keys
+Dispensa.Api.Tests

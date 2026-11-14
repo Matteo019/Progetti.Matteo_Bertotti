@@ -1,24 +1,19 @@
 // ============================================
 // Data Entry — Search + IN/OUT + History
 // ============================================
-import { supabase, showToast, formatItalianFloat, parseItalianFloat, formatDateTime, setupNavToggle } from './supabase-config.js';
+import { api, showToast, formatItalianFloat, parseItalianFloat, formatDateTime, setupNavToggle } from './api.js';
 import { requireAuth, initNavbar } from './auth-guard.js';
 
-let currentUser = null;
-let currentProfile = null;
 let debounceTimer = null;
 
 // ---- Init ----
 async function init() {
     try {
-        const { user, profile } = await requireAuth();
-        currentUser = user;
-        currentProfile = profile;
+        const { profile } = await requireAuth();
         initNavbar(profile, 'data-entry');
         setupNavToggle();
         setupSearch();
         loadRecentHistory();
-        subscribeToHistory();
     } catch {
         // requireAuth handles redirect
     }
@@ -45,20 +40,13 @@ async function searchProducts(query) {
     }
 
     try {
-        const { data, error } = await supabase
-            .from('products')
-            .select('*, categories(name), locations(name)')
-            .ilike('name', `%${query}%`)
-            .order('name')
-            .limit(20);
-
-        if (error) throw error;
+        const data = await api.get(`/products?q=${encodeURIComponent(query)}&limit=20`);
 
         if (!data.length) {
             container.innerHTML = `
         <div class="empty-state">
           <div class="empty-state__icon">🔍</div>
-          <p class="empty-state__text">Nessun prodotto trovato per "${query}"</p>
+          <p class="empty-state__text">Nessun prodotto trovato per "${escapeHtml(query)}"</p>
         </div>
       `;
             return;
@@ -116,43 +104,11 @@ async function handleQuantityChange(e) {
     const amountInput = card.querySelector('.de-product__amount-input');
     const amount = parseItalianFloat(amountInput.value) || 1;
 
-    const currentQty = parseFloat(card.dataset.qty) || 0;
-    let newQty;
-
-    if (action === 'in') {
-        newQty = currentQty + amount;
-    } else {
-        newQty = Math.max(0, currentQty - amount);
-    }
-
-    // Round to 1 decimal
-    newQty = Math.round(newQty * 10) / 10;
-
     try {
-        // Update product
-        const { error: updateError } = await supabase
-            .from('products')
-            .update({ quantity: newQty })
-            .eq('id', productId);
-
-        if (updateError) throw updateError;
-
-        // Log activity
-        const productName = card.querySelector('.de-product__name')?.textContent || '';
-        const { error: logError } = await supabase
-            .from('activity_log')
-            .insert({
-                user_id: currentUser.id,
-                user_name: currentProfile.display_name || currentProfile.email,
-                product_id: productId,
-                product_name: productName,
-                action: action === 'in' ? 'IN' : 'OUT',
-                previous_value: currentQty,
-                new_value: newQty,
-                details: { amount }
-            });
-
-        if (logError) console.warn('Log error:', logError);
+        // The server computes the new quantity and writes the history
+        const result = await api.post(`/products/${productId}/movement`, { action, amount });
+        const newQty = result.new_value;
+        const productName = result.product.name;
 
         // Update UI
         card.dataset.qty = newQty;
@@ -168,6 +124,7 @@ async function handleQuantityChange(e) {
             `${action === 'in' ? '+' : '−'}${formatItalianFloat(amount)} → ${productName}: ${formatItalianFloat(newQty)} bott`,
             'success'
         );
+        loadRecentHistory();
     } catch (err) {
         showToast('Errore aggiornamento: ' + err.message, 'error');
     }
@@ -176,14 +133,7 @@ async function handleQuantityChange(e) {
 // ---- History ----
 async function loadRecentHistory() {
     try {
-        const { data, error } = await supabase
-            .from('activity_log')
-            .select('*')
-            .eq('user_id', currentUser.id)
-            .order('created_at', { ascending: false })
-            .limit(15);
-
-        if (error) throw error;
+        const data = await api.get('/activity?mine=true&limit=15');
         renderHistory(data);
     } catch (err) {
         console.error('History load error:', err);
@@ -217,20 +167,6 @@ function renderHistory(items) {
       </div>
     `;
     }).join('');
-}
-
-function subscribeToHistory() {
-    supabase
-        .channel('activity-log-changes')
-        .on('postgres_changes', {
-            event: 'INSERT',
-            schema: 'public',
-            table: 'activity_log',
-            filter: `user_id=eq.${currentUser.id}`
-        }, () => {
-            loadRecentHistory();
-        })
-        .subscribe();
 }
 
 // ---- Utils ----

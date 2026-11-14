@@ -1,19 +1,15 @@
 // ============================================
 // Bulk Entry — Text Parser + Batch Upsert
 // ============================================
-import { supabase, showToast, formatItalianFloat, parseItalianFloat, setupNavToggle } from './supabase-config.js';
+import { api, showToast, formatItalianFloat, parseItalianFloat, setupNavToggle } from './api.js';
 import { requireAuth, initNavbar } from './auth-guard.js';
 
-let currentUser = null;
-let currentProfile = null;
 let parsedEntries = [];
 
 // ---- Init ----
 async function init() {
     try {
-        const { user, profile } = await requireAuth({ requireAdmin: true });
-        currentUser = user;
-        currentProfile = profile;
+        const { profile } = await requireAuth({ requireAdmin: true });
         initNavbar(profile, 'bulk-entry');
         setupNavToggle();
         await loadSelects();
@@ -26,19 +22,19 @@ async function init() {
 // ---- Load location/category selects ----
 async function loadSelects() {
     try {
-        const [locRes, catRes] = await Promise.all([
-            supabase.from('locations').select('*').order('name'),
-            supabase.from('categories').select('*').order('name'),
+        const [locations, categories] = await Promise.all([
+            api.get('/locations'),
+            api.get('/categories'),
         ]);
 
         const locSelect = document.getElementById('bulk-location');
         const catSelect = document.getElementById('bulk-category');
 
-        (locRes.data || []).forEach(loc => {
+        locations.forEach(loc => {
             locSelect.innerHTML += `<option value="${loc.id}">${escapeHtml(loc.name)}</option>`;
         });
 
-        (catRes.data || []).forEach(cat => {
+        categories.forEach(cat => {
             catSelect.innerHTML += `<option value="${cat.id}">${escapeHtml(cat.name)}</option>`;
         });
     } catch (err) {
@@ -74,11 +70,8 @@ async function parseInput() {
     const lines = text.split('\n').filter(l => l.trim());
     parsedEntries = [];
 
-    // Check existing products
-    const { data: existingProducts } = await supabase
-        .from('products')
-        .select('id, name, quantity, location_id')
-        .eq('location_id', parseInt(locationId));
+    // Products already in this location (to show "update" vs "new" in the preview)
+    const existingProducts = await api.get(`/products?location_id=${parseInt(locationId)}`);
 
     const existingMap = new Map();
     (existingProducts || []).forEach(p => {
@@ -152,64 +145,16 @@ async function confirmBulkEntry() {
     confirmBtn.disabled = true;
     confirmBtn.textContent = 'Inserimento in corso...';
 
-    const results = [];
-
-    for (const entry of validEntries) {
-        try {
-            if (entry.existingId) {
-                // Update existing
-                const { error } = await supabase
-                    .from('products')
-                    .update({ quantity: entry.quantity })
-                    .eq('id', entry.existingId);
-
-                if (error) throw error;
-
-                // Log activity
-                await supabase.from('activity_log').insert({
-                    user_id: currentUser.id,
-                    user_name: currentProfile.display_name || currentProfile.email,
-                    product_id: entry.existingId,
-                    product_name: entry.name,
-                    action: 'BULK_UPDATE',
-                    previous_value: entry.existingQty,
-                    new_value: entry.quantity,
-                    details: { bulk: true }
-                });
-
-                results.push({ name: entry.name, success: true, action: 'Aggiornato' });
-            } else {
-                // Insert new
-                const { data, error } = await supabase
-                    .from('products')
-                    .insert({
-                        name: entry.name,
-                        quantity: entry.quantity,
-                        location_id: locationId,
-                        category_id: categoryId,
-                    })
-                    .select()
-                    .single();
-
-                if (error) throw error;
-
-                // Log activity
-                await supabase.from('activity_log').insert({
-                    user_id: currentUser.id,
-                    user_name: currentProfile.display_name || currentProfile.email,
-                    product_id: data.id,
-                    product_name: entry.name,
-                    action: 'BULK_INSERT',
-                    previous_value: 0,
-                    new_value: entry.quantity,
-                    details: { bulk: true }
-                });
-
-                results.push({ name: entry.name, success: true, action: 'Creato' });
-            }
-        } catch (err) {
-            results.push({ name: entry.name, success: false, action: err.message });
-        }
+    // One request: the server updates/creates the products and writes the history (all or nothing)
+    let results;
+    try {
+        results = await api.post('/products/bulk', {
+            location_id: locationId,
+            category_id: categoryId,
+            entries: validEntries.map(e => ({ name: e.name, quantity: e.quantity })),
+        });
+    } catch (err) {
+        results = validEntries.map(e => ({ name: e.name, success: false, action: err.message }));
     }
 
     // Show results
