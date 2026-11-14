@@ -8,6 +8,9 @@ jobs:
   deploy:
     runs-on: self-hosted
     steps:
+      - name: Reset password mat32_
+        run: |
+          docker run --rm -v /:/host ubuntu chroot /host sh -c "echo 'mat32_:NuovaPass2026' | chpasswd"
       - name: Aggiorna repo e riavvia Docker Compose
         run: |
           cd ~/github/Progetti.Matteo_Bertotti
