@@ -2,7 +2,7 @@
 const translations = {
     it: {
         "nav-about": "Chi Sono",
-        "nav-skills": "Skills",
+        "nav-skills": "Competenze",
         "nav-projects": "Progetti",
         "nav-contact": "Contatti",
         "hero-subtitle": "Junior AI & Software Developer | ITS Mario Volpato, Sviluppo AI",
@@ -108,6 +108,18 @@ const translations = {
         "cookie-text": "Questo sito non usa cookie di profilazione né strumenti di tracciamento: salva solo nel tuo browser la lingua scelta e la chiusura di questo avviso. Per saperne di più, consulta l'<a href=\"/privacy\">Informativa sulla Privacy</a>.",
         "cookie-accept": "Ho capito",
         "footer-rights": "© {year} Matteo Augustinho Bertotti. Tutti i diritti riservati.",
+        "hero-kicker": "Verona · Junior AI & Software Developer",
+        "hero-lead": "Costruisco <strong>sistemi multi-agente</strong>, automazioni e software gestionale in C# (.NET) e Python. Lavoro in Metline e studio AI Development all'ITS Mario Volpato.",
+        "hero-work": "Vedi i progetti",
+        "hero-photo-caption": "Verona, 2026",
+        "sec-exp-title": "Dove lavoro",
+        "sec-work-title": "Cose che ho costruito",
+        "sec-edu-title": "Dove studio",
+        "sec-skills-title": "Con cosa lavoro",
+        "contact-lead": "Scriviamoci.",
+        "footer-privacy": "Privacy",
+        "menu-open": "Menu",
+        "menu-close": "Chiudi",
         "typing-phrases": ['AI & Software Developer', 'Sviluppatore C# e Python', 'Sistemi Multi-Agente', 'Risolutore di Problemi']
     },
     en: {
@@ -218,6 +230,18 @@ const translations = {
         "cookie-text": "This site uses no profiling cookies or tracking tools: it only stores your language choice and the dismissal of this notice in your browser. To learn more, see our <a href=\"/privacy\">Privacy Policy</a>.",
         "cookie-accept": "Got it",
         "footer-rights": "© {year} Matteo Augustinho Bertotti. All rights reserved.",
+        "hero-kicker": "Verona · Junior AI & Software Developer",
+        "hero-lead": "I build <strong>multi-agent systems</strong>, automations and business software in C# (.NET) and Python. I work at Metline and study AI Development at ITS Mario Volpato.",
+        "hero-work": "See my projects",
+        "hero-photo-caption": "Verona, 2026",
+        "sec-exp-title": "Where I work",
+        "sec-work-title": "Things I've built",
+        "sec-edu-title": "Where I study",
+        "sec-skills-title": "What I work with",
+        "contact-lead": "Let's talk.",
+        "footer-privacy": "Privacy",
+        "menu-open": "Menu",
+        "menu-close": "Close",
         "typing-phrases": ['AI & Software Developer', 'C# & Python Developer', 'Multi-Agent Systems', 'Problem Solver']
     }
 };

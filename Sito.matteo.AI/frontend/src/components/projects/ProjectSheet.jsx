@@ -1,6 +1,6 @@
 import { useLanguage } from '../../i18n/LanguageContext.jsx';
 
-// Compact "project sheet": banner, title, status, details, tags, actions
+// Compact "project sheet": title, status, details, tags, actions
 export default function ProjectSheet({ project, onClose }) {
     const { t } = useLanguage();
     const status = project.type === 'deploying' ? 'soon' : (project.status || 'desktop');
@@ -8,9 +8,6 @@ export default function ProjectSheet({ project, onClose }) {
 
     return (
         <div className="project-sheet">
-            <div className="sheet-banner">
-                <img src={project.img.src} alt="" style={project.bannerPosition ? { objectPosition: project.bannerPosition } : undefined} />
-            </div>
             <div className="sheet-body">
                 <div className="sheet-head">
                     <h3 id="sheet-title">{t(project.titleKey)}</h3>

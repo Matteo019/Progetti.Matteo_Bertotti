@@ -44,6 +44,7 @@ function LiveFrame({ project }) {
 }
 
 export default function ProjectModal({ project, onClosed }) {
+    const { t } = useLanguage();
     const [visible, setVisible] = useState(false);
     const overlayRef = useRef(null);
     const closeRef = useRef(null);
@@ -95,8 +96,14 @@ export default function ProjectModal({ project, onClosed }) {
         >
             <div className={`modal-container${isSheet ? ' modal--sheet' : ''}`}>
                 <div className="modal-header">
-                    <div className="modal-address-bar">{project.url || 'local://notebook'}</div>
-                    <h3 className="modal-title" id="modal-title">{project.title}</h3>
+                    {isSheet ? (
+                        <span className="modal-kicker">{t('nav-projects')}</span>
+                    ) : (
+                        <>
+                            <h3 className="modal-title" id="modal-title">{project.title}</h3>
+                            <div className="modal-address-bar">{project.type === 'iframe' ? project.url : 'Jupyter notebook · Python'}</div>
+                        </>
+                    )}
                     {project.type === 'iframe' && (
                         <a className="modal-external-btn" href={project.url} target="_blank" rel="noopener noreferrer"
                             aria-label="Apri in una nuova scheda" title="Apri in una nuova scheda">&#8599;</a>

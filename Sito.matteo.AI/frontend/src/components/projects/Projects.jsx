@@ -1,7 +1,7 @@
 import { useState } from 'react';
 
 import { useLanguage } from '../../i18n/LanguageContext.jsx';
-import SectionTitle from '../SectionTitle.jsx';
+import { Section } from '../Sections.jsx';
 import ProjectModal from './ProjectModal.jsx';
 import projects from './projectsData.js';
 
@@ -17,34 +17,30 @@ export default function Projects() {
     };
 
     return (
-        <section id="projects" className="section">
-            <div className="container">
-                <SectionTitle>{t('projects-title')}</SectionTitle>
-                <div className="projects-grid">
-                    {projects.map(p => (
+        <>
+            <Section id="projects" num="02" label={t('nav-projects')} title={t('sec-work-title')}>
+                <div className="work-list">
+                    {projects.map((p, i) => (
                         <article
                             key={p.id}
-                            className="project-card"
+                            className="work-item"
                             tabIndex={0}
                             role="button"
                             aria-label={p.title}
                             onClick={() => setActive(p)}
                             onKeyDown={(e) => openOnKey(e, p)}
                         >
-                            <div className="project-card-image">
-                                <img {...p.img} loading="lazy" />
-                                <div className="project-card-overlay"><span>{t(p.overlayKey)}</span></div>
+                            <span className="work-num mono">{String(i + 1).padStart(2, '0')}</span>
+                            <div className="work-main">
+                                <h3 className="work-title">{t(p.titleKey)} <span className="arrow" aria-hidden="true">↗</span></h3>
+                                <p className="work-desc">{t(p.descKey)}</p>
                             </div>
-                            <div className="project-card-body">
-                                <h3>{t(p.titleKey)}</h3>
-                                <p>{t(p.descKey)}</p>
-                                <div className="project-tags">{p.tags.map(tag => <span key={tag}>{tag}</span>)}</div>
-                            </div>
+                            <span className="work-tags mono">{p.tags.slice(0, 3).join(' · ')}</span>
                         </article>
                     ))}
                 </div>
-            </div>
+            </Section>
             <ProjectModal project={active} onClosed={() => setActive(null)} />
-        </section>
+        </>
     );
 }

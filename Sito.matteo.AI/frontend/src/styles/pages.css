@@ -13,10 +13,9 @@
 
 .post-card {
     background: var(--bg-card);
-    border: 1px solid rgba(26, 58, 42, .1);
-    border-radius: 16px;
-    padding: 1.25rem 1.5rem;
-    box-shadow: 0 4px 18px rgba(26, 58, 42, .06);
+    border: 1px solid var(--rule-soft);
+    border-radius: 4px;
+    padding: 1.5rem 1.75rem;
     animation: post-in .5s var(--ease) both;
 }
 
@@ -48,7 +47,9 @@
 
 .post-date {
     font-family: var(--font-mono);
-    font-size: .75rem;
+    font-size: .7rem;
+    letter-spacing: .04em;
+    text-transform: uppercase;
     color: var(--text-muted);
 }
 
@@ -59,13 +60,14 @@
 
 .post-body > * + * { margin-top: .75rem; }
 .post-body h1, .post-body h2, .post-body h3 {
-    font-family: var(--font-display);
+    font-family: var(--font-serif);
+    font-weight: 400;
     color: var(--green-dark);
     line-height: 1.2;
 }
-.post-body h1 { font-size: 1.5rem; }
-.post-body h2 { font-size: 1.3rem; }
-.post-body h3 { font-size: 1.1rem; }
+.post-body h1 { font-size: 1.9rem; }
+.post-body h2 { font-size: 1.65rem; }
+.post-body h3 { font-size: 1.35rem; }
 .post-body ul, .post-body ol { padding-left: 1.4rem; }
 .post-body ul { list-style: disc; }
 .post-body ol { list-style: decimal; }
@@ -99,6 +101,7 @@
     width: 100%;
     margin-top: 1rem;
     border-radius: 12px;
+    border-radius: 2px;
     max-height: 520px;
     object-fit: cover;
 }
@@ -117,14 +120,14 @@
 
 /* ---------- Privacy page ---------- */
 .privacy-content {
-    padding: 100px 20px 60px;
+    padding: 3rem 20px 60px;
     max-width: 800px;
     margin: 0 auto;
     color: var(--text);
     line-height: 1.6;
 }
-.privacy-content h1 { color: var(--green); margin-bottom: 2rem; font-size: 2.5rem; }
-.privacy-content h2 { color: var(--green); margin-top: 2rem; margin-bottom: 1rem; font-size: 1.5rem; }
+.privacy-content h1 { font-family: var(--font-serif); font-weight: 400; color: var(--green-dark); margin-bottom: 2rem; font-size: clamp(2.4rem, 6vw, 3.6rem); line-height: 1.05; }
+.privacy-content h2 { font-family: var(--font-serif); font-weight: 400; color: var(--green-dark); margin-top: 2rem; margin-bottom: .75rem; font-size: 1.7rem; }
 .privacy-content p { margin-bottom: 1rem; }
 .privacy-content ul { margin-bottom: 1rem; padding-left: 20px; }
 .privacy-content a { color: var(--green-light); }
@@ -155,7 +158,7 @@
     line-height: 1;
     color: var(--green);
 }
-.not-found h1 { font-family: var(--font-display); color: var(--green-dark); }
+.not-found h1 { font-family: var(--font-serif); font-weight: 400; font-size: 2rem; color: var(--green-dark); }
 
 /* ---------- Admin panel ---------- */
 .admin-page {
@@ -175,12 +178,14 @@
 .admin-card {
     background: var(--bg-card);
     border: 1px solid rgba(26, 58, 42, .1);
-    border-radius: 16px;
+    border-radius: 4px;
     padding: 1.5rem;
 }
 
 .admin-card h1, .admin-card h2, .admin-heading h1 {
-    font-family: var(--font-display);
+    font-family: var(--font-serif);
+    font-weight: 400;
+    font-size: 2rem;
     color: var(--green-dark);
     margin-bottom: 1rem;
 }
@@ -205,8 +210,8 @@
     font-weight: 400;
     color: var(--text);
     background: var(--white);
-    border: 1px solid rgba(26, 58, 42, .2);
-    border-radius: 10px;
+    border: 1px solid var(--rule);
+    border-radius: 2px;
     padding: .7rem .85rem;
     width: 100%;
 }
@@ -258,7 +263,7 @@
 .admin-error {
     color: #b3261e;
     background: rgba(179, 38, 30, .08);
-    border-radius: 8px;
+    border-radius: 2px;
     padding: .6rem .8rem;
     font-size: .9rem;
 }
@@ -308,13 +313,11 @@
     border: none;
     background: var(--green);
     color: var(--white);
-    font-family: var(--font-mono);
-    font-weight: 700;
-    font-size: .8rem;
-    letter-spacing: .08em;
-    text-transform: uppercase;
+    font-family: var(--font-serif);
+    font-style: italic;
+    font-size: 1.35rem;
     cursor: pointer;
-    box-shadow: 0 8px 24px rgba(15, 61, 36, .3);
+    box-shadow: 0 8px 24px rgba(15, 61, 36, .25);
     transition: transform .3s var(--ease-bounce), background .3s var(--ease), opacity .3s var(--ease);
 }
 
@@ -353,15 +356,15 @@
     align-items: center;
     justify-content: space-between;
     gap: 1rem;
-    padding: 1.25rem var(--section-px);
-    border-bottom: 1px solid rgba(26, 58, 42, .1);
+    padding: 1.25rem var(--page-px);
+    border-bottom: 1px solid var(--rule);
 }
 
 .posts-panel-header h2 {
-    font-family: var(--font-display);
-    font-size: clamp(2rem, 6vw, 3.5rem);
+    font-family: var(--font-serif);
+    font-weight: 400;
+    font-size: clamp(2.2rem, 6vw, 3.6rem);
     line-height: 1;
-    text-transform: uppercase;
     color: var(--green-dark);
 }
 
@@ -369,8 +372,8 @@
     width: 48px;
     height: 48px;
     border-radius: 50%;
-    border: 1px solid rgba(26, 58, 42, .2);
-    background: var(--bg-card);
+    border: 1px solid var(--rule);
+    background: transparent;
     color: var(--green-dark);
     font-size: 1.6rem;
     line-height: 1;
@@ -452,3 +455,6 @@ html.scroll-locked { overflow: hidden; }
 
 /* Scrollbar of the posts panel, matching the page one */
 .posts-panel-scroll { scrollbar-width: thin; scrollbar-color: var(--green) transparent; }
+
+/* The posts bubble steps aside while a project window is open */
+body.modal-open .posts-bubble:not(.is-open) { opacity: 0; pointer-events: none; }

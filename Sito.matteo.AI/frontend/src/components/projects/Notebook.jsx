@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import Chart from 'chart.js/auto';
+import ReactMarkdown from 'react-markdown';
 
 import { useLanguage } from '../../i18n/LanguageContext.jsx';
 
@@ -127,7 +128,7 @@ export default function Notebook({ onFinish }) {
                 <div className="notebook-progress-bar" style={{ width: `${progress}%` }}></div>
             </div>
             <div className="notebook-content" ref={contentRef}>
-                <div className="notebook-step-desc">{isIt ? step.description_it : step.description_en}</div>
+                <div className="notebook-step-desc"><ReactMarkdown>{isIt ? step.description_it : step.description_en}</ReactMarkdown></div>
                 <div className="notebook-code-panel">
                     <pre className="language-python" dangerouslySetInnerHTML={{ __html: highlightPython(step.code) }} />
                 </div>

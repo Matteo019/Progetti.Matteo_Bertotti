@@ -1,25 +1,7 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
 
 import { useLanguage } from '../i18n/LanguageContext.jsx';
-
-export function ScrollProgress() {
-    const ref = useRef(null);
-    useEffect(() => {
-        const update = () => {
-            const docHeight = Math.max(document.body.scrollHeight, document.documentElement.scrollHeight) - window.innerHeight;
-            const progress = docHeight <= 0 ? 100 : Math.min((window.scrollY / docHeight) * 100, 100);
-            if (ref.current) ref.current.style.width = `${progress}%`;
-        };
-        window.addEventListener('scroll', update, { passive: true });
-        window.addEventListener('resize', update, { passive: true });
-        update();
-        return () => {
-            window.removeEventListener('scroll', update);
-            window.removeEventListener('resize', update);
-        };
-    }, []);
-    return <div className="scroll-progress" ref={ref} />;
-}
 
 // Informative notice only: the public site sets no cookies, so there is nothing to accept
 export function CookieBanner() {
@@ -54,8 +36,11 @@ export function CookieBanner() {
 export function Footer() {
     const { t } = useLanguage();
     return (
-        <footer>
-            <div className="container"><p>{t('footer-rights')}</p></div>
+        <footer className="site-footer">
+            <div className="page mono">
+                <span>{t('footer-rights')}</span>
+                <Link to="/privacy">{t('footer-privacy')}</Link>
+            </div>
         </footer>
     );
 }

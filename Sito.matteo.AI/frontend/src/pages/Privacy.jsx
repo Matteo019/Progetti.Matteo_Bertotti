@@ -7,11 +7,11 @@ export default function Privacy() {
 
     return (
         <>
-            <nav className="navbar scrolled">
-                <div className="container">
-                    <Link to="/" className="logo">MB.</Link>
+            <header className="site-header scrolled">
+                <div className="page">
+                    <Link to="/" className="site-name">Matteo Bertotti</Link>
                 </div>
-            </nav>
+            </header>
 
             <main className="privacy-content">
                 <Link to="/" className="back-link">&larr; Torna alla Home</Link>

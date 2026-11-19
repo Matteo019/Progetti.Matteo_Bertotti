@@ -2,26 +2,6 @@
 //       'info' (project sheet), 'deploying' (sheet with a "coming soon" status)
 const projects = [
     {
-        id: 'akid',
-        type: 'deploying',
-        title: 'AKID Chatbox',
-        titleKey: 'project-1-title',
-        descKey: 'project-1-desc',
-        overlayKey: 'project-open',
-        img: { src: '/images/chatbox.webp', alt: 'AKID Chatbox Preview', width: 1200, height: 844 },
-        tags: ['FastAPI', 'Groq', 'MCP', 'Python', 'SQL', 'NVIDIA NIM'],
-    },
-    {
-        id: 'notebook',
-        type: 'notebook',
-        title: 'Mental Health & Work',
-        titleKey: 'project-3-title',
-        descKey: 'project-3-desc',
-        overlayKey: 'project-explore',
-        img: { src: '/images/AnalisiDati.webp', alt: 'Notebook Analisi Dati Preview', width: 1200, height: 836 },
-        tags: ['Python', 'Pandas', 'Seaborn', 'Matplotlib'],
-    },
-    {
         id: 'dispensa',
         type: 'iframe',
         url: 'https://dispensabar.matteobertotti.tech/',
@@ -31,6 +11,16 @@ const projects = [
         overlayKey: 'project-open',
         img: { src: '/images/dispensa.webp', alt: 'Gestione Magazzino Bar Preview', width: 1200, height: 848 },
         tags: ['C#', 'ASP.NET Core', 'PostgreSQL', 'EF Core', 'Docker', 'JavaScript'],
+    },
+    {
+        id: 'akid',
+        type: 'deploying',
+        title: 'AKID Chatbox',
+        titleKey: 'project-1-title',
+        descKey: 'project-1-desc',
+        overlayKey: 'project-open',
+        img: { src: '/images/chatbox.webp', alt: 'AKID Chatbox Preview', width: 1200, height: 844 },
+        tags: ['FastAPI', 'Groq', 'MCP', 'Python', 'SQL', 'NVIDIA NIM'],
     },
     {
         id: 'trascrizioni',
@@ -50,7 +40,6 @@ const projects = [
         type: 'info',
         sheet: 'hs',
         status: 'live',
-        bannerPosition: 'center top',
         figure: { src: '/images/portainer.webp', alt: 'Dashboard Portainer con gli stack Docker del server', width: 1200, height: 952 },
         title: 'Home Server & CI/CD',
         titleKey: 'project-5-title',
@@ -58,6 +47,16 @@ const projects = [
         overlayKey: 'project-details',
         img: { src: '/images/homeserver.webp', alt: 'Home server con Ubuntu Server: terminale dopo il login', width: 1200, height: 845 },
         tags: ['Ubuntu', 'Docker', 'GitHub Actions', 'Cloudflare', 'Nginx', 'Tailscale'],
+    },
+    {
+        id: 'notebook',
+        type: 'notebook',
+        title: 'Mental Health & Work',
+        titleKey: 'project-3-title',
+        descKey: 'project-3-desc',
+        overlayKey: 'project-explore',
+        img: { src: '/images/AnalisiDati.webp', alt: 'Notebook Analisi Dati Preview', width: 1200, height: 836 },
+        tags: ['Python', 'Pandas', 'Seaborn', 'Matplotlib'],
     },
 ];
 

@@ -199,7 +199,7 @@ export default function Admin() {
     return (
         <main className="admin-page">
             <header className="admin-top">
-                <Link to="/" className="logo">MB.</Link>
+                <Link to="/" className="site-name">Matteo Bertotti</Link>
                 {auth === 'in' && <button className="admin-link" onClick={logout}>Esci</button>}
             </header>
 

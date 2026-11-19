@@ -1,7 +1,6 @@
 import { lazy, Suspense } from 'react';
 import { Route, Routes } from 'react-router-dom';
 
-import Cursor from './components/Cursor.jsx';
 import Home from './pages/Home.jsx';
 import NotFound from './pages/NotFound.jsx';
 import Privacy from './pages/Privacy.jsx';
@@ -12,7 +11,6 @@ const Admin = lazy(() => import('./pages/Admin.jsx'));
 export default function App() {
     return (
         <>
-            <Cursor />
             <Routes>
                 <Route path="/" element={<Home />} />
                 <Route path="/privacy" element={<Privacy />} />
