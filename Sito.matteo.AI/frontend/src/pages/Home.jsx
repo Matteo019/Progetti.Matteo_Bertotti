@@ -31,7 +31,7 @@ export default function Home() {
 
     return (
         <div ref={rootRef}>
-            <Navbar onOpenPosts={() => setPosts(true)} />
+            <Navbar onOpenPosts={() => setPosts(true)} postsOpen={postsOpen} />
             <main>
                 <Hero />
                 <Experience />

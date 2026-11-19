@@ -1,4 +1,5 @@
 import { useLanguage } from '../i18n/LanguageContext.jsx';
+import TypeText from './TypeText.jsx';
 
 // Numbered editorial section: small mono label on the left, content on the right.
 // tone="sage" or tone="ink" paints the section as a full-width coloured band.
@@ -9,7 +10,7 @@ export function Section({ id, num, label, title, tone, children }) {
             <div className="section reveal">
                 <div className="section-label mono">
                     <span className="num">{num}</span>
-                    <span>{label}</span>
+                    <TypeText text={label} startOn="view" delay={150} speed={45} />
                 </div>
                 <div>
                     {title && <h2 className="section-title">{title}</h2>}

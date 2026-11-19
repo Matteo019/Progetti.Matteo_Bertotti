@@ -36,6 +36,7 @@
     --nav-h: 64px;
     --ease: cubic-bezier(.25, .46, .45, .94);
     --ease-bounce: cubic-bezier(.34, 1.56, .64, 1);
+    --ease-out-expo: cubic-bezier(.16, 1, .3, 1);
 }
 
 /* ---------- Reset ---------- */
@@ -126,10 +127,10 @@ button { font: inherit; color: inherit; }
     top: 0;
     z-index: 1000;
     background: var(--bg);
-    border-bottom: 1px solid transparent;
+    border-bottom: 1px solid var(--rule-soft);
     transition: border-color .3s var(--ease);
 }
-.site-header.scrolled { border-bottom-color: var(--rule-soft); }
+.site-header.scrolled { border-bottom-color: var(--rule); }
 
 .site-header .page {
     height: var(--nav-h);
@@ -151,10 +152,33 @@ button { font: inherit; color: inherit; }
 .nav-links { display: flex; gap: 1.5rem; }
 .nav-links a {
     font-size: .92rem;
-    color: var(--text-muted);
+    color: var(--green-dark);
     transition: color .2s var(--ease);
 }
 .nav-links a:hover { color: var(--green-dark); }
+
+/* Section being read: clay, with a short rule above (drawn in) */
+.nav-links a { position: relative; transition: color .3s var(--ease); }
+.nav-links a::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: -.55rem;
+    height: 2px;
+    background: var(--clay);
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform .45s var(--ease-out-expo);
+}
+.nav-links a.active { color: var(--clay); }
+.nav-links a.active::before { transform: scaleX(1); }
+
+/* Header name: hidden at the top, fades in once the hero name has scrolled away */
+.site-name { pointer-events: none; }
+.site-name.is-full { pointer-events: auto; }
+.site-name-full { display: inline-block; opacity: 0; transform: translateY(8px); transition: opacity .4s var(--ease), transform .5s var(--ease-out-expo); }
+.site-name.is-full .site-name-full { opacity: 1; transform: none; }
 
 .lang-switcher { display: flex; align-items: center; gap: .35rem; }
 .lang-btn {
@@ -171,15 +195,34 @@ button { font: inherit; color: inherit; }
 
 .menu-toggle {
     display: none;
+    align-items: center;
+    gap: .7rem;
+    height: 40px;
+    padding: 0;
     background: none;
     border: none;
     cursor: pointer;
     font-family: var(--font-mono);
-    font-size: .74rem;
-    letter-spacing: .06em;
+    font-size: .78rem;
+    letter-spacing: .08em;
     text-transform: uppercase;
     color: var(--green-dark);
 }
+.menu-label { line-height: 1; }
+.menu-icon { position: relative; width: 22px; height: 10px; }
+.menu-icon span {
+    position: absolute;
+    left: 0;
+    width: 100%;
+    height: 1.5px;
+    background: currentColor;
+    transition: transform .35s var(--ease-out-expo), top .35s var(--ease-out-expo);
+}
+.menu-icon span:first-child { top: 0; }
+.menu-icon span:last-child { top: 8.5px; }
+.menu-toggle.is-open .menu-icon span:first-child { top: 4.25px; transform: rotate(45deg); }
+.menu-toggle.is-open .menu-icon span:last-child { top: 4.25px; transform: rotate(-45deg); }
+.menu-toggle:hover { color: var(--clay); }
 
 /* ============================================================
    HERO
@@ -193,7 +236,12 @@ button { font: inherit; color: inherit; }
     align-items: end;
 }
 
-.hero-kicker { margin-bottom: 1.5rem; }
+.hero-kicker {
+    margin-bottom: 1.75rem;
+    font-size: clamp(1rem, 1.7vw, 1.3rem);
+    letter-spacing: .08em;
+    color: var(--green);
+}
 
 .hero-name {
     font-family: var(--font-serif);
@@ -211,13 +259,17 @@ button { font: inherit; color: inherit; }
     font-size: clamp(1.05rem, 1.6vw, 1.22rem);
     line-height: 1.6;
 }
-/* Highlighter stroke under the key words */
+/* Highlighter stroke under the key words: drawn left to right (see MOTION) */
 .hero-lead strong,
 .entry-body strong {
     font-weight: 500;
     color: var(--green-dark);
-    background: linear-gradient(transparent 58%, var(--highlight) 58%, var(--highlight) 92%, transparent 92%);
+    background-image: linear-gradient(var(--highlight), var(--highlight));
+    background-repeat: no-repeat;
+    background-position: 0 88%;
+    background-size: 0% 36%;
     padding: 0 .1em;
+    transition: background-size 1s var(--ease-out-expo);
 }
 
 .hero-actions { display: flex; flex-wrap: wrap; gap: 1.75rem; margin-top: 2rem; }
@@ -240,8 +292,22 @@ button { font: inherit; color: inherit; }
     grid-template-columns: 11rem minmax(0, 1fr);
     gap: 2rem;
     padding: clamp(2.5rem, 6vh, 4rem) 0;
-    border-top: 1px solid var(--rule);
+    position: relative;
 }
+/* Top rule, drawn from the left when the section comes into view */
+.section::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: var(--rule);
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 1.2s var(--ease-out-expo);
+}
+.section.revealed::before { transform: scaleX(1); }
 
 .section-label { display: flex; flex-direction: column; gap: .25rem; padding-top: .35rem; }
 .section-label .num { color: var(--clay); }
@@ -371,8 +437,9 @@ button { font: inherit; color: inherit; }
    COLOURED BANDS (full width)
    ============================================================ */
 .band--sage { background: var(--sage); }
-.band--sage .section,
-.band--sage + section .section { border-top-color: transparent; }
+.band--sage .section::before,
+.band--sage + section .section::before,
+.band--ink .section::before { display: none; }
 .band--sage .rows,
 .band--sage .row,
 .band--sage .work-list,
@@ -383,7 +450,6 @@ button { font: inherit; color: inherit; }
     background: var(--green-dark);
     color: var(--bg);
 }
-.band--ink .section { border-top-color: transparent; }
 .band--ink .section-label { color: rgba(240, 235, 227, .55); }
 .band--ink .section-label .num { color: var(--clay-light); }
 .band--ink .contact-lead { color: var(--bg); }
@@ -406,16 +472,108 @@ button { font: inherit; color: inherit; }
 .site-footer a:hover { color: var(--clay-light); }
 
 /* ============================================================
-   REVEAL ON SCROLL (subtle)
+   MOTION
+   Calm and editorial: things rise from behind a mask or fade up,
+   rules draw themselves, highlights are painted on.
    ============================================================ */
-.reveal { opacity: 0; transform: translateY(14px); transition: opacity .8s var(--ease), transform .8s var(--ease); }
-.reveal.revealed { opacity: 1; transform: none; }
 
-.fade-in { animation: fade-in .9s var(--ease) both; }
-.delay-1 { animation-delay: .1s; }
-.delay-2 { animation-delay: .2s; }
-.delay-3 { animation-delay: .3s; }
-@keyframes fade-in { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: none; } }
+/* ---------- On load (hero) ---------- */
+.fade-in { animation: fade-up .9s var(--ease-out-expo) both; }
+.delay-1 { animation-delay: .15s; }
+.delay-2 { animation-delay: .3s; }
+.delay-3 { animation-delay: .75s; }
+.delay-4 { animation-delay: .9s; }
+@keyframes fade-up { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: none; } }
+
+/* Name: each line slides up from behind its own mask */
+/* Room inside the mask for italic overhangs (the A leans left, the g drops below) */
+.hero-name .line { display: block; overflow: hidden; padding: 0 .12em .2em; margin: 0 -.12em -.2em; }
+.hero-name .line > * { display: inline-block; animation: line-up 1.1s var(--ease-out-expo) both; }
+.hero-name .line:nth-child(1) > * { animation-delay: .1s; }
+.hero-name .line:nth-child(2) > * { animation-delay: .22s; }
+.hero-name .line:nth-child(3) > * { animation-delay: .34s; }
+@keyframes line-up { from { transform: translateY(105%); } to { transform: none; } }
+
+/* Photo: uncovered from the bottom up, with a slow settle */
+.hero-photo img { animation: photo-in 1.4s var(--ease-out-expo) .35s both; }
+@keyframes photo-in {
+    from { clip-path: inset(100% 0 0 0); transform: scale(1.08); }
+    to { clip-path: inset(0 0 0 0); transform: none; }
+}
+.hero-photo figcaption { animation: fade-up .8s var(--ease-out-expo) 1.1s both; }
+
+/* Highlighter in the hero is painted once the lead has appeared */
+.hero-lead strong { animation: paint 1s var(--ease-out-expo) 1.3s both; }
+@keyframes paint { from { background-size: 0% 36%; } to { background-size: 100% 36%; } }
+
+/* ---------- On scroll (sections) ---------- */
+/* The section itself is visible; its parts rise in sequence */
+.reveal .section-label,
+.reveal .section-title,
+.reveal .entry,
+.reveal .work-item,
+.reveal .row,
+.reveal .link-rows li,
+.reveal .contact-lead,
+.reveal .contact-email,
+.reveal .contact-links {
+    opacity: 0;
+    transform: translateY(18px);
+    transition: opacity .9s var(--ease-out-expo), transform .9s var(--ease-out-expo);
+}
+.revealed .section-label,
+.revealed .section-title,
+.revealed .entry,
+.revealed .work-item,
+.revealed .row,
+.revealed .link-rows li,
+.revealed .contact-lead,
+.revealed .contact-email,
+.revealed .contact-links { opacity: 1; transform: none; }
+
+.revealed .section-title { transition-delay: .08s; }
+.revealed .entry,
+.revealed .contact-email { transition-delay: .18s; }
+.revealed .contact-links { transition-delay: .3s; }
+
+/* Lists come in one item after the other */
+.revealed :is(.work-item, .row, .link-rows li):nth-child(1) { transition-delay: .15s; }
+.revealed :is(.work-item, .row, .link-rows li):nth-child(2) { transition-delay: .22s; }
+.revealed :is(.work-item, .row, .link-rows li):nth-child(3) { transition-delay: .29s; }
+.revealed :is(.work-item, .row, .link-rows li):nth-child(4) { transition-delay: .36s; }
+.revealed :is(.work-item, .row, .link-rows li):nth-child(5) { transition-delay: .43s; }
+.revealed :is(.work-item, .row, .link-rows li):nth-child(6) { transition-delay: .5s; }
+.revealed :is(.work-item, .row, .link-rows li):nth-child(7) { transition-delay: .57s; }
+.revealed :is(.work-item, .row, .link-rows li):nth-child(8) { transition-delay: .64s; }
+
+/* Highlights in a section are painted after its text has risen */
+.revealed .entry-body strong { background-size: 100% 36%; transition-delay: .9s; }
+
+/* Hover: once revealed, rows react immediately (no stagger delay) */
+.revealed .work-item:hover,
+.revealed .link-rows li:hover { transition-delay: 0s; }
+
+/* ---------- Hover details ---------- */
+/* Project rows: a clay bar grows on the left */
+.work-item { position: relative; }
+.work-item::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 1.5rem;
+    bottom: 1.5rem;
+    width: 2px;
+    background: var(--clay);
+    transform: scaleY(0);
+    transform-origin: top;
+    transition: transform .4s var(--ease-out-expo);
+}
+.work-item:hover::before { transform: scaleY(1); }
+
+/* Text links: underline redrawn from the left on hover */
+.arrow-link { border-bottom-color: transparent; background: linear-gradient(currentColor, currentColor) 0 100% / 100% 1px no-repeat; transition: color .2s var(--ease), gap .2s var(--ease), background-size .45s var(--ease-out-expo); }
+.arrow-link:hover { background-size: 0% 1px; animation: underline-redraw .6s var(--ease-out-expo) .15s forwards; }
+@keyframes underline-redraw { from { background-size: 0% 1px; } to { background-size: 100% 1px; } }
 
 /* ============================================================
    RESPONSIVE
@@ -429,7 +587,7 @@ button { font: inherit; color: inherit; }
 @media (max-width: 768px) {
     body { font-size: 16px; }
 
-    .menu-toggle { display: block; }
+    .menu-toggle { display: inline-flex; }
     .site-header { z-index: 1003; }
     .site-nav {
         position: fixed;
@@ -448,6 +606,7 @@ button { font: inherit; color: inherit; }
     .site-nav.open { transform: none; visibility: visible; transition: transform .35s var(--ease); }
     .nav-links { flex-direction: column; gap: 1rem; }
     .nav-links a { font-family: var(--font-serif); font-size: 1.7rem; color: var(--green-dark); }
+    .nav-links a::before { top: auto; bottom: -.1rem; height: 1px; }
 
     /* Name first, then a small photo under the links */
     .hero { padding-top: 2.5rem; }
@@ -462,6 +621,26 @@ button { font: inherit; color: inherit; }
 
 @media (prefers-reduced-motion: reduce) {
     html { scroll-behavior: auto; }
-    .reveal, .fade-in { opacity: 1; transform: none; animation: none; transition: none; }
+    *, *::before, *::after { animation: none !important; transition: none !important; }
+    .reveal *, .section::before { opacity: 1 !important; transform: none !important; }
+    .hero-lead strong, .entry-body strong { background-size: 100% 36%; }
 }
 
+/* ---------- Typing (mono labels only) ---------- */
+.type-text { position: relative; white-space: pre-wrap; }
+.type-ghost { visibility: hidden; }
+.type-caret {
+    position: relative;
+    display: inline-block;
+    width: 1px;
+    height: 1.05em;
+    margin-left: 1px;
+    vertical-align: -.15em;
+    background: var(--clay);
+    opacity: 0;
+    transition: opacity .6s var(--ease);
+}
+.type-caret.is-on { opacity: 1; }
+/* Soft blink once the text is complete, then it fades out */
+.type-caret.is-on.is-idle { animation: caret-blink 1s steps(1) infinite; }
+@keyframes caret-blink { 50% { opacity: 0; } }
