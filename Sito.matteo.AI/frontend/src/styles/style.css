@@ -14,6 +14,13 @@
     --accent: #1bbc5e;
     --text: #1a3a2a;
     --text-muted: #5a7a6a;
+    /* Warm second colour: section numbers, arrows, highlights */
+    --clay: #b9532c;
+    --clay-light: #e9a07c;
+    /* Band colours that break the page into blocks */
+    --sage: #dde5d3;
+    --sage-deep: #c9d6bd;
+    --highlight: rgba(233, 160, 124, .38);
     --rule: rgba(26, 58, 42, .22);
     --rule-soft: rgba(26, 58, 42, .1);
     --white: #ffffff;
@@ -87,7 +94,7 @@ button { font: inherit; color: inherit; }
     padding-bottom: 2px;
     transition: color .2s var(--ease), gap .2s var(--ease);
 }
-.arrow-link:hover { color: var(--green-light); gap: .7em; }
+.arrow-link:hover { color: var(--clay); gap: .7em; }
 
 /* Buttons (used by modals, posts and admin) */
 .btn {
@@ -196,7 +203,7 @@ button { font: inherit; color: inherit; }
     letter-spacing: -.02em;
     color: var(--green-dark);
 }
-.hero-name em { font-style: italic; color: var(--green); }
+.hero-name em { font-style: italic; color: var(--clay); }
 
 .hero-lead {
     max-width: 34rem;
@@ -204,7 +211,14 @@ button { font: inherit; color: inherit; }
     font-size: clamp(1.05rem, 1.6vw, 1.22rem);
     line-height: 1.6;
 }
-.hero-lead strong { font-weight: 500; color: var(--green-dark); }
+/* Highlighter stroke under the key words */
+.hero-lead strong,
+.entry-body strong {
+    font-weight: 500;
+    color: var(--green-dark);
+    background: linear-gradient(transparent 58%, var(--highlight) 58%, var(--highlight) 92%, transparent 92%);
+    padding: 0 .1em;
+}
 
 .hero-actions { display: flex; flex-wrap: wrap; gap: 1.75rem; margin-top: 2rem; }
 
@@ -230,7 +244,7 @@ button { font: inherit; color: inherit; }
 }
 
 .section-label { display: flex; flex-direction: column; gap: .25rem; padding-top: .35rem; }
-.section-label .num { color: var(--green); }
+.section-label .num { color: var(--clay); }
 
 .section-title {
     font-family: var(--font-serif);
@@ -264,14 +278,18 @@ button { font: inherit; color: inherit; }
 }
 
 .entry-org { color: var(--text-muted); margin-top: .15rem; }
-.entry-org a { border-bottom: 1px solid var(--rule); }
-.entry-org a:hover { color: var(--green); border-color: var(--green); }
+.entry-org a { color: var(--green-dark); border-bottom: 1px solid var(--clay); }
+.entry-org a:hover { color: var(--clay); }
+
+/* Period of the entry in clay, with a dot */
+.entry-head .mono { display: inline-flex; align-items: center; gap: .45rem; color: var(--clay); }
+.entry-head .mono::before { content: ''; width: 7px; height: 7px; border-radius: 50%; background: var(--clay); }
 .entry-body { margin-top: 1rem; max-width: 44rem; }
 
 /* Dot-separated inline list (stack, skills) */
 .inline-list { display: flex; flex-wrap: wrap; gap: .3rem 0; margin-top: 1.1rem; }
 .inline-list li { font-family: var(--font-mono); font-size: .74rem; color: var(--green); }
-.inline-list li:not(:last-child)::after { content: '·'; margin: 0 .6rem; color: var(--rule); }
+.inline-list li:not(:last-child)::after { content: '·'; margin: 0 .6rem; color: var(--clay); }
 
 /* ---------- Work (projects): text rows, no images ---------- */
 .work-list { border-top: 1px solid var(--rule-soft); }
@@ -286,10 +304,10 @@ button { font: inherit; color: inherit; }
     cursor: pointer;
     transition: padding .25s var(--ease);
 }
-.work-item:hover { padding-left: .5rem; }
+.work-item:hover { padding-left: .75rem; }
 .work-item:focus-visible { outline-offset: 4px; }
 
-.work-num { color: var(--green); }
+.work-num { color: var(--clay); }
 
 .work-title {
     font-family: var(--font-serif);
@@ -298,7 +316,7 @@ button { font: inherit; color: inherit; }
     line-height: 1.15;
     color: var(--green-dark);
 }
-.work-title .arrow { display: inline-block; font-size: .7em; color: var(--green); transition: transform .25s var(--ease); }
+.work-title .arrow { display: inline-block; font-size: .7em; color: var(--clay); transition: transform .25s var(--ease); }
 .work-item:hover .work-title .arrow { transform: translate(3px, -3px); }
 
 .work-desc { margin-top: .4rem; color: var(--text-muted); font-size: .97rem; max-width: 38rem; }
@@ -328,7 +346,7 @@ button { font: inherit; color: inherit; }
     transition: color .2s var(--ease), padding .25s var(--ease);
 }
 .link-rows a:hover { color: var(--green); padding-left: .5rem; }
-.link-rows .arrow { color: var(--green); }
+.link-rows .arrow { color: var(--clay); }
 
 /* ---------- Contact ---------- */
 .contact-lead {
@@ -350,14 +368,42 @@ button { font: inherit; color: inherit; }
 .contact-links { display: flex; flex-wrap: wrap; gap: 1rem 2rem; margin-top: 2rem; }
 
 /* ============================================================
+   COLOURED BANDS (full width)
+   ============================================================ */
+.band--sage { background: var(--sage); }
+.band--sage .section,
+.band--sage + section .section { border-top-color: transparent; }
+.band--sage .rows,
+.band--sage .row,
+.band--sage .work-list,
+.band--sage .work-item { border-color: rgba(26, 58, 42, .14); }
+.band--sage .work-item:hover { background: var(--sage-deep); }
+
+.band--ink {
+    background: var(--green-dark);
+    color: var(--bg);
+}
+.band--ink .section { border-top-color: transparent; }
+.band--ink .section-label { color: rgba(240, 235, 227, .55); }
+.band--ink .section-label .num { color: var(--clay-light); }
+.band--ink .contact-lead { color: var(--bg); }
+.band--ink .contact-email { color: var(--clay-light); }
+.band--ink .contact-email:hover { color: var(--bg); }
+.band--ink .arrow-link { color: var(--bg); }
+.band--ink .arrow-link:hover { color: var(--clay-light); }
+
+/* ============================================================
    FOOTER
    ============================================================ */
 .site-footer {
-    border-top: 1px solid var(--rule);
+    background: var(--green-dark);
+    color: rgba(240, 235, 227, .6);
+    border-top: 1px solid rgba(240, 235, 227, .12);
     padding: 1.75rem 0 6.5rem;
 }
+.site-footer .mono { color: inherit; }
 .site-footer .page { display: flex; flex-wrap: wrap; justify-content: space-between; gap: .75rem; }
-.site-footer a:hover { color: var(--green); }
+.site-footer a:hover { color: var(--clay-light); }
 
 /* ============================================================
    REVEAL ON SCROLL (subtle)
@@ -384,15 +430,17 @@ button { font: inherit; color: inherit; }
     body { font-size: 16px; }
 
     .menu-toggle { display: block; }
+    .site-header { z-index: 1003; }
     .site-nav {
         position: fixed;
-        inset: var(--nav-h) 0 auto 0;
+        inset: var(--nav-h) 0 0 0;
+        overflow-y: auto;
         flex-direction: column;
         align-items: flex-start;
         gap: 1.5rem;
         padding: 1.5rem var(--page-px) 2rem;
         background: var(--bg);
-        border-bottom: 1px solid var(--rule);
+        border-top: 1px solid var(--rule-soft);
         transform: translateY(-120%);
         visibility: hidden;
         transition: transform .35s var(--ease), visibility 0s .35s;
@@ -401,10 +449,15 @@ button { font: inherit; color: inherit; }
     .nav-links { flex-direction: column; gap: 1rem; }
     .nav-links a { font-family: var(--font-serif); font-size: 1.7rem; color: var(--green-dark); }
 
-    .hero-grid { grid-template-columns: 1fr; }
-    .hero-photo { max-width: 220px; order: -1; }
-    .work-item { grid-template-columns: 2rem minmax(0, 1fr); }
-    .work-tags { grid-column: 2; text-align: left; }
+    /* Name first, then a small photo under the links */
+    .hero { padding-top: 2.5rem; }
+    .hero-grid { grid-template-columns: 1fr; gap: 2.5rem; }
+    .hero-photo { max-width: 180px; }
+    .hero-photo figcaption { display: none; }
+
+    /* Projects: number on its own line above the title, text uses the full width */
+    .work-item { grid-template-columns: 1fr; gap: .35rem; }
+    .work-tags { text-align: left; margin-top: .4rem; }
 }
 
 @media (prefers-reduced-motion: reduce) {

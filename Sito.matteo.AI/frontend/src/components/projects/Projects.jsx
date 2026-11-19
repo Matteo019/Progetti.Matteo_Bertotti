@@ -18,7 +18,7 @@ export default function Projects() {
 
     return (
         <>
-            <Section id="projects" num="02" label={t('nav-projects')} title={t('sec-work-title')}>
+            <Section id="projects" num="02" label={t('nav-projects')} title={t('sec-work-title')} tone="sage">
                 <div className="work-list">
                     {projects.map((p, i) => (
                         <article

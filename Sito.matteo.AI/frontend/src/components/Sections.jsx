@@ -1,9 +1,11 @@
 import { useLanguage } from '../i18n/LanguageContext.jsx';
 
-// Numbered editorial section: small mono label on the left, content on the right
-export function Section({ id, num, label, title, children }) {
+// Numbered editorial section: small mono label on the left, content on the right.
+// tone="sage" or tone="ink" paints the section as a full-width coloured band.
+export function Section({ id, num, label, title, tone, children }) {
     return (
-        <section id={id} className="page">
+        <section id={id} className={tone ? `band band--${tone}` : undefined}>
+            <div className="page">
             <div className="section reveal">
                 <div className="section-label mono">
                     <span className="num">{num}</span>
@@ -14,6 +16,7 @@ export function Section({ id, num, label, title, children }) {
                     {children}
                 </div>
             </div>
+            </div>
         </section>
     );
 }
@@ -23,7 +26,7 @@ function InlineList({ items }) {
 }
 
 export function Experience() {
-    const { t } = useLanguage();
+    const { t, html } = useLanguage();
     const stack = ['C# / .NET 10', 'SQL Server', t('exp-stack-framework'), 'SaaS', t('exp-stack-erp'),
         t('exp-stack-automation'), t('exp-stack-integration'), t('exp-stack-kpi')];
     return (
@@ -36,7 +39,7 @@ export function Experience() {
                 <p className="entry-org">
                     <a href="https://www.metline.it/" target="_blank" rel="noopener noreferrer">{t('exp-company')}</a>
                 </p>
-                <p className="entry-body">{t('exp-desc')}</p>
+                <p className="entry-body" dangerouslySetInnerHTML={html('exp-desc')} />
                 <InlineList items={stack} />
             </article>
         </Section>
@@ -78,7 +81,7 @@ export function Skills() {
         ['skill-title-9', t('skill-desc-9')],
     ];
     return (
-        <Section id="skills" num="04" label={t('nav-skills')} title={t('sec-skills-title')}>
+        <Section id="skills" num="04" label={t('nav-skills')} title={t('sec-skills-title')} tone="sage">
             <dl className="rows">
                 {rows.map(([title, desc]) => (
                     <div className="row" key={title}>
@@ -118,7 +121,7 @@ export function Certifications() {
 export function Contact() {
     const { t } = useLanguage();
     return (
-        <Section id="contact" num="06" label={t('contact-title')}>
+        <Section id="contact" num="06" label={t('contact-title')} tone="ink">
             <p className="contact-lead">{t('contact-lead')}</p>
             <a className="contact-email" href="mailto:matteobertotti@icloud.com?subject=Ciao%20Matteo!">matteobertotti@icloud.com</a>
             <div className="contact-links">

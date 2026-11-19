@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 
+import { lockScroll, unlockScroll } from '../effects/scrollLock.js';
 import { useLanguage } from '../i18n/LanguageContext.jsx';
 
 const LINKS = [
@@ -23,6 +24,13 @@ export default function Navbar({ onOpenPosts }) {
         window.addEventListener('scroll', update, { passive: true });
         return () => window.removeEventListener('scroll', update);
     }, []);
+
+    // The open mobile menu covers the page: keep the page still behind it
+    useEffect(() => {
+        if (!open) return undefined;
+        lockScroll();
+        return unlockScroll;
+    }, [open]);
 
     const follow = (e, id) => {
         setOpen(false);

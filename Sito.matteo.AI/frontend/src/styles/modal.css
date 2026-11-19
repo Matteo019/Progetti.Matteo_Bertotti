@@ -245,7 +245,7 @@
     content: counter(feature, decimal-leading-zero);
     font-family: var(--font-mono);
     font-size: .72rem;
-    color: var(--green);
+    color: var(--clay);
     padding-top: .2rem;
 }
 
@@ -260,11 +260,13 @@
 
 .sheet-note {
     margin-top: 1.75rem;
+    padding-left: 1rem;
+    border-left: 2px solid var(--clay);
     font-family: var(--font-serif);
     font-style: italic;
     font-size: 1.25rem;
     line-height: 1.4;
-    color: var(--green);
+    color: var(--green-dark);
 }
 
 /* Tags as a dot-separated mono line */
@@ -296,7 +298,7 @@
     font-size: .72rem;
     letter-spacing: .06em;
     text-transform: uppercase;
-    color: var(--green);
+    color: var(--clay);
 }
 .notebook-step-title {
     font-family: var(--font-serif);
