@@ -40,3 +40,34 @@ class Me(BaseModel):
 
 class UploadOut(BaseModel):
     image: str
+
+
+EMAIL_RE = r"^[^@\s]+@[^@\s]+\.[^@\s]+$"
+
+
+class ContactIn(BaseModel):
+    name: str = Field(min_length=1, max_length=120)
+    email: str = Field(min_length=3, max_length=254, pattern=EMAIL_RE)
+    message: str = Field(min_length=10, max_length=4000)
+    # Honeypot: hidden in the form, so only bots fill it in
+    website: str = Field(default="", max_length=200)
+
+
+class ContactOut(BaseModel):
+    model_config = ConfigDict(from_attributes=True)
+
+    id: int
+    name: str
+    email: str
+    message: str
+    read: bool
+    created_at: datetime
+
+
+class ContactPage(BaseModel):
+    items: list[ContactOut]
+    unread: int
+
+
+class ReadIn(BaseModel):
+    read: bool

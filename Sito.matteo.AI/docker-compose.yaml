@@ -33,6 +33,12 @@ services:
       SECRET_KEY: "${SECRET_KEY}"
       SECURE_COOKIE: "true"
       UPLOAD_DIR: /data/uploads
+      SMTP_HOST: "${SMTP_HOST:-}"
+      SMTP_PORT: "${SMTP_PORT:-587}"
+      SMTP_USER: "${SMTP_USER:-}"
+      SMTP_PASSWORD: "${SMTP_PASSWORD:-}"
+      SMTP_FROM: "${SMTP_FROM:-}"
+      NOTIFY_EMAIL: "${NOTIFY_EMAIL:-}"
     volumes:
       - sito-uploads:/data/uploads
     depends_on:

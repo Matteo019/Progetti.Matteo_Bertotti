@@ -23,6 +23,15 @@ class Settings(BaseSettings):
     upload_dir: Path = Path("/data/uploads")
     max_upload_mb: int = 5
 
+    # Contact form: every message is saved and shown in /admin.
+    # If SMTP is configured, a copy is also emailed to notify_email.
+    smtp_host: str = ""
+    smtp_port: int = 587
+    smtp_user: str = ""
+    smtp_password: str = ""
+    smtp_from: str = ""
+    notify_email: str = ""
+
 
 @lru_cache
 def get_settings() -> Settings:

@@ -21,6 +21,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 from fastapi.testclient import TestClient  # noqa: E402
 
 from app import auth  # noqa: E402
+from app.routers import contact  # noqa: E402
 from app.db import Base, engine  # noqa: E402
 from app.main import app  # noqa: E402
 
@@ -37,6 +38,7 @@ def client(_running_app):
     Base.metadata.drop_all(engine)
     Base.metadata.create_all(engine)
     auth._failures.clear()
+    contact._sent.clear()
     _running_app.cookies.clear()
     yield _running_app
 

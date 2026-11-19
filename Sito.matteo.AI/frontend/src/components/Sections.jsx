@@ -1,4 +1,5 @@
 import { useLanguage } from '../i18n/LanguageContext.jsx';
+import ContactForm from './ContactForm.jsx';
 import TypeText from './TypeText.jsx';
 
 // Numbered editorial section: small mono label on the left, content on the right.
@@ -123,12 +124,18 @@ export function Contact() {
     const { t } = useLanguage();
     return (
         <Section id="contact" num="06" label={t('contact-title')} tone="ink">
-            <p className="contact-lead">{t('contact-lead')}</p>
-            <a className="contact-email" href="mailto:matteobertotti@icloud.com?subject=Ciao%20Matteo!">matteobertotti@icloud.com</a>
-            <div className="contact-links">
-                <a className="arrow-link" href="https://www.linkedin.com/in/matteo-augustinho-bertotti/" target="_blank" rel="noopener noreferrer">LinkedIn <span aria-hidden="true">↗</span></a>
-                <a className="arrow-link" href="https://github.com/Matteo019" target="_blank" rel="noopener noreferrer">GitHub <span aria-hidden="true">↗</span></a>
-                <a className="arrow-link" href="tel:+393921831641">+39 392 183 1641</a>
+            <div className="contact-grid">
+                <div className="contact-intro">
+                    <p className="contact-lead">{t('contact-lead')}</p>
+                    <p className="contact-text">{t('contact-text')}</p>
+                    <ul className="contact-direct">
+                        <li><span className="mono">Email</span><a href="mailto:matteobertotti@icloud.com">matteobertotti@icloud.com</a></li>
+                        <li><span className="mono">LinkedIn</span><a href="https://www.linkedin.com/in/matteo-augustinho-bertotti/" target="_blank" rel="noopener noreferrer">matteo-augustinho-bertotti ↗</a></li>
+                        <li><span className="mono">GitHub</span><a href="https://github.com/Matteo019" target="_blank" rel="noopener noreferrer">Matteo019 ↗</a></li>
+                        <li><span className="mono">{t('contact-phone')}</span><a href="tel:+393921831641">+39 392 183 1641</a></li>
+                    </ul>
+                </div>
+                <ContactForm />
             </div>
         </Section>
     );

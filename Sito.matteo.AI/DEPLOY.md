@@ -27,6 +27,8 @@ Il deploy fallisce, lasciando online il sito attuale, finché non esiste `Sito.m
    ```
    Lo script stampa la riga `ADMIN_PASSWORD_HASH=...` con i `$` già raddoppiati per Docker Compose.
 4. Scegli una `POSTGRES_PASSWORD` lunga e casuale, poi `chmod 600 .env`.
+5. (Facoltativo) Notifiche del modulo contatti: compila le variabili `SMTP_*` e `NOTIFY_EMAIL`.
+   Senza, i messaggi vengono comunque salvati e li leggi in `/admin` → Messaggi.
 
 Nginx Proxy Manager continua a puntare al container `backend-vetrina:80`: non serve cambiare nulla lì.
 

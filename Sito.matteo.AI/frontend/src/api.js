@@ -38,6 +38,11 @@ export const api = {
     login: (username, password) => request('/auth/login', { method: 'POST', body: { username, password } }),
     logout: () => request('/auth/logout', { method: 'POST' }),
 
+    sendContact: (data) => request('/contact', { method: 'POST', body: data }),
+    messages: () => request('/admin/messages'),
+    markMessage: (id, read) => request(`/admin/messages/${id}`, { method: 'PATCH', body: { read } }),
+    deleteMessage: (id) => request(`/admin/messages/${id}`, { method: 'DELETE' }),
+
     allPosts: () => request('/admin/posts?limit=100'),
     createPost: (post) => request('/admin/posts', { method: 'POST', body: post }),
     updatePost: (id, post) => request(`/admin/posts/${id}`, { method: 'PUT', body: post }),

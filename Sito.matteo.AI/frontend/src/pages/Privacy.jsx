@@ -9,7 +9,7 @@ export default function Privacy() {
         <>
             <header className="site-header scrolled">
                 <div className="page">
-                    <Link to="/" className="site-name">Matteo Bertotti</Link>
+                    <Link to="/" className="site-name is-full">Matteo Bertotti</Link>
                 </div>
             </header>
 
@@ -30,7 +30,15 @@ export default function Privacy() {
                     login imposta un <strong>cookie tecnico di sessione</strong>, necessario all'accesso e non usato per
                     profilazione.</p>
 
-                <h2>3. Dati salvati nel browser</h2>
+                <h2>3. Modulo di contatto</h2>
+                <p>Se mi scrivi dal modulo nella sezione &laquo;Contatti&raquo;, vengono salvati sul server che ospita il
+                    sito il <strong>nome</strong>, l'<strong>indirizzo email</strong> e il <strong>testo del messaggio</strong>,
+                    con data e ora di invio. Li uso solo per risponderti e non li cedo a nessuno. Il tuo indirizzo IP
+                    non viene salvato: serve solo, per pochi minuti e solo in memoria, a limitare gli invii automatici.
+                    Se ho configurato le notifiche, una copia del messaggio mi arriva anche via email. Puoi chiedere in
+                    qualsiasi momento di cancellare il tuo messaggio scrivendo all'indirizzo indicato sotto.</p>
+
+                <h2>4. Dati salvati nel browser</h2>
                 <p>Per il funzionamento del sito vengono salvate, esclusivamente nel <em>localStorage</em> del vostro browser,
                     due preferenze tecniche:</p>
                 <ul>
@@ -40,11 +48,11 @@ export default function Privacy() {
                 <p>Questi dati non vengono mai inviati al server né a terzi e potete cancellarli in qualsiasi momento dalle
                     impostazioni del browser (dati dei siti).</p>
 
-                <h2>4. Risorse di terze parti</h2>
+                <h2>5. Risorse di terze parti</h2>
                 <p>Font, immagini e script sono serviti direttamente da questo sito, senza servizi esterni. I link esterni
                     (LinkedIn, GitHub, Google Drive, freeCodeCamp) portano a siti con proprie politiche sulla privacy.</p>
 
-                <h2>5. Applicazione Gestione Magazzino Bar</h2>
+                <h2>6. Applicazione Gestione Magazzino Bar</h2>
                 <p>L'applicazione dimostrativa aperta dalla sezione &laquo;Progetti&raquo;
                     (<strong>dispensabar.matteobertotti.tech</strong>) è ospitata sullo stesso server, senza servizi di terze parti:</p>
                 <ul>
@@ -57,11 +65,11 @@ export default function Privacy() {
                 </ul>
                 <p>Per far cancellare un account creato con la registrazione scrivete all'indirizzo indicato sotto.</p>
 
-                <h2>6. Log del server</h2>
+                <h2>7. Log del server</h2>
                 <p>Come ogni server web, il server che ospita il sito può registrare temporaneamente dati tecnici (indirizzo IP,
                     data e ora, pagina richiesta) per finalità di sicurezza e corretto funzionamento.</p>
 
-                <h2>7. Contatti</h2>
+                <h2>8. Contatti</h2>
                 <p>Per qualsiasi domanda relativa a questa informativa, potete contattarmi all'indirizzo email: <a
                     href="mailto:matteobertotti@icloud.com">matteobertotti@icloud.com</a>.</p>
             </main>

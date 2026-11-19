@@ -11,7 +11,7 @@ from .mcp_server import build_app as build_mcp_app
 from .mcp_server import mcp
 from .models import Post
 from .profile import PROFILE, PROJECTS, SITE_URL
-from .routers import auth, posts
+from .routers import auth, contact, posts
 from .seed import seed_posts
 
 
@@ -42,6 +42,8 @@ app = FastAPI(
 app.include_router(auth.router)
 app.include_router(posts.public)
 app.include_router(posts.admin)
+app.include_router(contact.public)
+app.include_router(contact.admin)
 
 
 @app.get("/api/health", tags=["health"])

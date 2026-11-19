@@ -154,6 +154,31 @@ function PostList({ posts, onEdit, onDelete }) {
     );
 }
 
+function Inbox({ messages, onToggle, onDelete }) {
+    if (!messages.length) return <p className="posts-message">Nessun messaggio.</p>;
+    return (
+        <ul className="admin-list">
+            {messages.map(m => (
+                <li key={m.id} className={`admin-card admin-message${m.read ? '' : ' is-unread'}`}>
+                    <div className="admin-message-head">
+                        <div>
+                            <p className="admin-message-from">{m.name}</p>
+                            <a className="admin-link" href={`mailto:${m.email}`}>{m.email}</a>
+                        </div>
+                        <time>{formatDate(m.created_at, 'it')}</time>
+                    </div>
+                    <p className="admin-message-text">{m.message}</p>
+                    <div className="admin-row-actions">
+                        <a className="admin-link" href={`mailto:${m.email}?subject=${encodeURIComponent('Re: il tuo messaggio')}`}>Rispondi</a>
+                        <button className="admin-link" onClick={() => onToggle(m)}>{m.read ? 'Segna come non letto' : 'Segna come letto'}</button>
+                        <button className="admin-link is-danger" onClick={() => onDelete(m)}>Elimina</button>
+                    </div>
+                </li>
+            ))}
+        </ul>
+    );
+}
+
 export default function Admin() {
     usePageMeta({ title: 'Admin | Matteo Augustinho Bertotti', path: '/admin', noindex: true });
 
@@ -161,6 +186,8 @@ export default function Admin() {
     const [posts, setPosts] = useState([]);
     const [draft, setDraft] = useState(null);
     const [error, setError] = useState('');
+    const [tab, setTab] = useState('posts'); // posts | messages
+    const [inbox, setInbox] = useState({ items: [], unread: 0 });
 
     const loadPosts = useCallback(async () => {
         try {
@@ -175,9 +202,27 @@ export default function Admin() {
         api.me().then(() => setAuth('in')).catch(() => setAuth('out'));
     }, []);
 
+    const loadInbox = useCallback(async () => {
+        try {
+            setInbox(await api.messages());
+        } catch (err) {
+            if (err.status === 401) setAuth('out');
+            else setError(err.message);
+        }
+    }, []);
+
     useEffect(() => {
-        if (auth === 'in') loadPosts();
-    }, [auth, loadPosts]);
+        if (auth === 'in') { loadPosts(); loadInbox(); }
+    }, [auth, loadPosts, loadInbox]);
+
+    const toggleRead = async (m) => {
+        try { await api.markMessage(m.id, !m.read); loadInbox(); } catch (err) { setError(err.message); }
+    };
+
+    const removeMessage = async (m) => {
+        if (!window.confirm(`Eliminare il messaggio di ${m.name}? Non si può annullare.`)) return;
+        try { await api.deleteMessage(m.id); loadInbox(); } catch (err) { setError(err.message); }
+    };
 
     const remove = async (post) => {
         if (!window.confirm('Eliminare questo post? Non si può annullare.')) return;
@@ -199,7 +244,7 @@ export default function Admin() {
     return (
         <main className="admin-page">
             <header className="admin-top">
-                <Link to="/" className="site-name">Matteo Bertotti</Link>
+                <Link to="/" className="site-name is-full">Matteo Bertotti</Link>
                 {auth === 'in' && <button className="admin-link" onClick={logout}>Esci</button>}
             </header>
 
@@ -209,7 +254,20 @@ export default function Admin() {
             {auth === 'in' && (
                 <>
                     {error && <p className="admin-error" role="alert">{error}</p>}
-                    {draft ? (
+                    {!draft && (
+                        <nav className="admin-tabs">
+                            <button className={tab === 'posts' ? 'active' : ''} onClick={() => setTab('posts')}>Post</button>
+                            <button className={tab === 'messages' ? 'active' : ''} onClick={() => { setTab('messages'); loadInbox(); }}>
+                                Messaggi{inbox.unread > 0 && <span className="admin-count">{inbox.unread}</span>}
+                            </button>
+                        </nav>
+                    )}
+                    {tab === 'messages' && !draft ? (
+                        <>
+                            <div className="admin-heading"><h1>Messaggi</h1></div>
+                            <Inbox messages={inbox.items} onToggle={toggleRead} onDelete={removeMessage} />
+                        </>
+                    ) : draft ? (
                         <Editor
                             draft={draft}
                             setDraft={setDraft}

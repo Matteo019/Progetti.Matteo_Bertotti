@@ -460,3 +460,40 @@ html.scroll-locked { overflow: hidden; }
 
 /* The posts bubble steps aside while a project window is open */
 body.modal-open .posts-bubble:not(.is-open) { opacity: 0; pointer-events: none; }
+
+/* ---------- Admin: tabs and inbox ---------- */
+.admin-tabs { display: flex; gap: 1.5rem; margin-bottom: 1.5rem; border-bottom: 1px solid var(--rule); }
+.admin-tabs button {
+    background: none;
+    border: none;
+    padding: .6rem 0;
+    margin-bottom: -1px;
+    border-bottom: 2px solid transparent;
+    font-family: var(--font-mono);
+    font-size: .74rem;
+    letter-spacing: .06em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: .5rem;
+}
+.admin-tabs button.active { color: var(--clay); border-bottom-color: var(--clay); }
+.admin-count {
+    min-width: 1.4rem;
+    padding: 0 .4rem;
+    border-radius: 999px;
+    background: var(--clay);
+    color: var(--white);
+    font-size: .68rem;
+    line-height: 1.4rem;
+    text-align: center;
+}
+
+.admin-message { display: grid; gap: .75rem; }
+.admin-message.is-unread { border-left: 3px solid var(--clay); }
+.admin-message-head { display: flex; justify-content: space-between; gap: 1rem; align-items: baseline; }
+.admin-message-head time { font-family: var(--font-mono); font-size: .72rem; color: var(--text-muted); }
+.admin-message-from { font-family: var(--font-serif); font-size: 1.35rem; color: var(--green-dark); line-height: 1.2; }
+.admin-message-text { white-space: pre-wrap; overflow-wrap: anywhere; }
