@@ -132,6 +132,7 @@ def test_seed_runs_only_on_empty_table(client):
     page = client.get("/api/posts", params={"limit": 50}).json()
     assert page["total"] == len(SEED_POSTS)
     assert "SFSCON" in page["items"][0]["body"]  # newest first
+    assert "home server" in page["items"][1]["body"]
     image = page["items"][0]["image"]
     assert client.get(f"/api/uploads/{image}").status_code == 200
 

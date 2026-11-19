@@ -65,6 +65,22 @@ SEED_POSTS = [
         ),
     },
     {
+        "created_at": _at(2026, 8, 3, 2),
+        "image_file": "homeserver.webp",
+        "body": (
+            "## Il mio sito ora gira sul mio server 🖥️\n\n"
+            "Da oggi questo portfolio non è più su Netlify: è ospitato su un **home server Linux** "
+            "che ho configurato da zero.\n\n"
+            "- **Ubuntu Server** con i servizi isolati in container **Docker**\n"
+            "- **Deploy automatico** con GitHub Actions e un runner self-hosted: a ogni push su `main` "
+            "il sito si ricostruisce e va online da solo\n"
+            "- **Cloudflare Tunnel** per esporlo su internet senza aprire porte sul router\n"
+            "- **Tailscale** e chiavi SSH per gestirlo da remoto in sicurezza\n\n"
+            "Una bella palestra di Linux, networking e CI/CD: ogni volta che aprite questa pagina, "
+            "la state chiedendo a una macchina che sta a casa mia 😄"
+        ),
+    },
+    {
         "created_at": _at(2026, 11, 13, 1),
         "image_file": "sfscon-2026.webp",
         "body": (

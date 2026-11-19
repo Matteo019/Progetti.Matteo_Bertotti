@@ -13,7 +13,7 @@ const LINKS = [
     ['contact', 'nav-contact'],
 ];
 
-export default function Navbar() {
+export default function Navbar({ onOpenPosts }) {
     const { lang, setLang, t } = useLanguage();
     const [open, setOpen] = useState(false);
     const navRef = useRef(null);
@@ -26,7 +26,16 @@ export default function Navbar() {
                 <a href="#" className="logo">MB.</a>
                 <ul className={`nav-links${open ? ' active' : ''}`}>
                     {LINKS.map(([id, key]) => (
-                        <li key={id}><a href={`#${id}`} onClick={() => setOpen(false)}>{t(key)}</a></li>
+                        <li key={id}>
+                            <a
+                                href={`#${id}`}
+                                onClick={(e) => {
+                                    setOpen(false);
+                                    // Posts are not a page section: the link opens their panel
+                                    if (id === 'posts') { e.preventDefault(); onOpenPosts?.(); }
+                                }}
+                            >{t(key)}</a>
+                        </li>
                     ))}
                 </ul>
                 <div className="lang-switcher">

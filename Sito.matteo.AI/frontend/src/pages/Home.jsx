@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 
 import Hero from '../components/Hero.jsx';
 import Navbar from '../components/Navbar.jsx';
@@ -17,6 +17,14 @@ export default function Home() {
     const rootRef = useRef(null);
     const gridRef = useRef(null);
     const starsRef = useRef(null);
+    const [postsOpen, setPostsOpen] = useState(() => window.location.hash === '#posts');
+
+    // #posts in the address bar mirrors the open panel, so the link can be shared
+    const setPosts = useCallback((open) => {
+        setPostsOpen(open);
+        const url = open ? '#posts' : window.location.pathname + window.location.search;
+        window.history.replaceState(null, '', url);
+    }, []);
 
     useEffect(() => {
         const root = rootRef.current;
@@ -33,7 +41,8 @@ export default function Home() {
 
     // Deep links like /#projects: scroll once the sections exist
     useEffect(() => {
-        if (window.location.hash) document.querySelector(window.location.hash)?.scrollIntoView();
+        const hash = window.location.hash;
+        if (hash && hash !== '#posts') document.querySelector(hash)?.scrollIntoView();
     }, []);
 
     return (
@@ -42,7 +51,7 @@ export default function Home() {
             <canvas id="grid-canvas" ref={gridRef}></canvas>
             <Preloader />
             <canvas id="star-canvas" ref={starsRef}></canvas>
-            <Navbar />
+            <Navbar onOpenPosts={() => setPosts(true)} />
             <Hero />
             <Marquee />
             <About />
@@ -50,9 +59,9 @@ export default function Home() {
             <Education />
             <Skills />
             <Projects />
-            <Posts />
             <Certifications />
             <Contact />
+            <Posts open={postsOpen} onOpenChange={setPosts} />
             <BackToTop />
             <CookieBanner />
             <Footer />
