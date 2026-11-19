@@ -1,18 +1,10 @@
 /* Self-hosted fonts (latin subset) — no requests to Google servers */
 @font-face {
-    font-family: 'Oswald';
-    font-style: normal;
-    font-weight: 400 700;
-    font-display: swap;
-    src: url('fonts/oswald-latin.woff2') format('woff2');
-}
-
-@font-face {
     font-family: 'Outfit';
     font-style: normal;
     font-weight: 300 700;
     font-display: swap;
-    src: url('fonts/outfit-latin.woff2') format('woff2');
+    src: url('/fonts/outfit-latin.woff2') format('woff2');
 }
 
 @font-face {
@@ -20,7 +12,7 @@
     font-style: normal;
     font-weight: 400;
     font-display: swap;
-    src: url('fonts/spacemono-400-latin.woff2') format('woff2');
+    src: url('/fonts/spacemono-400-latin.woff2') format('woff2');
 }
 
 @font-face {
@@ -28,5 +20,5 @@
     font-style: normal;
     font-weight: 700;
     font-display: swap;
-    src: url('fonts/spacemono-700-latin.woff2') format('woff2');
+    src: url('/fonts/spacemono-700-latin.woff2') format('woff2');
 }

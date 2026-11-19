@@ -1,18 +1,82 @@
+# Log rotation for every container: at most 3 files of 10 MB, then the oldest is deleted
+x-logging: &logging
+  driver: json-file
+  options:
+    max-size: "10m"
+    max-file: "3"
+
 services:
-  mio-backend:
+  # React build + forwarding of /api, /mcp, /llms.txt. The only container on proxy-net.
+  web:
     build: .
+    # Same name as before: Nginx Proxy Manager already points here
     container_name: backend-vetrina
+    logging: *logging
     restart: unless-stopped
-    # Log a rotazione: al massimo 3 file da 10 MB, poi i più vecchi vengono cancellati
-    logging:
-      driver: json-file
-      options:
-        max-size: "10m"
-        max-file: "3"
-    # NON apriamo porte verso l'esterno (es. 8000:8000), ci pensa Nginx!
+    depends_on:
+      api:
+        condition: service_healthy
     networks:
       - proxy-net
+      - internal
+
+  # FastAPI backend: posts, admin login, uploads, MCP server
+  api:
+    build: ./api
+    container_name: sito-api
+    logging: *logging
+    restart: unless-stopped
+    environment:
+      DATABASE_URL: "postgresql+psycopg://sito:${POSTGRES_PASSWORD}@db:5432/sito"
+      ADMIN_USERNAME: "${ADMIN_USERNAME:-matteo}"
+      ADMIN_PASSWORD_HASH: "${ADMIN_PASSWORD_HASH}"
+      SECRET_KEY: "${SECRET_KEY}"
+      SECURE_COOKIE: "true"
+      UPLOAD_DIR: /data/uploads
+      SMTP_HOST: "${SMTP_HOST:-}"
+      SMTP_PORT: "${SMTP_PORT:-587}"
+      SMTP_USER: "${SMTP_USER:-}"
+      SMTP_PASSWORD: "${SMTP_PASSWORD:-}"
+      SMTP_FROM: "${SMTP_FROM:-}"
+      NOTIFY_EMAIL: "${NOTIFY_EMAIL:-}"
+    volumes:
+      - sito-uploads:/data/uploads
+    depends_on:
+      db:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8000/api/health')"]
+      interval: 10s
+      timeout: 5s
+      retries: 6
+    networks:
+      - internal
+
+  # PostgreSQL dedicated to the site: data in the sito-db-data volume, no port exposed
+  db:
+    image: postgres:17-alpine
+    container_name: sito-db
+    logging: *logging
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: sito
+      POSTGRES_USER: sito
+      POSTGRES_PASSWORD: "${POSTGRES_PASSWORD}"
+    volumes:
+      - sito-db-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U sito -d sito"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+    networks:
+      - internal
+
+volumes:
+  sito-db-data:
+  sito-uploads:
 
 networks:
   proxy-net:
     external: true
+  internal:

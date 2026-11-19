@@ -1,0 +1,10 @@
+fastapi==0.165.0
+uvicorn[standard]==0.37.0
+sqlalchemy==2.0.43
+psycopg[binary]==3.2.10
+pydantic-settings==2.11.0
+bcrypt==5.0.0
+pyjwt==2.10.1
+python-multipart==0.0.20
+pillow==11.3.0
+mcp==2.3.0
