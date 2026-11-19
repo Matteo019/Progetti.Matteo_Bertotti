@@ -2,7 +2,7 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 
 import Hero from '../components/Hero.jsx';
 import Navbar from '../components/Navbar.jsx';
-import { BackToTop, CookieBanner, Footer, ScrollProgress } from '../components/PageChrome.jsx';
+import { CookieBanner, Footer, ScrollProgress } from '../components/PageChrome.jsx';
 import Preloader from '../components/Preloader.jsx';
 import Posts from '../components/posts/Posts.jsx';
 import Projects from '../components/projects/Projects.jsx';
@@ -62,7 +62,6 @@ export default function Home() {
             <Certifications />
             <Contact />
             <Posts open={postsOpen} onOpenChange={setPosts} />
-            <BackToTop />
             <CookieBanner />
             <Footer />
         </div>

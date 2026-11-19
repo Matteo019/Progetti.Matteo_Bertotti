@@ -2277,41 +2277,6 @@ body.modal-open * {
 }
 
 /* ============================================================
-   BACK TO TOP
-   ============================================================ */
-#back-to-top {
-    position: fixed;
-    bottom: 2rem;
-    right: 2rem;
-    width: 48px;
-    height: 48px;
-    background: var(--green);
-    color: var(--white);
-    border: none;
-    cursor: pointer;
-    font-size: 1.4rem;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    opacity: 0;
-    pointer-events: none;
-    transform: translateY(20px) scale(.8);
-    transition: all .4s var(--ease-bounce);
-    z-index: 999;
-}
-
-#back-to-top.show {
-    opacity: 1;
-    pointer-events: auto;
-    transform: translateY(0) scale(1);
-}
-
-#back-to-top:hover {
-    background: var(--accent);
-    transform: translateY(-4px) scale(1.1);
-}
-
-/* ============================================================
    FOOTER
    ============================================================ */
 footer {

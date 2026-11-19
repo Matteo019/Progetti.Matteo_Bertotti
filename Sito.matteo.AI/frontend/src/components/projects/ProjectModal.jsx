@@ -1,6 +1,7 @@
 import { lazy, Suspense, useCallback, useEffect, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
 
+import { lockScroll, unlockScroll } from '../../effects/scrollLock.js';
 import { useLanguage } from '../../i18n/LanguageContext.jsx';
 import ProjectSheet from './ProjectSheet.jsx';
 
@@ -51,21 +52,16 @@ export default function ProjectModal({ project, onClosed }) {
 
     const close = useCallback(() => {
         setVisible(false);
-        document.body.classList.remove('modal-open');
-        setTimeout(() => {
-            document.body.style.overflow = '';
-            onClosed();
-        }, CLOSE_MS);
+        setTimeout(onClosed, CLOSE_MS);
     }, [onClosed]);
 
     // Open: show the overlay, then add .active on the next frame so the CSS transition runs
     useEffect(() => {
         if (!project) return undefined;
-        document.body.style.overflow = 'hidden';
-        document.body.classList.add('modal-open');
+        lockScroll();
         const frame = requestAnimationFrame(() => setVisible(true));
         const focus = setTimeout(() => closeRef.current?.focus({ preventScroll: true }), 60);
-        return () => { cancelAnimationFrame(frame); clearTimeout(focus); };
+        return () => { cancelAnimationFrame(frame); clearTimeout(focus); unlockScroll(); };
     }, [project]);
 
     // Escape closes, Tab stays inside the dialog

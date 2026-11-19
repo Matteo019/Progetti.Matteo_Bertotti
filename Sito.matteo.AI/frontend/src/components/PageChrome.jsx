@@ -21,19 +21,6 @@ export function ScrollProgress() {
     return <div className="scroll-progress" ref={ref} />;
 }
 
-export function BackToTop() {
-    const [show, setShow] = useState(false);
-    useEffect(() => {
-        const update = () => setShow(window.scrollY > 400);
-        window.addEventListener('scroll', update, { passive: true });
-        return () => window.removeEventListener('scroll', update);
-    }, []);
-    return (
-        <button id="back-to-top" className={show ? 'show' : ''} title="Torna su"
-            onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}>↑</button>
-    );
-}
-
 // Informative notice only: the public site sets no cookies, so there is nothing to accept
 export function CookieBanner() {
     const { t, html } = useLanguage();

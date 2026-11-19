@@ -2,6 +2,7 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
 
 import { api } from '../../api.js';
+import { lockScroll, unlockScroll } from '../../effects/scrollLock.js';
 import { useLanguage } from '../../i18n/LanguageContext.jsx';
 import PostCard from './PostCard.jsx';
 
@@ -52,8 +53,6 @@ export default function Posts({ open, onOpenChange }) {
         const rect = bubbleRef.current?.getBoundingClientRect();
         if (rect) setOrigin({ x: rect.left + rect.width / 2, y: rect.top + rect.height / 2 });
         setMounted(true);
-        document.body.style.overflow = 'hidden';
-        document.body.classList.add('modal-open');
         const frame = requestAnimationFrame(() => requestAnimationFrame(() => setExpanded(true)));
         const focus = setTimeout(() => closeRef.current?.focus({ preventScroll: true }), ANIM_MS);
         return () => { cancelAnimationFrame(frame); clearTimeout(focus); };
@@ -64,12 +63,17 @@ export default function Posts({ open, onOpenChange }) {
         setExpanded(false);
         const timer = setTimeout(() => {
             setMounted(false);
-            document.body.style.overflow = '';
-            document.body.classList.remove('modal-open');
             bubbleRef.current?.focus({ preventScroll: true });
         }, ANIM_MS);
         return () => clearTimeout(timer);
     }, [open, mounted]);
+
+    // The page behind stays still while the panel is in the DOM: only the panel scrolls
+    useEffect(() => {
+        if (!mounted) return undefined;
+        lockScroll();
+        return unlockScroll;
+    }, [mounted]);
 
     useEffect(() => {
         if (!open) return undefined;

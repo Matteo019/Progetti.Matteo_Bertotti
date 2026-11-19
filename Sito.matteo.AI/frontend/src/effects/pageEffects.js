@@ -17,7 +17,9 @@ function onScrollFrame(callback) {
     return () => window.removeEventListener('scroll', handler);
 }
 
-// ---------- Floating particles (whole page height) ----------
+// ---------- Floating particles ----------
+// The canvas is position: fixed, so it only needs to be as big as the window
+// (a page-tall canvas was ~47 MB redrawn every frame and made scrolling stutter)
 export function initStars(canvas) {
     const ctx = canvas.getContext('2d');
     let width, height, stars = [], frame;
@@ -38,7 +40,7 @@ export function initStars(canvas) {
 
     const resize = () => {
         width = window.innerWidth;
-        height = document.body.scrollHeight;
+        height = window.innerHeight;
         canvas.width = width;
         canvas.height = height;
         stars = Array.from({ length: Math.floor((width * height) / 10000) }, makeStar);
@@ -59,15 +61,11 @@ export function initStars(canvas) {
         frame = requestAnimationFrame(animate);
     };
 
-    // The page grows when content (posts) loads: keep the canvas as tall as the page
-    const observer = new ResizeObserver(resize);
-    observer.observe(document.body);
     window.addEventListener('resize', resize);
     resize();
     animate();
     return () => {
         cancelAnimationFrame(frame);
-        observer.disconnect();
         window.removeEventListener('resize', resize);
     };
 }

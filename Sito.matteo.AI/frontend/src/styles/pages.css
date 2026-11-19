@@ -397,3 +397,58 @@
     .posts-panel { transition: none; }
     .posts-bubble::after { animation: none; }
 }
+
+/* ---------- Hero: rotating role word ---------- */
+.rotating-word {
+    position: relative;
+    display: inline-block;
+    /* Clip only vertically, so a longer outgoing word is not cut on the right */
+    overflow-x: visible;
+    overflow-y: clip;
+    vertical-align: bottom;
+    padding: .06em 0;
+    color: var(--green-light);
+}
+
+.rw-word { display: inline-block; white-space: nowrap; }
+
+/* The outgoing word sits on top of the incoming one while it leaves */
+.rw-word-out {
+    position: absolute;
+    left: 0;
+    top: .06em;
+}
+
+.rw-char { display: inline-block; }
+
+.rw-in {
+    transform: translateY(110%);
+    animation: rw-in .55s cubic-bezier(.22, 1, .36, 1) forwards;
+}
+
+.rw-out {
+    animation: rw-out .4s cubic-bezier(.64, 0, .78, 0) forwards;
+}
+
+@keyframes rw-in {
+    from { transform: translateY(110%) rotate(8deg); opacity: 0; }
+    to { transform: translateY(0) rotate(0); opacity: 1; }
+}
+
+@keyframes rw-out {
+    from { transform: translateY(0); opacity: 1; }
+    to { transform: translateY(-110%) rotate(-8deg); opacity: 0; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .rw-in, .rw-out { animation: none; transform: none; }
+    .rw-word-out { display: none; }
+}
+
+/* ---------- Scroll lock (see effects/scrollLock.js) ---------- */
+/* Reserve the scrollbar's space so the page does not jump when an overlay hides it */
+html { scrollbar-gutter: stable; }
+html.scroll-locked { overflow: hidden; }
+
+/* Scrollbar of the posts panel, matching the page one */
+.posts-panel-scroll { scrollbar-width: thin; scrollbar-color: var(--green) transparent; }

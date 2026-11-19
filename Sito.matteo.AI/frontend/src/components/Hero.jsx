@@ -2,6 +2,10 @@ import { useEffect, useRef, useState } from 'react';
 
 import { initParallaxHero } from '../effects/pageEffects.js';
 import { useLanguage } from '../i18n/LanguageContext.jsx';
+import RotatingWord from './RotatingWord.jsx';
+
+// Read together with the fixed word below: "AI DEVELOPER", ".NET DEVELOPER"...
+const ROLES = ['AI', 'SOFTWARE', '.NET', 'PYTHON', 'BACKEND'];
 
 const FULL_NAME = 'Matteo Augustinho Bertotti';
 export const CV_URL = '/images/CV_MatteoBertotti_AI-SoftwareDeveloper_Verona.pdf';
@@ -78,11 +82,11 @@ export default function Hero() {
         <header className="hero">
             <div className="container hero-content">
                 <div className="hero-visual" ref={visualRef}>
-                    <span className="hero-big-text hero-big-top" aria-hidden="true">AI &amp;</span>
+                    <span className="hero-big-text hero-big-top" aria-hidden="true"><RotatingWord words={ROLES} /></span>
                     <div className="hero-image fade-in delay-2">
                         <img src="/images/profile.webp" alt="Matteo Augustinho Bertotti" width="864" height="980" fetchPriority="high" />
                     </div>
-                    <span className="hero-big-text hero-big-bottom" aria-hidden="true">SOFTWARE DEV</span>
+                    <span className="hero-big-text hero-big-bottom" aria-hidden="true">DEVELOPER</span>
                     <span className="hero-code-icon" aria-hidden="true">&lt;/&gt;</span>
                 </div>
                 <div className="hero-text">
