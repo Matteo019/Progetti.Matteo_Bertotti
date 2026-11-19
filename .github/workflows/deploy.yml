@@ -20,8 +20,21 @@ jobs:
       - name: Riavvia Docker Compose (sito)
         run: |
           cd ~/github/Progetti.Matteo_Bertotti/Sito.matteo.AI
-          docker rm -f backend-vetrina || true
-          docker compose up -d --build
+          # Without .env the API cannot start: fail here, while the old site is still online
+          if [ ! -f .env ]; then
+            echo "::error::Sito.matteo.AI/.env non trovato sul server: crealo da .env.example (vedi DEPLOY.md). Il sito attuale resta online."
+            exit 1
+          fi
+          # Build first, while the current containers keep serving: the swap then takes seconds,
+          # instead of the site being down (5xx) for the whole build
+          docker compose build
+          # One-time migration: the old static site ran as service "mio-backend" with the same
+          # container name, which would clash with the new "web" service
+          if docker inspect backend-vetrina >/dev/null 2>&1 \
+             && [ "$(docker inspect -f '{{ index .Config.Labels "com.docker.compose.service" }}' backend-vetrina)" != "web" ]; then
+            docker rm -f backend-vetrina
+          fi
+          docker compose up -d --wait
 
       - name: Riavvia Docker Compose (Dispensa)
         run: |

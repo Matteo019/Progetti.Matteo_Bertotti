@@ -1,30 +1,22 @@
 # ─────────────────────────────────────────────
-# Stage unico: serve i file statici con Nginx
+# Stage 1: build the React app with Vite
+# ─────────────────────────────────────────────
+FROM node:24-alpine AS build
+WORKDIR /app
+COPY frontend/package.json frontend/package-lock.json ./
+RUN npm ci
+COPY frontend/ ./
+RUN npm run build \
+    # Unknown URLs get the app shell with a real 404 status (see nginx.conf)
+    && cp dist/index.html dist/404.html
+
+# ─────────────────────────────────────────────
+# Stage 2: serve it with Nginx (and forward /api to the backend)
 # ─────────────────────────────────────────────
 FROM nginx:1.27-alpine
-
-# Rimuove la pagina di default di Nginx
 RUN rm -rf /usr/share/nginx/html/*
-
-# Config Nginx: gzip, cache e security header
 COPY nginx.conf /etc/nginx/conf.d/default.conf
-
-# Copia tutti i file statici nella root di Nginx
-COPY index.html        /usr/share/nginx/html/
-COPY privacy.html      /usr/share/nginx/html/
-COPY style.css         /usr/share/nginx/html/
-COPY script.js         /usr/share/nginx/html/
-COPY cookie-banner.css /usr/share/nginx/html/
-COPY cookie-banner.js  /usr/share/nginx/html/
-COPY fonts.css         /usr/share/nginx/html/
-COPY notebook-steps.json /usr/share/nginx/html/
-COPY images/           /usr/share/nginx/html/images/
-COPY vendor/           /usr/share/nginx/html/vendor/
-COPY fonts/            /usr/share/nginx/html/fonts/
-
-# Espone la porta interna (Nginx ascolta sulla 80,
-# ma NON la pubblichiamo verso l'esterno: ci pensa il reverse proxy)
+COPY security-headers.conf /etc/nginx/snippets/security-headers.conf
+COPY --from=build /app/dist/ /usr/share/nginx/html/
 EXPOSE 80
-
-# Avvia Nginx in foreground
 CMD ["nginx", "-g", "daemon off;"]
