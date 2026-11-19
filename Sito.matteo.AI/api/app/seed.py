@@ -57,10 +57,12 @@ SEED_POSTS = [
     },
     {
         "created_at": _at(2026, 6, 15, 2),
+        "image_file": "metline-2026.webp",
         "body": (
             "## Nuovo inizio in Metline! 💼\n\n"
             "Sono stato assunto da **Metline** (Gruppo Maestrale) e sono contentissimo di iniziare questo "
             "percorso di apprendistato.\n\n"
+            "Si parte dalla formazione sul gestionale **Panthera**, l'ERP su cui lavorerò ogni giorno.\n\n"
             "Non vedo l'ora di mettere in pratica tutto ciò che ho imparato in questo primo anno di ITS."
         ),
     },
