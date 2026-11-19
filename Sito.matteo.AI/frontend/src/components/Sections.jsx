@@ -73,7 +73,7 @@ export function Education() {
 export function Skills() {
     const { t } = useLanguage();
     const rows = [
-        ['skill-title-7', 'C#, Python, SQL, JavaScript, HTML/CSS'],
+        ['skill-title-7', 'C#, Python, SQL'],
         ['skill-title-6', t('skill-desc-6')],
         ['skill-title-5', t('skill-desc-5')],
         ['skill-title-2', 'SQL Server, MySQL, PostgreSQL'],

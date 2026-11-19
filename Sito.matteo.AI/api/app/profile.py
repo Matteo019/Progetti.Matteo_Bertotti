@@ -44,9 +44,9 @@ PROFILE = {
         }
     ],
     "skills": {
-        "languages": ["C#", "Python", "SQL", "JavaScript", "HTML/CSS"],
+        "languages": ["C#", "Python", "SQL"],
         "ai": ["Multi-Agent Systems", "Generative AI", "Prompt Engineering", "MCP", "Deep Learning", "PyTorch", "Scikit-learn"],
-        "backend": [".NET 10", "ASP.NET Core", "FastAPI", "REST APIs", "OAuth 2.0", "React"],
+        "backend": [".NET 10", "ASP.NET Core", "FastAPI", "REST APIs", "OAuth 2.0"],
         "data_devops": ["SQL Server", "PostgreSQL", "MySQL", "Pandas", "Docker", "Git", "GitHub Actions", "Linux"],
     },
     "spoken_languages": ["Italian (native)", "Portuguese (native)", "English (B2, EF SET)"],

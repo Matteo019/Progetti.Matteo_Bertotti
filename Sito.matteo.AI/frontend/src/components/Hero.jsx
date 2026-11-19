@@ -1,10 +1,14 @@
 import { useLanguage } from '../i18n/LanguageContext.jsx';
 import TypeText from './TypeText.jsx';
 
-export const CV_URL = '/images/CV_MatteoBertotti_AI-SoftwareDeveloper_Verona.pdf';
+// The CV follows the page language
+export const CV_URLS = {
+    en: '/images/CV_MatteoBertotti_AI-SoftwareDeveloper_Verona.pdf',
+    it: '/images/CV_MatteoBertotti_AI-SoftwareDeveloper_Verona_IT.pdf',
+};
 
 export default function Hero() {
-    const { t, html } = useLanguage();
+    const { lang, t, html } = useLanguage();
 
     return (
         <section className="hero" id="top">
@@ -19,7 +23,7 @@ export default function Hero() {
                     </h1>
                     <p className="hero-lead fade-in delay-3" dangerouslySetInnerHTML={html('hero-lead')} />
                     <div className="hero-actions fade-in delay-4">
-                        <a href={CV_URL} className="arrow-link" download>{t('hero-cv')} <span aria-hidden="true">↓</span></a>
+                        <a href={CV_URLS[lang] || CV_URLS.en} className="arrow-link" download>{t('hero-cv')} <span aria-hidden="true">↓</span></a>
                         <a href="#projects" className="arrow-link">{t('hero-work')} <span aria-hidden="true">→</span></a>
                     </div>
                 </div>
